@@ -47,7 +47,8 @@ export const KIDS_WORDS = [
 export function generateTestText(category: TestCategory, count: number = 50, isKids: boolean = false): string {
   if (isKids) {
     const words: string[] = [];
-    for (let i = 0; i < Math.min(count, 40); i++) {
+    const targetCount = Math.max(30, count);
+    for (let i = 0; i < targetCount; i++) {
       const randomWord = KIDS_WORDS[Math.floor(Math.random() * KIDS_WORDS.length)];
       words.push(randomWord);
     }
@@ -56,16 +57,31 @@ export function generateTestText(category: TestCategory, count: number = 50, isK
 
   switch (category) {
     case "quotes": {
-      const quote = FAMOUS_QUOTES[Math.floor(Math.random() * FAMOUS_QUOTES.length)];
-      return quote;
+      const quotes: string[] = [];
+      const numQuotesNeeded = Math.max(1, Math.ceil(count / 25));
+      for (let i = 0; i < numQuotesNeeded; i++) {
+        const quote = FAMOUS_QUOTES[Math.floor(Math.random() * FAMOUS_QUOTES.length)];
+        quotes.push(quote);
+      }
+      return quotes.join(" ");
     }
     case "code": {
-      const code = CODE_SNIPPETS[Math.floor(Math.random() * CODE_SNIPPETS.length)];
-      return code;
+      const snippets: string[] = [];
+      const numNeeded = Math.max(1, Math.ceil(count / 15));
+      for (let i = 0; i < numNeeded; i++) {
+        const code = CODE_SNIPPETS[Math.floor(Math.random() * CODE_SNIPPETS.length)];
+        snippets.push(code);
+      }
+      return snippets.join(" ");
     }
     case "numbers": {
-      const numText = NUMBERS_AND_PUNCTUATION[Math.floor(Math.random() * NUMBERS_AND_PUNCTUATION.length)];
-      return numText;
+      const nums: string[] = [];
+      const numNeeded = Math.max(1, Math.ceil(count / 15));
+      for (let i = 0; i < numNeeded; i++) {
+        const numText = NUMBERS_AND_PUNCTUATION[Math.floor(Math.random() * NUMBERS_AND_PUNCTUATION.length)];
+        nums.push(numText);
+      }
+      return nums.join(" ");
     }
     case "words":
     default: {

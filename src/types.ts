@@ -12,7 +12,7 @@ export type TabType =
   | "blog"
   | "pricing";
 
-export type TestDuration = 15 | 30 | 60 | 120;
+export type TestDuration = 15 | 30 | 60 | 180 | number;
 export type TestCategory = "words" | "quotes" | "code" | "numbers" | "custom";
 
 export interface TypingStats {
@@ -23,6 +23,7 @@ export interface TypingStats {
   totalChars: number;
   correctChars: number;
   errorCount: number;
+  completedWords?: number;
   timeElapsed: number;
   duration: number;
   timestamp: string;

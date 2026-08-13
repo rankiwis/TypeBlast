@@ -3,6 +3,22 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import {
+  createUser,
+  loginUser,
+  getUserByToken,
+  logoutToken,
+  addTestResultToUser,
+  addGameScoreToUser,
+  updateUserProfile,
+  getPublicProfile
+} from "./server/authStore";
+import {
+  queryLeaderboard,
+  validateAndSanitizeSubmission,
+  addLeaderboardRecord,
+  updateUserDisplayNameInLeaderboard
+} from "./server/leaderboardStore";
 
 dotenv.config();
 
@@ -11,23 +27,302 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Initialize Google GenAI on server side
-const getAiClient = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return null;
-  return new GoogleGenAI({
-    apiKey,
-    httpOptions: {
-      headers: {
-        "User-Agent": "aistudio-build",
-      },
-    },
-  });
+// Helper middleware to extract authorization token
+const getAuthToken = (req: express.Request): string | null => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) return null;
+  return authHeader.substring(7).trim();
 };
 
 // API Routes
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", service: "TypeBlast API" });
+});
+
+// Auth API Endpoints
+app.post("/api/auth/signup", (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: "Username, email, and password are required." });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters long." });
+    }
+    const result = createUser(username, email, password);
+    res.json({ status: "success", user: result.user, token: result.token });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to create account." });
+  }
+});
+
+app.post("/api/auth/login", (req, res) => {
+  try {
+    const { emailOrUsername, password } = req.body;
+    if (!emailOrUsername || !password) {
+      return res.status(400).json({ error: "Email/username and password are required." });
+    }
+    const result = loginUser(emailOrUsername, password);
+    res.json({ status: "success", user: result.user, token: result.token });
+  } catch (error: any) {
+    res.status(401).json({ error: error.message || "Invalid credentials." });
+  }
+});
+
+app.get("/api/auth/me", (req, res) => {
+  const token = getAuthToken(req);
+  if (!token) return res.status(401).json({ error: "Not authenticated" });
+  const user = getUserByToken(token);
+  if (!user) return res.status(401).json({ error: "Session expired or invalid" });
+  res.json({ status: "success", user });
+});
+
+app.post("/api/auth/logout", (req, res) => {
+  const token = getAuthToken(req);
+  if (token) logoutToken(token);
+  res.json({ status: "success", message: "Logged out" });
+});
+
+// Leaderboard Query Endpoint (Today, Week, Month, All Time)
+app.get("/api/leaderboard", (req, res) => {
+  try {
+    const period = (req.query.period as any) || "alltime";
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 15;
+    const duration = req.query.duration ? Number(req.query.duration) : undefined;
+    const category = req.query.category ? String(req.query.category) : undefined;
+    const search = req.query.search ? String(req.query.search) : undefined;
+
+    const result = queryLeaderboard({ period, page, limit, duration, category, search });
+    res.json({ status: "success", ...result });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || "Failed to fetch leaderboard" });
+  }
+});
+
+// Secure Leaderboard Submission Endpoint
+app.post("/api/leaderboard/submit", (req, res) => {
+  try {
+    const token = getAuthToken(req);
+    const user = token ? getUserByToken(token) : null;
+
+    const { wpm, rawWpm, accuracy, cpm, totalChars, correctChars, errorCount, duration, category, displayName } = req.body;
+
+    // Strict validation of typing metrics & score
+    const validation = validateAndSanitizeSubmission({
+      wpm: Number(wpm),
+      rawWpm: Number(rawWpm),
+      accuracy: Number(accuracy),
+      cpm: Number(cpm),
+      totalChars: Number(totalChars),
+      correctChars: Number(correctChars),
+      errorCount: Number(errorCount),
+      duration: Number(duration),
+      category: String(category || "words"),
+      displayName: user ? (user.displayName || user.username) : displayName,
+      username: user ? user.username : "guest",
+      userId: user ? user.id : undefined,
+    });
+
+    if (!validation.isValid || !validation.record) {
+      return res.status(400).json({ error: validation.error || "Invalid typing score." });
+    }
+
+    // Add to global leaderboard store
+    const record = addLeaderboardRecord(validation.record);
+
+    // If user is logged in, also record in user test history
+    let updatedUser = null;
+    if (token && user) {
+      updatedUser = addTestResultToUser(token, {
+        wpm: validation.record.wpm,
+        rawWpm: validation.record.rawWpm,
+        accuracy: validation.record.accuracy,
+        cpm: Number(cpm) || 0,
+        totalChars: Number(totalChars) || 0,
+        correctChars: Number(correctChars) || 0,
+        errorCount: Number(errorCount) || 0,
+        duration: validation.record.duration,
+        category: validation.record.category,
+      });
+    }
+
+    res.json({ status: "success", record, user: updatedUser });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to submit leaderboard score." });
+  }
+});
+
+// Game Score Submission Endpoint (with strict server-side validation)
+app.post("/api/games/submit", (req, res) => {
+  try {
+    const token = getAuthToken(req);
+    const user = token ? getUserByToken(token) : null;
+
+    const { gameType, wpm, rawWpm, accuracy, duration, wordsTyped, totalChars, correctChars, errorCount, displayName } = req.body;
+
+    // Validate gameType
+    const validGames = ["word-blast", "time-attack", "typing-race"];
+    if (!gameType || !validGames.includes(gameType)) {
+      return res.status(400).json({ error: "Invalid game type. Must be word-blast, time-attack, or typing-race." });
+    }
+
+    const dur = Math.max(5, Number(duration) || 30);
+    const speedWpm = Number(wpm) || 0;
+    const acc = Number(accuracy) || 0;
+
+    // Strict server-side validation
+    const validation = validateAndSanitizeSubmission({
+      wpm: speedWpm,
+      rawWpm: Number(rawWpm) || speedWpm,
+      accuracy: acc,
+      totalChars: Number(totalChars) || 0,
+      correctChars: Number(correctChars) || 0,
+      errorCount: Number(errorCount) || 0,
+      duration: dur,
+      category: `game_${gameType.replace(/-/g, "_")}`,
+      displayName: user ? (user.displayName || user.username) : displayName,
+      username: user ? user.username : "guest",
+      userId: user ? user.id : undefined,
+    });
+
+    if (!validation.isValid || !validation.record) {
+      return res.status(400).json({ error: validation.error || "Game score failed server validation." });
+    }
+
+    // Save record into verified database
+    const record = addLeaderboardRecord(validation.record);
+
+    // Update user history if logged in
+    let updatedUser = null;
+    if (token && user) {
+      updatedUser = addTestResultToUser(token, {
+        wpm: validation.record.wpm,
+        rawWpm: validation.record.rawWpm,
+        accuracy: validation.record.accuracy,
+        cpm: Math.round(validation.record.wpm * 5),
+        totalChars: Number(totalChars) || 0,
+        correctChars: Number(correctChars) || 0,
+        errorCount: Number(errorCount) || 0,
+        duration: validation.record.duration,
+        category: `game_${gameType.replace(/-/g, "_")}`,
+      });
+    }
+
+    res.json({
+      status: "success",
+      message: "Game score validated and stored.",
+      record,
+      user: updatedUser,
+    });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to process game score." });
+  }
+});
+
+// Test Results Recording Endpoint
+app.post("/api/user/test-results", (req, res) => {
+  const token = getAuthToken(req);
+  if (!token) return res.status(401).json({ error: "Authentication token required." });
+
+  try {
+    const user = getUserByToken(token);
+    if (!user) return res.status(401).json({ error: "User session invalid." });
+
+    const { wpm, rawWpm, accuracy, cpm, totalChars, correctChars, errorCount, duration, category } = req.body;
+    if (wpm === undefined || accuracy === undefined) {
+      return res.status(400).json({ error: "Invalid test result payload." });
+    }
+
+    // Validate submission parameters before recording
+    const validation = validateAndSanitizeSubmission({
+      wpm: Number(wpm),
+      rawWpm: Number(rawWpm),
+      accuracy: Number(accuracy),
+      cpm: Number(cpm),
+      totalChars: Number(totalChars),
+      correctChars: Number(correctChars),
+      errorCount: Number(errorCount),
+      duration: Number(duration),
+      category: String(category || "words"),
+      displayName: user.displayName || user.username,
+      username: user.username,
+      userId: user.id,
+    });
+
+    if (!validation.isValid || !validation.record) {
+      return res.status(400).json({ error: validation.error || "Invalid typing test metrics." });
+    }
+
+    // Record to global verified leaderboard
+    addLeaderboardRecord(validation.record);
+
+    // Save to user account history
+    const updatedUser = addTestResultToUser(token, {
+      wpm: validation.record.wpm,
+      rawWpm: validation.record.rawWpm,
+      accuracy: validation.record.accuracy,
+      cpm: Number(cpm) || 0,
+      totalChars: Number(totalChars) || 0,
+      correctChars: Number(correctChars) || 0,
+      errorCount: Number(errorCount) || 0,
+      duration: validation.record.duration,
+      category: validation.record.category,
+    });
+
+    res.json({ status: "success", user: updatedUser });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to save test result." });
+  }
+});
+
+// Game Scores Endpoint
+app.post("/api/user/game-scores", (req, res) => {
+  const token = getAuthToken(req);
+  if (!token) return res.status(401).json({ error: "Authentication token required." });
+
+  try {
+    const { gameId, gameName, score, wpm, accuracy } = req.body;
+    const updatedUser = addGameScoreToUser(token, {
+      gameId: String(gameId),
+      gameName: String(gameName),
+      score: Number(score) || 0,
+      wpm: Number(wpm) || 0,
+      accuracy: Number(accuracy) || 0,
+    });
+    res.json({ status: "success", user: updatedUser });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to save game score." });
+  }
+});
+
+// Profile Update Endpoint
+app.put("/api/user/profile", (req, res) => {
+  const token = getAuthToken(req);
+  if (!token) return res.status(401).json({ error: "Authentication token required." });
+
+  try {
+    const user = getUserByToken(token);
+    if (!user) return res.status(401).json({ error: "Invalid session." });
+
+    const { displayName, bio, keyboardLayout, soundPreference } = req.body;
+    const updatedUser = updateUserProfile(token, { displayName, bio, keyboardLayout, soundPreference });
+
+    if (displayName) {
+      updateUserDisplayNameInLeaderboard(user.id, displayName);
+    }
+
+    res.json({ status: "success", user: updatedUser });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to update profile." });
+  }
+});
+
+// Public Safe Profile Endpoint (Does NOT expose email or password hash)
+app.get("/api/user/public-profile/:id", (req, res) => {
+  const profile = getPublicProfile(req.params.id);
+  if (!profile) return res.status(404).json({ error: "User profile not found." });
+  res.json({ status: "success", profile });
 });
 
 // AI Typing Coach Endpoint
