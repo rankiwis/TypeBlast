@@ -1,0 +1,6 @@
+{
+  "name": "TypeBlast",
+  "description": "Ultimate typing platform featuring typing tests, arcade speed games, touch typing lessons, daily challenges, AI typing coach, and verified certificates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
