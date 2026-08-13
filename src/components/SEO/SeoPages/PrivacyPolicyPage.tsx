@@ -2,6 +2,7 @@ import React from "react";
 import { ShieldCheck, Lock } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 
 interface PrivacyPolicyPageProps {
   onNavigatePath: (path: string) => void;
@@ -9,17 +10,27 @@ interface PrivacyPolicyPageProps {
 
 export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/privacy/";
-  const pageTitle = "Privacy Policy | TypeBlast";
+  const pageTitle = "Privacy Policy & Data Protection - TypeBlast";
   const metaDescription =
-    "Read TypeBlast's Privacy Policy. Learn how we protect user privacy, keystroke security, local browser data persistence, and COPPA/GDPR compliance.";
+    "Read the official TypeBlast privacy policy. Learn how we protect your personal information, user account data, and typing test scores.";
+
+  const breadcrumbs = [{ label: "Privacy Policy", path: "/privacy/" }];
+
+  const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
+  ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
+        structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       <header className="space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold">

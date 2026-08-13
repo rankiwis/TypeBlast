@@ -1,0 +1,29 @@
+# TypeBlast - High-Precision Online Typing Platform
+
+TypeBlast is a fast, responsive online typing speed test, touch-typing practice engine, and gamified typing platform.
+
+## Key Capabilities
+- Standardized WPM and Accuracy Testing (15s, 30s, 60s, 120s, 300s durations)
+- Daily Typing Challenges with synchronized daily passages and global rankings
+- Targeted Skill & Drill Practice Engine for home row, number row, code snippets, and custom text
+- Arcade Typing Games (Word Blast, Time Attack, Typing Race, Speed Blast Laser, Nitro Typing Race, Word Defense Arena)
+- Verification & Official Printable Speed Certificates
+- Anti-Tamper Leaderboards with server-side validation
+- AI Typing Coach powered by Google Gemini AI
+
+## Important Public URLs
+- https://typeblast.com/
+- https://typeblast.com/typing-test/
+- https://typeblast.com/daily-typing-challenge/
+- https://typeblast.com/typing-speed-test/
+- https://typeblast.com/wpm-test/
+- https://typeblast.com/typing-accuracy-test/
+- https://typeblast.com/typing-practice/
+- https://typeblast.com/typing-games/
+- https://typeblast.com/touch-typing/
+- https://typeblast.com/typing-tips/
+- https://typeblast.com/faq/
+- https://typeblast.com/about/
+- https://typeblast.com/contact/
+- https://typeblast.com/privacy/
+- https://typeblast.com/terms/

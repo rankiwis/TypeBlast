@@ -2,6 +2,7 @@ import React from "react";
 import { FileText, ShieldAlert } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 
 interface TermsOfServicePageProps {
   onNavigatePath: (path: string) => void;
@@ -9,17 +10,27 @@ interface TermsOfServicePageProps {
 
 export const TermsOfServicePage: React.FC<TermsOfServicePageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/terms/";
-  const pageTitle = "Terms of Service | TypeBlast";
+  const pageTitle = "Terms of Service & Rules - TypeBlast";
   const metaDescription =
-    "Read TypeBlast's Terms of Service. Learn about platform fair play rules, leaderboard integrity, certificate validation, and user terms.";
+    "Read the TypeBlast terms of service. Guidelines for platform usage, speed test leaderboard fair play, and certificate issuance rules.";
+
+  const breadcrumbs = [{ label: "Terms of Service", path: "/terms/" }];
+
+  const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
+  ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
+        structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       <header className="space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold">

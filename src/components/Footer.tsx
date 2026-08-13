@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
                 <Activity className="w-5 h-5 text-white" />
               </div>
               <span className="text-lg font-black tracking-tight text-white group-hover:text-cyan-400 transition-colors">
-                TypeBlast<span className="text-cyan-400 text-xs">.com</span>
+                TypeBlast
               </span>
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed max-w-xs">
@@ -234,7 +234,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
           </div>
 
           <div className="text-slate-500 font-mono text-[10px]">
-            © 2026 TypeBlast • Sub-millisecond Precision Telemetry
+            © 2026 TypeBlast • All rights reserved
           </div>
         </div>
       </div>

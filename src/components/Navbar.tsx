@@ -144,9 +144,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-lg font-black tracking-tight bg-gradient-to-r from-cyan-400 via-blue-300 to-indigo-300 bg-clip-text text-transparent">
                   TypeBlast
                 </span>
-                <span className="text-[10px] uppercase font-mono px-1 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hidden sm:inline-block">
-                  .com
-                </span>
               </div>
             </div>
           </div>

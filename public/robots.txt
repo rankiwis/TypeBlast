@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /admin/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /api/
+
+Sitemap: https://typeblast.com/sitemap.xml

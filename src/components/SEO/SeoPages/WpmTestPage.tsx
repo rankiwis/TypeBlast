@@ -1,8 +1,9 @@
 import React from "react";
-import { BarChart2, Calculator, CheckCircle2, ShieldAlert, Award } from "lucide-react";
+import { BarChart2, Calculator, ShieldAlert } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 import { TypingTestView } from "../../TypingTest/TypingTestView";
 import { TypingStats, TabType } from "../../../types";
 
@@ -18,9 +19,11 @@ export const WpmTestPage: React.FC<WpmTestPageProps> = ({
   onNavigatePath,
 }) => {
   const canonicalUrl = "https://typeblast.com/wpm-test/";
-  const pageTitle = "WPM Test | Words Per Minute Typing Calculator & Speed Test";
+  const pageTitle = "Words Per Minute WPM Typing Test - TypeBlast";
   const metaDescription =
-    "Calculate your exact Words Per Minute (WPM) with our accurate online WPM test. Learn the international formula: 5 characters equal 1 word.";
+    "Evaluate your Words Per Minute WPM score with our official speed test. Get detailed accuracy analysis and printable WPM certificates.";
+
+  const breadcrumbs = [{ label: "WPM Test", path: "/wpm-test/" }];
 
   const faqs = [
     {
@@ -42,6 +45,7 @@ export const WpmTestPage: React.FC<WpmTestPageProps> = ({
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -71,13 +75,16 @@ export const WpmTestPage: React.FC<WpmTestPageProps> = ({
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       {/* Hero Header */}
       <header className="space-y-4 text-center sm:text-left">

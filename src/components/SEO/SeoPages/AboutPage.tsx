@@ -2,6 +2,7 @@ import React from "react";
 import { Activity, ShieldCheck, Zap, Award, Users } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 
 interface AboutPageProps {
   onNavigatePath: (path: string) => void;
@@ -9,17 +10,34 @@ interface AboutPageProps {
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/about/";
-  const pageTitle = "About TypeBlast | High-Precision Online Typing Engine";
+  const pageTitle = "About TypeBlast Speed Platform - TypeBlast";
   const metaDescription =
-    "Learn about TypeBlast's mission: building the world's most responsive, precise, and engaging online typing speed and accuracy platform with AI coaching.";
+    "Learn about TypeBlast, our mission to advance global keyboard literacy, and our free typing speed test and training platform tools.";
+
+  const breadcrumbs = [{ label: "About Us", path: "/about/" }];
+
+  const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      name: "About TypeBlast",
+      url: canonicalUrl,
+      description: metaDescription,
+    },
+  ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
+        structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       <header className="space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold">

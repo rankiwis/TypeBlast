@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Mail, Send, CheckCircle2, MessageSquare } from "lucide-react";
+import { Mail, Send, CheckCircle2 } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 
 interface ContactPageProps {
   onNavigatePath: (path: string) => void;
@@ -9,9 +10,22 @@ interface ContactPageProps {
 
 export const ContactPage: React.FC<ContactPageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/contact/";
-  const pageTitle = "Contact Us & Support | TypeBlast";
+  const pageTitle = "Contact TypeBlast Support Team - TypeBlast";
   const metaDescription =
-    "Get in touch with the TypeBlast team. Contact us for feedback, feature requests, school licenses, or bug reports.";
+    "Get in touch with the TypeBlast team for support, feature requests, school inquiries, or feedback regarding our typing speed tools.";
+
+  const breadcrumbs = [{ label: "Contact Us", path: "/contact/" }];
+
+  const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      name: "Contact TypeBlast",
+      url: canonicalUrl,
+      description: metaDescription,
+    },
+  ];
 
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", subject: "Feedback", message: "" });
@@ -24,12 +38,16 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigatePath }) => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
+        structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       <header className="space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold">

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { TypingStats } from "../types";
+import { trackEvent } from "../utils/analytics";
 
 export interface UserTestResult {
   id: string;
@@ -130,6 +131,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.setItem(TOKEN_KEY, data.token);
     setToken(data.token);
     setUser(data.user);
+    trackEvent("account_created", { method: "email" });
   };
 
   const login = async (emailOrUsername: string, password: string) => {
@@ -147,6 +149,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.setItem(TOKEN_KEY, data.token);
     setToken(data.token);
     setUser(data.user);
+    trackEvent("login", { method: "email" });
   };
 
   const logout = async () => {

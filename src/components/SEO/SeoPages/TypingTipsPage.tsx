@@ -1,8 +1,9 @@
 import React from "react";
-import { Lightbulb, CheckCircle2, ShieldCheck, Flame, Zap, Compass } from "lucide-react";
+import { Lightbulb, Compass } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 
 interface TypingTipsPageProps {
   onNavigatePath: (path: string) => void;
@@ -10,9 +11,11 @@ interface TypingTipsPageProps {
 
 export const TypingTipsPage: React.FC<TypingTipsPageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/typing-tips/";
-  const pageTitle = "Top Typing Tips & Ergonomic Speed Drills | TypeBlast";
+  const pageTitle = "Typing Speed Tips & Techniques - TypeBlast";
   const metaDescription =
-    "Discover 10 expert typing tips to boost WPM, improve accuracy, master ergonomics, and build effortless touch-typing muscle memory.";
+    "Discover proven typing tips to increase your WPM speed and accuracy. Learn proper ergonomics, home row position, and practice routines.";
+
+  const breadcrumbs = [{ label: "Typing Tips", path: "/typing-tips/" }];
 
   const faqs = [
     {
@@ -30,6 +33,7 @@ export const TypingTipsPage: React.FC<TypingTipsPageProps> = ({ onNavigatePath }
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "Article",
@@ -56,13 +60,16 @@ export const TypingTipsPage: React.FC<TypingTipsPageProps> = ({ onNavigatePath }
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       <header className="space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold">

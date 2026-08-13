@@ -1,8 +1,9 @@
 import React from "react";
-import { Zap, Gauge, TrendingUp, Award, CheckCircle2 } from "lucide-react";
+import { Zap, Gauge, TrendingUp, CheckCircle2 } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 import { TypingTestView } from "../../TypingTest/TypingTestView";
 import { TypingStats, TabType } from "../../../types";
 
@@ -18,9 +19,11 @@ export const TypingSpeedTestPage: React.FC<TypingSpeedTestPageProps> = ({
   onNavigatePath,
 }) => {
   const canonicalUrl = "https://typeblast.com/typing-speed-test/";
-  const pageTitle = "Typing Speed Test Online | Measure Your Words Per Minute Speed";
+  const pageTitle = "Typing Speed Test & WPM Checker - TypeBlast";
   const metaDescription =
-    "Test your typing speed online with our real-time speed measurement tool. Benchmark your typing velocity against average, fast, and pro speed tiers.";
+    "Check your typing speed and accuracy with our fast online WPM test. Analyze keystroke metrics, error keys, and improve finger speed.";
+
+  const breadcrumbs = [{ label: "Typing Speed Test", path: "/typing-speed-test/" }];
 
   const faqs = [
     {
@@ -42,6 +45,7 @@ export const TypingSpeedTestPage: React.FC<TypingSpeedTestPageProps> = ({
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -71,13 +75,16 @@ export const TypingSpeedTestPage: React.FC<TypingSpeedTestPageProps> = ({
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       {/* Hero Header */}
       <header className="space-y-4 text-center sm:text-left">

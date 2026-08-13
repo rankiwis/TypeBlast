@@ -16,6 +16,7 @@ import {
 import { soundEngine } from "../../utils/sound";
 import { COMMON_WORDS } from "../../utils/textGenerator";
 import { useAuth } from "../../context/AuthContext";
+import { trackEvent } from "../../utils/analytics";
 
 interface FallingWord {
   id: string;
@@ -92,6 +93,12 @@ export const WordBlastGame: React.FC = () => {
       },
     ]);
 
+    trackEvent("typing_game_started", {
+      game_id: "word_blast",
+      game_name: "Word Blast Arena",
+      difficulty: "level_1",
+    });
+
     setTimeout(() => {
       inputRef.current?.focus();
     }, 100);
@@ -113,6 +120,14 @@ export const WordBlastGame: React.FC = () => {
       const calculatedDuration = Math.max(5, durationSec);
       const acc = finalTotal > 0 ? Math.round((finalCorrect / finalTotal) * 100) : 100;
       const wpm = Math.round((finalCorrect / 5) / (calculatedDuration / 60));
+
+      trackEvent("typing_game_completed", {
+        game_id: "word_blast",
+        game_name: "Word Blast Arena",
+        score: finalScore,
+        wpm: wpm,
+        accuracy: acc,
+      });
 
       try {
         const token = localStorage.getItem("typeblast_token");

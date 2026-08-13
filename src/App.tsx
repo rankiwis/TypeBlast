@@ -140,7 +140,7 @@ function MainAppContent() {
     "/profile/",
   ];
 
-  const isKnownPath = knownPaths.includes(currentPath);
+  const isKnownPath = knownPaths.includes(currentPath) || currentPath.startsWith("/blog/");
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
@@ -226,7 +226,9 @@ function MainAppContent() {
           <TermsOfServicePage onNavigatePath={navigateToPath} />
         )}
         {currentPath === "/leaderboard/" && <LeaderboardView onNavigatePath={navigateToPath} />}
-        {currentPath === "/blog/" && <BlogView />}
+        {(currentPath === "/blog/" || currentPath.startsWith("/blog/")) && (
+          <BlogView onNavigatePath={navigateToPath} />
+        )}
         {currentPath === "/lessons/" && <LessonsView />}
         {currentPath === "/certificates/" && <CertificatesView lastStats={lastStats} />}
         {currentPath === "/aicoach/" && <AICoachView lastStats={lastStats} setActiveTab={setActiveTab} />}

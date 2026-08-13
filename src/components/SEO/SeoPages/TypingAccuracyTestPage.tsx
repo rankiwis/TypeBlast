@@ -3,6 +3,7 @@ import { CheckCircle2, Target, AlertTriangle, ShieldCheck } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 import { TypingTestView } from "../../TypingTest/TypingTestView";
 import { TypingStats, TabType } from "../../../types";
 
@@ -18,9 +19,11 @@ export const TypingAccuracyTestPage: React.FC<TypingAccuracyTestPageProps> = ({
   onNavigatePath,
 }) => {
   const canonicalUrl = "https://typeblast.com/typing-accuracy-test/";
-  const pageTitle = "Typing Accuracy Test | Benchmark Keystroke Precision & Errors";
+  const pageTitle = "Typing Accuracy Test & Precision - TypeBlast";
   const metaDescription =
-    "Measure your typing accuracy percentage and identify error-prone keys with our free typing accuracy test. Improve keystroke precision and reduce backspacing.";
+    "Measure your typing accuracy percentage and identify problem keys. Practice precise touch typing with real-time error rate feedback.";
+
+  const breadcrumbs = [{ label: "Accuracy Test", path: "/typing-accuracy-test/" }];
 
   const faqs = [
     {
@@ -42,6 +45,7 @@ export const TypingAccuracyTestPage: React.FC<TypingAccuracyTestPageProps> = ({
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -71,13 +75,16 @@ export const TypingAccuracyTestPage: React.FC<TypingAccuracyTestPageProps> = ({
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       {/* Hero Header */}
       <header className="space-y-4 text-center sm:text-left">

@@ -1,8 +1,9 @@
 import React from "react";
-import { Trophy, Flame, Calendar, Sparkles } from "lucide-react";
+import { Trophy, Flame, Calendar } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 import { DailyChallengeView } from "../../DailyChallenge/DailyChallengeView";
 import { TabType } from "../../../types";
 
@@ -16,9 +17,11 @@ export const DailyChallengePage: React.FC<DailyChallengePageProps> = ({
   onNavigatePath,
 }) => {
   const canonicalUrl = "https://typeblast.com/daily-typing-challenge/";
-  const pageTitle = "Daily Typing Challenge | Compete Online in Today's Sprint";
+  const pageTitle = "Daily Typing Speed Challenge - TypeBlast";
   const metaDescription =
-    "Take today's official daily typing challenge, build your daily streak, earn XP multipliers, and compete against global typists on the leaderboard.";
+    "Compete in today's official daily typing challenge. Test speed against typists worldwide on the daily passage and win streak rewards.";
+
+  const breadcrumbs = [{ label: "Daily Challenge", path: "/daily-typing-challenge/" }];
 
   const faqs = [
     {
@@ -40,6 +43,7 @@ export const DailyChallengePage: React.FC<DailyChallengePageProps> = ({
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -69,13 +73,16 @@ export const DailyChallengePage: React.FC<DailyChallengePageProps> = ({
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       {/* Hero Header */}
       <header className="space-y-4 text-center sm:text-left">

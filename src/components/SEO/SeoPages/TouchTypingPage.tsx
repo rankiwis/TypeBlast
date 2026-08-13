@@ -3,6 +3,7 @@ import { Target, Keyboard, Hand, CheckCircle2, ShieldCheck } from "lucide-react"
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 import { TypingTestView } from "../../TypingTest/TypingTestView";
 import { TypingStats, TabType } from "../../../types";
 
@@ -18,9 +19,11 @@ export const TouchTypingPage: React.FC<TouchTypingPageProps> = ({
   onNavigatePath,
 }) => {
   const canonicalUrl = "https://typeblast.com/touch-typing/";
-  const pageTitle = "Learn Touch Typing Online | Free Guide & Finger Placement Guide";
+  const pageTitle = "Touch Typing Course & Lessons - TypeBlast";
   const metaDescription =
-    "Learn touch typing without looking at the keyboard. Master home row finger positioning (ASDF JKL;), visual finger maps, and muscle memory drills.";
+    "Learn touch typing online with interactive finger placement guides, home row drills, and step-by-step muscle memory practice lessons.";
+
+  const breadcrumbs = [{ label: "Touch Typing", path: "/touch-typing/" }];
 
   const [selectedFinger, setSelectedFinger] = useState<string>("left-index");
 
@@ -56,6 +59,7 @@ export const TouchTypingPage: React.FC<TouchTypingPageProps> = ({
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -85,13 +89,16 @@ export const TouchTypingPage: React.FC<TouchTypingPageProps> = ({
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       {/* Hero Header */}
       <header className="space-y-4 text-center sm:text-left">

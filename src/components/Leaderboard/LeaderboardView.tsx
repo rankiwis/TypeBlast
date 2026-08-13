@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { SeoHead } from "../SEO/SeoHead";
 import { useAuth } from "../../context/AuthContext";
+import { trackEvent } from "../../utils/analytics";
 
 export interface LeaderboardEntry {
   id: string;
@@ -106,6 +107,11 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ onNavigatePath
         setEntries(data.entries || []);
         setPagination(data.pagination || { total: 0, page: 1, limit, totalPages: 1 });
         setStatsSummary(data.statsSummary || { totalSubmissions: 0, topWpm: 0, avgWpm: 0, avgAccuracy: 0 });
+
+        trackEvent("leaderboard_viewed", {
+          category: durationFilter,
+          timeframe: period,
+        });
       } else {
         throw new Error(data.error || "Server returned error loading leaderboard.");
       }

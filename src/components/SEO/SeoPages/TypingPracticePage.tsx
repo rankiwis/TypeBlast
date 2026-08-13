@@ -3,6 +3,7 @@ import { BookOpen, Target, Sparkles, CheckCircle2 } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 import { PracticeView } from "../../TypingPractice/PracticeView";
 
 interface TypingPracticePageProps {
@@ -11,9 +12,11 @@ interface TypingPracticePageProps {
 
 export const TypingPracticePage: React.FC<TypingPracticePageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/typing-practice/";
-  const pageTitle = "Online Typing Practice | Free Custom Typing Exercises & Drills";
+  const pageTitle = "Interactive Online Typing Practice - TypeBlast";
   const metaDescription =
-    "Practice typing online with targeted exercises for home row, number row, punctuation, and custom text drills. Build muscle memory and typing speed.";
+    "Practice typing with customized drills, code snippets, quote passages, and error key exercises to build finger muscle memory fast.";
+
+  const breadcrumbs = [{ label: "Typing Practice", path: "/typing-practice/" }];
 
   const faqs = [
     {
@@ -35,6 +38,7 @@ export const TypingPracticePage: React.FC<TypingPracticePageProps> = ({ onNaviga
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -64,13 +68,16 @@ export const TypingPracticePage: React.FC<TypingPracticePageProps> = ({ onNaviga
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       {/* Hero Header */}
       <header className="space-y-4 text-center sm:text-left">

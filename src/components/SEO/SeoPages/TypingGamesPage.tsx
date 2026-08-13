@@ -3,6 +3,7 @@ import { Gamepad2, Flame, Trophy, Sparkles } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 import { GamesHubView } from "../../TypingGames/GamesHubView";
 
 interface TypingGamesPageProps {
@@ -11,9 +12,11 @@ interface TypingGamesPageProps {
 
 export const TypingGamesPage: React.FC<TypingGamesPageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/typing-games/";
-  const pageTitle = "Free Typing Games Online | Fun Arcade Speed & Reflex Games";
+  const pageTitle = "Arcade Typing Games & Speed Drills - TypeBlast";
   const metaDescription =
-    "Play free online typing games including Speed Blast Laser, Nitro Typing Race, and Word Defense Arena. Train reflexes and typing speed while playing.";
+    "Play fun arcade typing games online to boost your WPM speed. Challenge space shooters, rhythm racers, and word tower speed battles.";
+
+  const breadcrumbs = [{ label: "Typing Games", path: "/typing-games/" }];
 
   const faqs = [
     {
@@ -35,6 +38,7 @@ export const TypingGamesPage: React.FC<TypingGamesPageProps> = ({ onNavigatePath
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -64,13 +68,16 @@ export const TypingGamesPage: React.FC<TypingGamesPageProps> = ({ onNavigatePath
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       {/* Hero Header */}
       <header className="space-y-4 text-center sm:text-left">

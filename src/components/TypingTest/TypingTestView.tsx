@@ -44,6 +44,7 @@ import {
   calculateCompletedWords,
   validateTestResult,
 } from "../../utils/typingCalculator";
+import { trackEvent } from "../../utils/analytics";
 
 interface TypingTestViewProps {
   onTestComplete: (stats: TypingStats) => void;
@@ -197,6 +198,15 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
     }
 
     setFinalStats(statsPayload);
+
+    trackEvent("typing_test_completed", {
+      duration: duration,
+      test_type: `${duration}s_${category}`,
+      completion_status: "completed",
+      wpm: finalWpm,
+      raw_wpm: rawWpm,
+      accuracy: accuracy,
+    });
   }, [
     duration,
     correctChars,
@@ -253,6 +263,12 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
     if (!isActive && val.length > 0) {
       setIsActive(true);
       startTimeRef.current = performance.now();
+      trackEvent("typing_test_started", {
+        duration: duration,
+        test_type: `${duration}s_${category}`,
+        completion_status: "in_progress",
+        mode: category,
+      });
     }
 
     const lastCharTyped = val[val.length - 1];
@@ -327,6 +343,11 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
       navigator.clipboard.writeText(shareText);
       setShareCopied(true);
       setTimeout(() => setShareCopied(false), 2500);
+      trackEvent("result_shared", {
+        platform: "clipboard",
+        score_wpm: finalStats.wpm,
+        test_type: `${duration}s_${category}`,
+      });
     }
   };
 

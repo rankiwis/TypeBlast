@@ -3,6 +3,7 @@ import { HelpCircle } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
+import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
 
 interface FaqPageProps {
   onNavigatePath: (path: string) => void;
@@ -10,9 +11,11 @@ interface FaqPageProps {
 
 export const FaqPage: React.FC<FaqPageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://typeblast.com/faq/";
-  const pageTitle = "Frequently Asked Questions (FAQ) | TypeBlast";
+  const pageTitle = "Typing Test FAQs & Speed Questions - TypeBlast";
   const metaDescription =
-    "Find comprehensive answers to all questions about typing speed tests, WPM formulas, keyboard shortcuts, certification, and AI coaching on TypeBlast.";
+    "Find answers to common questions about typing speed tests, WPM scoring, keyboard accuracy, touch typing techniques, and certificates.";
+
+  const breadcrumbs = [{ label: "FAQ", path: "/faq/" }];
 
   const mainFaqs = [
     {
@@ -42,6 +45,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigatePath }) => {
   ];
 
   const structuredData = [
+    generateBreadcrumbSchema(breadcrumbs),
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -57,13 +61,16 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigatePath }) => {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
         canonicalUrl={canonicalUrl}
         structuredData={structuredData}
       />
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
 
       <header className="space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold">

@@ -19,6 +19,13 @@ import {
   addLeaderboardRecord,
   updateUserDisplayNameInLeaderboard
 } from "./server/leaderboardStore";
+import {
+  getDailyChallenge,
+  getDailyChallengeLeaderboard,
+  submitDailyChallengeScore,
+  getDailyChallengeHistory,
+  getUserDailyChallengeResult
+} from "./server/dailyChallengeStore";
 
 dotenv.config();
 
@@ -26,6 +33,12 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+
+const getAiClient = () => {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return null;
+  return new GoogleGenAI({ apiKey });
+};
 
 // Helper middleware to extract authorization token
 const getAuthToken = (req: express.Request): string | null => {
@@ -37,6 +50,106 @@ const getAuthToken = (req: express.Request): string | null => {
 // API Routes
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", service: "TypeBlast API" });
+});
+
+// Dynamic XML Sitemap Generator
+app.get("/sitemap.xml", (_req, res) => {
+  const baseUrl = "https://typeblast.com";
+  const today = new Date().toISOString().split("T")[0];
+
+  const publicRoutes = [
+    { path: "/", priority: "1.0", changefreq: "daily" },
+    { path: "/typing-test/", priority: "0.9", changefreq: "daily" },
+    { path: "/daily-typing-challenge/", priority: "0.9", changefreq: "daily" },
+    { path: "/blog/", priority: "0.9", changefreq: "daily" },
+    { path: "/blog/how-to-type-100-wpm-touch-typing-guide/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/home-row-finger-placement-mastery/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/ergonomics-and-wrist-health-for-typists/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/how-typing-speed-impacts-tech-careers/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/gamified-typing-for-kids-and-students/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/mechanical-keyboard-switches-wpm-guide/", priority: "0.8", changefreq: "weekly" },
+    { path: "/typing-speed-test/", priority: "0.8", changefreq: "weekly" },
+    { path: "/wpm-test/", priority: "0.8", changefreq: "weekly" },
+    { path: "/typing-accuracy-test/", priority: "0.8", changefreq: "weekly" },
+    { path: "/typing-practice/", priority: "0.8", changefreq: "weekly" },
+    { path: "/typing-games/", priority: "0.8", changefreq: "weekly" },
+    { path: "/touch-typing/", priority: "0.8", changefreq: "monthly" },
+    { path: "/typing-tips/", priority: "0.7", changefreq: "monthly" },
+    { path: "/faq/", priority: "0.6", changefreq: "monthly" },
+    { path: "/about/", priority: "0.5", changefreq: "monthly" },
+    { path: "/contact/", priority: "0.5", changefreq: "monthly" },
+    { path: "/privacy/", priority: "0.3", changefreq: "yearly" },
+    { path: "/terms/", priority: "0.3", changefreq: "yearly" },
+  ];
+
+  const xmlUrls = publicRoutes
+    .map(
+      (r) => `  <url>
+    <loc>${baseUrl}${r.path}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${r.changefreq}</changefreq>
+    <priority>${r.priority}</priority>
+  </url>`
+    )
+    .join("\n");
+
+  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${xmlUrls}
+</urlset>`;
+
+  res.header("Content-Type", "application/xml");
+  res.send(sitemapXml);
+});
+
+// Robots.txt Handler
+app.get("/robots.txt", (_req, res) => {
+  res.header("Content-Type", "text/plain");
+  res.send(`User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /admin/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /api/
+
+Sitemap: https://typeblast.com/sitemap.xml`);
+});
+
+// LLMs.txt Handler
+app.get("/llms.txt", (_req, res) => {
+  res.header("Content-Type", "text/plain");
+  res.send(`# TypeBlast - High-Precision Online Typing Platform
+
+TypeBlast is a fast, responsive online typing speed test, touch-typing practice engine, and gamified typing platform.
+
+## Key Capabilities
+- Standardized WPM and Accuracy Testing (15s, 30s, 60s, 120s, 300s durations)
+- Daily Typing Challenges with synchronized daily passages and global rankings
+- Targeted Skill & Drill Practice Engine for home row, number row, code snippets, and custom text
+- Arcade Typing Games (Word Blast, Time Attack, Typing Race, Speed Blast Laser, Nitro Typing Race, Word Defense Arena)
+- Verification & Official Printable Speed Certificates
+- Anti-Tamper Leaderboards with server-side validation
+- AI Typing Coach powered by Google Gemini AI
+
+## Important Public URLs
+- https://typeblast.com/
+- https://typeblast.com/typing-test/
+- https://typeblast.com/daily-typing-challenge/
+- https://typeblast.com/blog/
+- https://typeblast.com/typing-speed-test/
+- https://typeblast.com/wpm-test/
+- https://typeblast.com/typing-accuracy-test/
+- https://typeblast.com/typing-practice/
+- https://typeblast.com/typing-games/
+- https://typeblast.com/touch-typing/
+- https://typeblast.com/typing-tips/
+- https://typeblast.com/faq/
+- https://typeblast.com/about/
+- https://typeblast.com/contact/
+- https://typeblast.com/privacy/
+- https://typeblast.com/terms/`);
 });
 
 // Auth API Endpoints
@@ -217,6 +330,135 @@ app.post("/api/games/submit", (req, res) => {
     });
   } catch (error: any) {
     res.status(400).json({ error: error.message || "Failed to process game score." });
+  }
+});
+
+// Daily Challenge Endpoints
+app.get("/api/daily-challenge/today", (req, res) => {
+  try {
+    const token = getAuthToken(req);
+    const user = token ? getUserByToken(token) : null;
+
+    const todayKey = new Date().toISOString().split("T")[0];
+    const challenge = getDailyChallenge(todayKey);
+    const leaderboard = getDailyChallengeLeaderboard(todayKey, 1, 25);
+    const history = getDailyChallengeHistory(14);
+
+    let userResult = null;
+    if (user) {
+      userResult =
+        getUserDailyChallengeResult(todayKey, user.username) ||
+        getUserDailyChallengeResult(todayKey, user.displayName);
+    }
+
+    res.json({
+      status: "success",
+      serverTime: new Date().toISOString(),
+      challenge,
+      userResult,
+      leaderboard,
+      history,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || "Failed to load daily challenge." });
+  }
+});
+
+app.get("/api/daily-challenge/challenge", (req, res) => {
+  try {
+    const token = getAuthToken(req);
+    const user = token ? getUserByToken(token) : null;
+    const dateKey = (req.query.date as string) || new Date().toISOString().split("T")[0];
+
+    const challenge = getDailyChallenge(dateKey);
+    const leaderboard = getDailyChallengeLeaderboard(dateKey, 1, 25);
+
+    let userResult = null;
+    if (user) {
+      userResult =
+        getUserDailyChallengeResult(dateKey, user.username) ||
+        getUserDailyChallengeResult(dateKey, user.displayName);
+    }
+
+    res.json({
+      status: "success",
+      serverTime: new Date().toISOString(),
+      challenge,
+      userResult,
+      leaderboard,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || "Failed to query daily challenge." });
+  }
+});
+
+app.post("/api/daily-challenge/submit", (req, res) => {
+  try {
+    const token = getAuthToken(req);
+    const user = token ? getUserByToken(token) : null;
+
+    const {
+      dateKey,
+      wpm,
+      rawWpm,
+      accuracy,
+      totalChars,
+      correctChars,
+      errorCount,
+      duration,
+      displayName,
+    } = req.body;
+
+    const targetDateKey = dateKey || new Date().toISOString().split("T")[0];
+    const finalDisplayName = user
+      ? user.displayName || user.username
+      : displayName || "Anonymous Typist";
+    const finalUsername = user
+      ? user.username
+      : displayName
+      ? displayName.toLowerCase().replace(/\s+/g, "_")
+      : "guest";
+
+    const result = submitDailyChallengeScore({
+      dateKey: targetDateKey,
+      wpm: Number(wpm) || 0,
+      rawWpm: Number(rawWpm) || Number(wpm) || 0,
+      accuracy: Number(accuracy) || 0,
+      totalChars: Number(totalChars) || 0,
+      correctChars: Number(correctChars) || 0,
+      errorCount: Number(errorCount) || 0,
+      duration: Number(duration) || 60,
+      displayName: finalDisplayName,
+      username: finalUsername,
+      userId: user ? user.id : undefined,
+    });
+
+    if (!result.isValid) {
+      return res.status(400).json({ error: result.error || "Submission failed validation." });
+    }
+
+    // Record in user account history if logged in
+    if (token && user) {
+      addGameScoreToUser(token, {
+        gameId: "daily-challenge",
+        gameName: "Daily Challenge",
+        score: result.record?.score || 0,
+        wpm: result.record?.wpm || 0,
+        accuracy: result.record?.accuracy || 0,
+      });
+    }
+
+    const updatedLeaderboard = getDailyChallengeLeaderboard(targetDateKey, 1, 25);
+
+    res.json({
+      status: "success",
+      record: result.record,
+      userRank: result.userRank,
+      totalParticipants: result.totalParticipants,
+      leaderboard: updatedLeaderboard,
+    });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to submit daily challenge result." });
   }
 });
 

@@ -16,6 +16,7 @@ import {
 import { soundEngine } from "../../utils/sound";
 import { COMMON_WORDS } from "../../utils/textGenerator";
 import { useAuth } from "../../context/AuthContext";
+import { trackEvent } from "../../utils/analytics";
 
 type TimeOption = 15 | 30 | 60;
 
@@ -71,6 +72,12 @@ export const TimeAttackGame: React.FC = () => {
     setSubmitError(null);
     setGameState("playing");
 
+    trackEvent("typing_game_started", {
+      game_id: "time_attack",
+      game_name: "Time Attack Sprint",
+      difficulty: `${selectedDuration}s`,
+    });
+
     setTimeout(() => {
       inputRef.current?.focus();
     }, 100);
@@ -91,6 +98,14 @@ export const TimeAttackGame: React.FC = () => {
       const acc = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
       const wpm = Math.round((correctChars / 5) / (dur / 60));
       const score = Math.round(wpm * (acc / 100) * 12);
+
+      trackEvent("typing_game_completed", {
+        game_id: "time_attack",
+        game_name: "Time Attack Sprint",
+        score: score,
+        wpm: wpm,
+        accuracy: acc,
+      });
 
       try {
         const token = localStorage.getItem("typeblast_token");

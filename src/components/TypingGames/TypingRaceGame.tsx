@@ -16,6 +16,7 @@ import {
 import { soundEngine } from "../../utils/sound";
 import { FAMOUS_QUOTES } from "../../utils/textGenerator";
 import { useAuth } from "../../context/AuthContext";
+import { trackEvent } from "../../utils/analytics";
 
 interface BotRacer {
   name: string;
@@ -81,6 +82,12 @@ export const TypingRaceGame: React.FC = () => {
     setStartTime(Date.now());
     setGameState("playing");
 
+    trackEvent("typing_game_started", {
+      game_id: "typing_race",
+      game_name: "Nitro Typing Race",
+      difficulty: "vs_bots",
+    });
+
     setTimeout(() => {
       inputRef.current?.focus();
     }, 100);
@@ -103,6 +110,14 @@ export const TypingRaceGame: React.FC = () => {
       const acc = totalKeys > 0 ? Math.round((correct / totalKeys) * 100) : 100;
       const wpm = Math.round((correct / 5) / (calculatedSec / 60));
       const score = Math.round(wpm * (acc / 100) * 15 * (rank === 1 ? 1.3 : rank === 2 ? 1.1 : 1.0));
+
+      trackEvent("typing_game_completed", {
+        game_id: "typing_race",
+        game_name: "Nitro Typing Race",
+        score: score,
+        wpm: wpm,
+        accuracy: acc,
+      });
 
       try {
         const token = localStorage.getItem("typeblast_token");
