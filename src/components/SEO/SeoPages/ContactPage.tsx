@@ -9,7 +9,7 @@ interface ContactPageProps {
 }
 
 export const ContactPage: React.FC<ContactPageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/contact/";
+  const canonicalUrl = "https://www.typeblast.com/contact/";
   const pageTitle = "Contact TypeBlast Support Team - TypeBlast";
   const metaDescription =
     "Get in touch with the TypeBlast team for support, feature requests, school inquiries, or feedback regarding our typing speed tools.";

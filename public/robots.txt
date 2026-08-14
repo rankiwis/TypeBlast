@@ -1,11 +1,11 @@
 User-agent: *
 Allow: /
-Disallow: /dashboard/
-Disallow: /profile/
-Disallow: /admin/
-Disallow: /login/
-Disallow: /signup/
+
+# Direct indexing rules
+Allow: /typing-test/
+Allow: /daily-typing-challenge/
+Allow: /blog/
+
 Disallow: /api/
 
-Sitemap: https://typeblast.com/sitemap.xml
 Sitemap: https://www.typeblast.com/sitemap.xml

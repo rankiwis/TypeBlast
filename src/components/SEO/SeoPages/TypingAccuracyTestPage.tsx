@@ -18,7 +18,7 @@ export const TypingAccuracyTestPage: React.FC<TypingAccuracyTestPageProps> = ({
   setActiveTab,
   onNavigatePath,
 }) => {
-  const canonicalUrl = "https://typeblast.com/typing-accuracy-test/";
+  const canonicalUrl = "https://www.typeblast.com/typing-accuracy-test/";
   const pageTitle = "Typing Accuracy Test & Precision - TypeBlast";
   const metaDescription =
     "Measure your typing accuracy percentage and identify problem keys. Practice precise touch typing with real-time error rate feedback.";

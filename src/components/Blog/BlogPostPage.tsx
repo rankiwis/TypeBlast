@@ -53,7 +53,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
   }
 
   const relatedPosts = getRelatedBlogPosts(post, 3);
-  const currentUrl = `https://typeblast.com/blog/${post.slug}/`;
+  const currentUrl = `https://www.typeblast.com/blog/${post.slug}/`;
 
   const breadcrumbs = [
     { label: "Blog", path: "/blog/" },
@@ -80,7 +80,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
       name: "TypeBlast",
       logo: {
         "@type": "ImageObject",
-        url: "https://typeblast.com/icon.png",
+        url: "https://www.typeblast.com/icon.png",
       },
     },
     mainEntityOfPage: {

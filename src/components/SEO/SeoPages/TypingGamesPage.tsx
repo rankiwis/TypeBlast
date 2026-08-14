@@ -11,7 +11,7 @@ interface TypingGamesPageProps {
 }
 
 export const TypingGamesPage: React.FC<TypingGamesPageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/typing-games/";
+  const canonicalUrl = "https://www.typeblast.com/typing-games/";
   const pageTitle = "Arcade Typing Games & Speed Drills - TypeBlast";
   const metaDescription =
     "Play fun arcade typing games online to boost your WPM speed. Challenge space shooters, rhythm racers, and word tower speed battles.";

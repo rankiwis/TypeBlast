@@ -18,7 +18,7 @@ export const TypingSpeedTestPage: React.FC<TypingSpeedTestPageProps> = ({
   setActiveTab,
   onNavigatePath,
 }) => {
-  const canonicalUrl = "https://typeblast.com/typing-speed-test/";
+  const canonicalUrl = "https://www.typeblast.com/typing-speed-test/";
   const pageTitle = "Typing Speed Test & WPM Checker - TypeBlast";
   const metaDescription =
     "Check your typing speed and accuracy with our fast online WPM test. Analyze keystroke metrics, error keys, and improve finger speed.";

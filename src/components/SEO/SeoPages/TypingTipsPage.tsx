@@ -10,7 +10,7 @@ interface TypingTipsPageProps {
 }
 
 export const TypingTipsPage: React.FC<TypingTipsPageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/typing-tips/";
+  const canonicalUrl = "https://www.typeblast.com/typing-tips/";
   const pageTitle = "Typing Speed Tips & Techniques - TypeBlast";
   const metaDescription =
     "Discover proven typing tips to increase your WPM speed and accuracy. Learn proper ergonomics, home row position, and practice routines.";

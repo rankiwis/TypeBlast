@@ -61,7 +61,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
       <SeoHead
         title="TypeBlast Blog - Typing Speed Guides, Practice & Touch Typing Tips"
         description="Comprehensive guides on touch typing, increasing WPM, keyboard switch ergonomics, typing games, and career benchmarks from the TypeBlast Team."
-        canonicalUrl="https://typeblast.com/blog/"
+        canonicalUrl="https://www.typeblast.com/blog/"
         structuredData={[
           breadcrumbSchema,
           {
@@ -70,11 +70,11 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
             name: "TypeBlast Typing Guides & Speed Telemetry Blog",
             description:
               "Expert touch typing strategies, ergonomics, keyboard hardware guides, and speed drills.",
-            url: "https://typeblast.com/blog/",
+            url: "https://www.typeblast.com/blog/",
             publisher: {
               "@type": "Organization",
               name: "TypeBlast",
-              logo: "https://typeblast.com/icon.png",
+              logo: "https://www.typeblast.com/icon.png",
             },
           },
         ]}

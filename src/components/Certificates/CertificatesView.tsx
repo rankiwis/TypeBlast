@@ -30,7 +30,7 @@ export const CertificatesView: React.FC<CertificatesViewProps> = ({ lastStats })
     ? Object.keys(lastStats.errorKeys).slice(0, 5)
     : ["p", ";", "q", "z", "r"];
 
-  const shareMessage = `🚀 I just earned my ${certTier} Typing Certificate on TypeBlast!\n⚡ Speed: ${wpm} WPM | 🎯 Accuracy: ${accuracy}%\n📜 Certificate ID: ${verificationCode}\n\nTest your typing speed & accuracy at https://typeblast.com #TypeBlast #TypingSpeed #TouchTyping`;
+  const shareMessage = `🚀 I just earned my ${certTier} Typing Certificate on TypeBlast!\n⚡ Speed: ${wpm} WPM | 🎯 Accuracy: ${accuracy}%\n📜 Certificate ID: ${verificationCode}\n\nTest your typing speed & accuracy at https://www.typeblast.com #TypeBlast #TypingSpeed #TouchTyping`;
 
   const handleShareX = () => {
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage)}`;

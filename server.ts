@@ -118,7 +118,7 @@ app.get("/api/health", (_req, res) => {
 
 // Dynamic XML Sitemap Generator
 app.get("/sitemap.xml", (_req, res) => {
-  const baseUrl = "https://typeblast.com";
+  const baseUrl = "https://www.typeblast.com";
   const today = new Date().toISOString().split("T")[0];
 
   const publicRoutes = [
@@ -178,7 +178,7 @@ Disallow: /login/
 Disallow: /signup/
 Disallow: /api/
 
-Sitemap: https://typeblast.com/sitemap.xml`);
+Sitemap: https://www.typeblast.com/sitemap.xml`);
 });
 
 // LLMs.txt Handler
@@ -198,22 +198,22 @@ TypeBlast is a fast, responsive online typing speed test, touch-typing practice 
 - AI Typing Coach powered by Google Gemini AI
 
 ## Important Public URLs
-- https://typeblast.com/
-- https://typeblast.com/typing-test/
-- https://typeblast.com/daily-typing-challenge/
-- https://typeblast.com/blog/
-- https://typeblast.com/typing-speed-test/
-- https://typeblast.com/wpm-test/
-- https://typeblast.com/typing-accuracy-test/
-- https://typeblast.com/typing-practice/
-- https://typeblast.com/typing-games/
-- https://typeblast.com/touch-typing/
-- https://typeblast.com/typing-tips/
-- https://typeblast.com/faq/
-- https://typeblast.com/about/
-- https://typeblast.com/contact/
-- https://typeblast.com/privacy/
-- https://typeblast.com/terms/`);
+- https://www.typeblast.com/
+- https://www.typeblast.com/typing-test/
+- https://www.typeblast.com/daily-typing-challenge/
+- https://www.typeblast.com/blog/
+- https://www.typeblast.com/typing-speed-test/
+- https://www.typeblast.com/wpm-test/
+- https://www.typeblast.com/typing-accuracy-test/
+- https://www.typeblast.com/typing-practice/
+- https://www.typeblast.com/typing-games/
+- https://www.typeblast.com/touch-typing/
+- https://www.typeblast.com/typing-tips/
+- https://www.typeblast.com/faq/
+- https://www.typeblast.com/about/
+- https://www.typeblast.com/contact/
+- https://www.typeblast.com/privacy/
+- https://www.typeblast.com/terms/`);
 });
 
 // Auth API Endpoints

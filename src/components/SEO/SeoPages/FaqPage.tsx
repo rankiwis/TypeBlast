@@ -10,7 +10,7 @@ interface FaqPageProps {
 }
 
 export const FaqPage: React.FC<FaqPageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/faq/";
+  const canonicalUrl = "https://www.typeblast.com/faq/";
   const pageTitle = "Typing Test FAQs & Speed Questions - TypeBlast";
   const metaDescription =
     "Find answers to common questions about typing speed tests, WPM scoring, keyboard accuracy, touch typing techniques, and certificates.";

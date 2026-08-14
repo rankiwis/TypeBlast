@@ -16,7 +16,7 @@ export const DailyChallengePage: React.FC<DailyChallengePageProps> = ({
   setActiveTab,
   onNavigatePath,
 }) => {
-  const canonicalUrl = "https://typeblast.com/daily-typing-challenge/";
+  const canonicalUrl = "https://www.typeblast.com/daily-typing-challenge/";
   const pageTitle = "Daily Typing Speed Challenge - TypeBlast";
   const metaDescription =
     "Compete in today's official daily typing challenge. Test speed against typists worldwide on the daily passage and win streak rewards.";

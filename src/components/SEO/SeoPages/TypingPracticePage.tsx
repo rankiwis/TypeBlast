@@ -11,7 +11,7 @@ interface TypingPracticePageProps {
 }
 
 export const TypingPracticePage: React.FC<TypingPracticePageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/typing-practice/";
+  const canonicalUrl = "https://www.typeblast.com/typing-practice/";
   const pageTitle = "Interactive Online Typing Practice - TypeBlast";
   const metaDescription =
     "Practice typing with customized drills, code snippets, quote passages, and error key exercises to build finger muscle memory fast.";

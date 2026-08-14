@@ -8,7 +8,7 @@ interface NotFoundPageProps {
 }
 
 export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/404/";
+  const canonicalUrl = "https://www.typeblast.com/404/";
   const pageTitle = "404 Page Not Found Error - TypeBlast";
   const metaDescription =
     "The requested page could not be found on TypeBlast. Return to our free online typing speed test or practice tools to continue typing.";

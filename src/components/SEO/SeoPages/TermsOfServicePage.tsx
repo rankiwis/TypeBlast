@@ -9,7 +9,7 @@ interface TermsOfServicePageProps {
 }
 
 export const TermsOfServicePage: React.FC<TermsOfServicePageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/terms/";
+  const canonicalUrl = "https://www.typeblast.com/terms/";
   const pageTitle = "Terms of Service & Rules - TypeBlast";
   const metaDescription =
     "Read the TypeBlast terms of service. Guidelines for platform usage, speed test leaderboard fair play, and certificate issuance rules.";

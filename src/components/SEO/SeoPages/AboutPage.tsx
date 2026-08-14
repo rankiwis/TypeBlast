@@ -9,7 +9,7 @@ interface AboutPageProps {
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/about/";
+  const canonicalUrl = "https://www.typeblast.com/about/";
   const pageTitle = "About TypeBlast Speed Platform - TypeBlast";
   const metaDescription =
     "Learn about TypeBlast, our mission to advance global keyboard literacy, and our free typing speed test and training platform tools.";

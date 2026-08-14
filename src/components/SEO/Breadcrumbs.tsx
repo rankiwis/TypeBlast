@@ -60,7 +60,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, onNavigate }) =
 };
 
 // Helper function to build Schema.org BreadcrumbList JSON-LD
-export function generateBreadcrumbSchema(items: BreadcrumbItem[], baseUrl = "https://typeblast.com") {
+export function generateBreadcrumbSchema(items: BreadcrumbItem[], baseUrl = "https://www.typeblast.com") {
   const itemListElement = [
     {
       "@type": "ListItem",

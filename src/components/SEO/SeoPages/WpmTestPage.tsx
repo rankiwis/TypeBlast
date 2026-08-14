@@ -18,7 +18,7 @@ export const WpmTestPage: React.FC<WpmTestPageProps> = ({
   setActiveTab,
   onNavigatePath,
 }) => {
-  const canonicalUrl = "https://typeblast.com/wpm-test/";
+  const canonicalUrl = "https://www.typeblast.com/wpm-test/";
   const pageTitle = "Words Per Minute WPM Typing Test - TypeBlast";
   const metaDescription =
     "Evaluate your Words Per Minute WPM score with our official speed test. Get detailed accuracy analysis and printable WPM certificates.";

@@ -9,7 +9,7 @@ interface PrivacyPolicyPageProps {
 }
 
 export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigatePath }) => {
-  const canonicalUrl = "https://typeblast.com/privacy/";
+  const canonicalUrl = "https://www.typeblast.com/privacy/";
   const pageTitle = "Privacy Policy & Data Protection - TypeBlast";
   const metaDescription =
     "Read the official TypeBlast privacy policy. Learn how we protect your personal information, user account data, and typing test scores.";

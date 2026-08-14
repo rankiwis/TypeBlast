@@ -18,7 +18,7 @@ export const TouchTypingPage: React.FC<TouchTypingPageProps> = ({
   setActiveTab,
   onNavigatePath,
 }) => {
-  const canonicalUrl = "https://typeblast.com/touch-typing/";
+  const canonicalUrl = "https://www.typeblast.com/touch-typing/";
   const pageTitle = "Touch Typing Course & Lessons - TypeBlast";
   const metaDescription =
     "Learn touch typing online with interactive finger placement guides, home row drills, and step-by-step muscle memory practice lessons.";

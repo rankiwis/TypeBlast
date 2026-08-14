@@ -168,7 +168,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ onNavigatePath
       <SeoHead
         title="TypeBlast Global Leaderboard - Today, This Week & All Time Speed Records"
         description="View official verified typing speed rankings across 15s, 30s & 60s typing sprints. Compete for top rank and master typing accuracy."
-        canonicalUrl="https://typeblast.com/leaderboard/"
+        canonicalUrl="https://www.typeblast.com/leaderboard/"
       />
 
       <div className="max-w-6xl mx-auto space-y-6">
