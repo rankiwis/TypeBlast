@@ -298,16 +298,33 @@ export function submitDailyChallengeScore(data: {
 }) {
   loadSubmissions();
 
+  // Validate dateKey format (YYYY-MM-DD)
+  if (!data.dateKey || !/^\d{4}-\d{2}-\d{2}$/.test(data.dateKey)) {
+    return {
+      isValid: false,
+      error: "Invalid date format for daily challenge. Must be YYYY-MM-DD.",
+    };
+  }
+
+  // Prevent spoofing future dates beyond today UTC
+  const todayKey = new Date().toISOString().split("T")[0];
+  if (data.dateKey > todayKey) {
+    return {
+      isValid: false,
+      error: "Cannot submit scores for future daily challenges.",
+    };
+  }
+
   const challenge = getDailyChallenge(data.dateKey);
 
   // Anti-abuse 1: Enforce cooldown between submissions per user
   const userKey = `${data.userId || data.username || "guest"}_${data.dateKey}`;
   const now = Date.now();
   const lastSubmit = recentSubmissionsMap.get(userKey);
-  if (lastSubmit && now - lastSubmit < 15000) { // 15 seconds cooldown
+  if (lastSubmit && now - lastSubmit < 10000) { // 10 seconds cooldown
     return {
       isValid: false,
-      error: "Please wait 15 seconds before submitting another daily challenge attempt.",
+      error: "Please wait 10 seconds before submitting another daily challenge attempt.",
     };
   }
 
@@ -346,8 +363,8 @@ export function submitDailyChallengeScore(data: {
     id: `dc_${data.dateKey}_${crypto.randomBytes(6).toString("hex")}`,
     dateKey: data.dateKey,
     userId: data.userId,
-    username: data.username,
-    displayName: data.displayName,
+    username: validation.record.username,
+    displayName: validation.record.displayName,
     wpm: validation.record.wpm,
     rawWpm: validation.record.rawWpm,
     accuracy: validation.record.accuracy,

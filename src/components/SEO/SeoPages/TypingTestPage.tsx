@@ -27,20 +27,36 @@ export const TypingTestPage: React.FC<TypingTestPageProps> = ({
 
   const faqs = [
     {
-      q: "How long is a standard typing test online?",
-      a: "Standard online typing tests typically offer 15-second, 30-second, 60-second (1-minute), and 3-minute options. The 60-second duration is the international standard for job assessments and school benchmarks.",
+      q: "How is typing speed (WPM) calculated on TypeBlast?",
+      a: "Net WPM is calculated using the international standard formula: (Total Correct Characters / 5) divided by Elapsed Minutes. Uncorrected errors reduce your net WPM score, rewarding both speed and accuracy under realistic workplace typing conditions.",
     },
     {
-      q: "Is this typing test completely free to take?",
-      a: "Yes! TypeBlast provides 100% free online typing tests with unlimited retakes, instant WPM feedback, error key heatmaps, and downloadable certificates without requiring sign-up.",
+      q: "Is TypeBlast free to use?",
+      a: "Yes! TypeBlast provides 100% free online typing speed tests, custom practice drills, arcade games, daily sprints, and official downloadable certificates without requiring subscriptions or paywalls.",
+    },
+    {
+      q: "How long is a standard typing test online?",
+      a: "Standard online typing tests typically offer 15-second, 30-second, 60-second (1-minute), and 3-minute options. The 60-second duration is the international standard for employment assessments, certifications, and school benchmarks.",
     },
     {
       q: "What is a good typing test score for employment?",
-      a: "An average typing speed is around 40 WPM with 95% accuracy. Administrative, data entry, and technical roles often require 60 to 75 WPM, while executive assistants and court reporters frequently exceed 80 to 100 WPM.",
+      a: "An average typing speed is around 40 WPM with 95% accuracy. Administrative, customer support, and data entry roles often require 60 to 75 WPM, while software engineers, executive assistants, and transcriptionists frequently exceed 80 to 100+ WPM.",
     },
     {
-      q: "How is my typing test score calculated?",
-      a: "Net WPM is calculated using the official standard: (Total Correct Characters / 5) / Elapsed Minutes. Uncorrected typos decrease your net speed score to reflect realistic workplace typing conditions.",
+      q: "How does anti-tamper score validation work?",
+      a: "TypeBlast validates keystroke timing logs, elapsed time, and mathematical character metrics before saving or posting scores to prevent automated scripts or tampered entries on global leaderboards.",
+    },
+    {
+      q: "How can I improve my typing speed and accuracy?",
+      a: "Focus on touch typing fundamentals: anchor your fingers on the Home Row (A-S-D-F and J-K-L-;), avoid looking down at the keyboard, and maintain a smooth, steady cadence. Utilize our Gemini AI Coach for targeted error analysis and finger-reach diagnostics.",
+    },
+    {
+      q: "Does TypeBlast support code typing practice for programmers?",
+      a: "Yes! We provide specialized code typing exercises featuring real JavaScript, Python, C++, and HTML syntax to help developers master speed with brackets, semicolons, quotes, and indentation.",
+    },
+    {
+      q: "Can teachers and schools track student typing progress?",
+      a: "Yes! Teachers can utilize the Schools & Teachers Portal to manage student rosters, track lesson completion, view real-time WPM benchmarks, and export gradebook CSV reports.",
     },
   ];
 

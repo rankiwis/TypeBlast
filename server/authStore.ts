@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import { sanitizeText } from "./leaderboardStore";
 
 export interface UserTestResult {
   id: string;
@@ -71,6 +72,12 @@ export interface PublicProfile {
   achievementsCount: number;
 }
 
+export interface SessionData {
+  userId: string;
+  createdAt: number;
+  expiresAt: number;
+}
+
 const DATA_DIR = path.join(process.cwd(), "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const SESSIONS_FILE = path.join(DATA_DIR, "sessions.json");
@@ -82,7 +89,10 @@ if (!fs.existsSync(DATA_DIR)) {
 
 // In-memory data structures synced with disk
 let users: Record<string, UserAccount> = {};
-let sessions: Record<string, string> = {}; // token -> userId
+let sessions: Record<string, SessionData> = {}; // token -> SessionData
+
+// Session TTL: 30 days in milliseconds
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 // Load initial data
 try {
@@ -98,7 +108,20 @@ try {
 try {
   if (fs.existsSync(SESSIONS_FILE)) {
     const raw = fs.readFileSync(SESSIONS_FILE, "utf-8");
-    sessions = JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    // Backward-compatibility: convert old string sessions to SessionData
+    const now = Date.now();
+    for (const [token, val] of Object.entries(parsed)) {
+      if (typeof val === "string") {
+        sessions[token] = {
+          userId: val,
+          createdAt: now,
+          expiresAt: now + SESSION_TTL_MS,
+        };
+      } else if (val && typeof val === "object" && (val as any).userId) {
+        sessions[token] = val as SessionData;
+      }
+    }
   }
 } catch (e) {
   console.error("Error loading sessions database:", e);
@@ -121,23 +144,46 @@ function saveSessions() {
   }
 }
 
-// Password hashing using PBKDF2
+// Password hashing using PBKDF2 with 100,000 iterations for defense against brute force
 export function hashPassword(password: string, salt?: string) {
   const selectedSalt = salt || crypto.randomBytes(16).toString("hex");
   const hash = crypto
-    .pbkdf2Sync(password, selectedSalt, 10000, 64, "sha512")
+    .pbkdf2Sync(password, selectedSalt, 100000, 64, "sha512")
     .toString("hex");
   return { hash, salt: selectedSalt };
 }
 
-export function verifyPassword(password: string, hash: string, salt: string) {
-  const computed = crypto
-    .pbkdf2Sync(password, salt, 10000, 64, "sha512")
-    .toString("hex");
-  return computed === hash;
+// Timing-safe password verification to prevent timing attack vulnerabilities
+export function verifyPassword(password: string, hash: string, salt: string): boolean {
+  try {
+    // Check with 100,000 iterations
+    const computed = crypto
+      .pbkdf2Sync(password, salt, 100000, 64, "sha512")
+      .toString("hex");
+    
+    const computedBuf = Buffer.from(computed, "hex");
+    const hashBuf = Buffer.from(hash, "hex");
+
+    if (computedBuf.length === hashBuf.length && crypto.timingSafeEqual(computedBuf, hashBuf)) {
+      return true;
+    }
+
+    // Fallback for legacy 10,000 iteration hashes if present
+    const legacyComputed = crypto
+      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .toString("hex");
+    const legacyBuf = Buffer.from(legacyComputed, "hex");
+    if (legacyBuf.length === hashBuf.length && crypto.timingSafeEqual(legacyBuf, hashBuf)) {
+      return true;
+    }
+
+    return false;
+  } catch {
+    return false;
+  }
 }
 
-// Generate token
+// Generate secure token
 export function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
 }
@@ -197,12 +243,38 @@ export function getDefaultAchievements(): Achievement[] {
   ];
 }
 
-// User methods
+// User registration with rigorous format validation & sanitization
 export function createUser(username: string, email: string, password: string): { user: UserAccount; token: string } {
-  const normalizedEmail = email.trim().toLowerCase();
-  const normalizedUsername = username.trim().toLowerCase();
+  if (typeof username !== "string" || typeof email !== "string" || typeof password !== "string") {
+    throw new Error("Invalid request payload.");
+  }
 
-  // Check if exists
+  const rawUsername = username.trim();
+  const rawEmail = email.trim().toLowerCase();
+
+  // Username validation: 3-24 characters, alphanumeric + underscore + hyphen
+  if (!/^[a-zA-Z0-9_-]{3,24}$/.test(rawUsername)) {
+    throw new Error("Username must be between 3 and 24 characters and contain only letters, numbers, underscores, or hyphens.");
+  }
+
+  // Email format validation (RFC-compliant standard pattern)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(rawEmail) || rawEmail.length > 100) {
+    throw new Error("Please provide a valid email address.");
+  }
+
+  // Password validation: 6-128 characters
+  if (password.length < 6) {
+    throw new Error("Password must be at least 6 characters long.");
+  }
+  if (password.length > 128) {
+    throw new Error("Password cannot exceed 128 characters.");
+  }
+
+  const normalizedEmail = rawEmail;
+  const normalizedUsername = rawUsername.toLowerCase();
+
+  // Check if account with email or username already exists
   const existingUser = Object.values(users).find(
     (u) => u.email.toLowerCase() === normalizedEmail || u.username.toLowerCase() === normalizedUsername
   );
@@ -219,12 +291,12 @@ export function createUser(username: string, email: string, password: string): {
 
   const newUser: UserAccount = {
     id: userId,
-    username: username.trim(),
+    username: rawUsername,
     email: normalizedEmail,
     passwordHash: hash,
     salt,
     createdAt: now,
-    displayName: username.trim(),
+    displayName: rawUsername,
     bio: "TypeBlast enthusiast mastering speed touch typing.",
     keyboardLayout: "QWERTY",
     soundPreference: "mechanical",
@@ -246,13 +318,22 @@ export function createUser(username: string, email: string, password: string): {
   saveUsers();
 
   const token = generateToken();
-  sessions[token] = userId;
+  const nowMs = Date.now();
+  sessions[token] = {
+    userId,
+    createdAt: nowMs,
+    expiresAt: nowMs + SESSION_TTL_MS,
+  };
   saveSessions();
 
   return { user: sanitizeUser(newUser), token };
 }
 
 export function loginUser(emailOrUsername: string, password: string): { user: UserAccount; token: string } {
+  if (typeof emailOrUsername !== "string" || typeof password !== "string") {
+    throw new Error("Invalid credentials payload.");
+  }
+
   const query = emailOrUsername.trim().toLowerCase();
   const foundUser = Object.values(users).find(
     (u) => u.email.toLowerCase() === query || u.username.toLowerCase() === query
@@ -268,23 +349,45 @@ export function loginUser(emailOrUsername: string, password: string): { user: Us
   }
 
   const token = generateToken();
-  sessions[token] = foundUser.id;
+  const nowMs = Date.now();
+  sessions[token] = {
+    userId: foundUser.id,
+    createdAt: nowMs,
+    expiresAt: nowMs + SESSION_TTL_MS,
+  };
   saveSessions();
 
   return { user: sanitizeUser(foundUser), token };
 }
 
+// Session resolution with expiration check and auto-pruning
 export function getUserByToken(token: string): UserAccount | null {
-  const userId = sessions[token];
+  if (!token || typeof token !== "string") return null;
+
+  const session = sessions[token];
+  if (!session) return null;
+
+  // Check session expiration
+  const now = Date.now();
+  if (session.expiresAt && session.expiresAt < now) {
+    delete sessions[token];
+    saveSessions();
+    return null;
+  }
+
+  const userId = session.userId;
   if (!userId || !users[userId]) return null;
   return sanitizeUser(users[userId]);
 }
 
 export function logoutToken(token: string) {
-  delete sessions[token];
-  saveSessions();
+  if (token && sessions[token]) {
+    delete sessions[token];
+    saveSessions();
+  }
 }
 
+// Never expose password hash or salt
 export function sanitizeUser(user: UserAccount): UserAccount {
   const clone = { ...user };
   delete (clone as any).passwordHash;
@@ -309,7 +412,12 @@ export function getPublicProfile(userId: string): PublicProfile | null {
 }
 
 export function addTestResultToUser(token: string, testResult: Omit<UserTestResult, "id" | "timestamp">) {
-  const userId = sessions[token];
+  const session = sessions[token];
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const userId = session.userId;
   if (!userId || !users[userId]) {
     throw new Error("Unauthorized");
   }
@@ -324,7 +432,7 @@ export function addTestResultToUser(token: string, testResult: Omit<UserTestResu
     timestamp: nowIso,
   };
 
-  // Append to history (immutable - users cannot edit or delete history)
+  // Append to history
   user.testHistory.unshift(resultEntry);
 
   // Recalculate stats
@@ -357,7 +465,7 @@ export function addTestResultToUser(token: string, testResult: Omit<UserTestResu
     user.currentStreak = 1;
   }
   user.lastTestDate = nowIso;
-  user.xp += Math.round(testResult.wpm * 2);
+  user.xp += Math.min(500, Math.round(testResult.wpm * 2));
 
   // Check achievement unlocks
   checkAchievements(user, resultEntry);
@@ -391,7 +499,12 @@ function checkAchievements(user: UserAccount, latestTest: UserTestResult) {
 }
 
 export function addGameScoreToUser(token: string, scoreData: Omit<UserGameScore, "timestamp">) {
-  const userId = sessions[token];
+  const session = sessions[token];
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const userId = session.userId;
   if (!userId || !users[userId]) {
     throw new Error("Unauthorized");
   }
@@ -399,13 +512,24 @@ export function addGameScoreToUser(token: string, scoreData: Omit<UserGameScore,
   const user = users[userId];
   const nowIso = new Date().toISOString();
 
+  // Validate game score bounds
+  const clampedScore = Math.min(10000, Math.max(0, Number(scoreData.score) || 0));
+  const clampedWpm = Math.min(230, Math.max(0, Number(scoreData.wpm) || 0));
+  const clampedAcc = Math.min(100, Math.max(0, Number(scoreData.accuracy) || 0));
+  const cleanGameId = sanitizeText(scoreData.gameId, 32);
+  const cleanGameName = sanitizeText(scoreData.gameName, 48);
+
   const gameEntry: UserGameScore = {
-    ...scoreData,
+    gameId: cleanGameId,
+    gameName: cleanGameName,
+    score: clampedScore,
+    wpm: clampedWpm,
+    accuracy: clampedAcc,
     timestamp: nowIso,
   };
 
   user.gameScores.unshift(gameEntry);
-  user.xp += Math.round(scoreData.score / 10);
+  user.xp += Math.min(1000, Math.round(clampedScore / 10));
 
   saveUsers();
   return sanitizeUser(user);
@@ -415,16 +539,35 @@ export function updateUserProfile(
   token: string,
   profileData: { displayName?: string; bio?: string; keyboardLayout?: string; soundPreference?: string }
 ) {
-  const userId = sessions[token];
+  const session = sessions[token];
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const userId = session.userId;
   if (!userId || !users[userId]) {
     throw new Error("Unauthorized");
   }
 
   const user = users[userId];
-  if (profileData.displayName !== undefined) user.displayName = profileData.displayName.trim();
-  if (profileData.bio !== undefined) user.bio = profileData.bio.trim();
-  if (profileData.keyboardLayout !== undefined) user.keyboardLayout = profileData.keyboardLayout;
-  if (profileData.soundPreference !== undefined) user.soundPreference = profileData.soundPreference;
+  if (profileData.displayName !== undefined) {
+    user.displayName = sanitizeText(profileData.displayName, 24) || user.username;
+  }
+  if (profileData.bio !== undefined) {
+    user.bio = sanitizeText(profileData.bio, 200);
+  }
+  if (profileData.keyboardLayout !== undefined) {
+    const validLayouts = ["QWERTY", "Dvorak", "Colemak", "AZERTY", "QWERTZ"];
+    if (validLayouts.includes(profileData.keyboardLayout)) {
+      user.keyboardLayout = profileData.keyboardLayout;
+    }
+  }
+  if (profileData.soundPreference !== undefined) {
+    const validSounds = ["mechanical", "typewriter", "bubble", "silent"];
+    if (validSounds.includes(profileData.soundPreference)) {
+      user.soundPreference = profileData.soundPreference;
+    }
+  }
 
   saveUsers();
   return sanitizeUser(user);

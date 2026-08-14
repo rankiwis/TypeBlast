@@ -32,7 +32,71 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+// Security: Disable X-Powered-By header
+app.disable("x-powered-by");
+
+// Security Headers Middleware
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
+});
+
+// Security: Enforce JSON body size limit (100kb)
+app.use(express.json({ limit: "100kb" }));
+
+// In-Memory Sliding Window Rate Limiter
+function createRateLimiter(options: { windowMs: number; max: number; message: string }) {
+  const requests = new Map<string, number[]>();
+
+  // Cleanup routine every 5 minutes
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, timestamps] of requests.entries()) {
+      const valid = timestamps.filter((t) => now - t < options.windowMs);
+      if (valid.length === 0) {
+        requests.delete(ip);
+      } else {
+        requests.set(ip, valid);
+      }
+    }
+  }, 5 * 60 * 1000).unref();
+
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "unknown";
+    const now = Date.now();
+    const timestamps = requests.get(ip) || [];
+    const validTimestamps = timestamps.filter((t) => now - t < options.windowMs);
+
+    if (validTimestamps.length >= options.max) {
+      return res.status(429).json({ error: options.message });
+    }
+
+    validTimestamps.push(now);
+    requests.set(ip, validTimestamps);
+    next();
+  };
+}
+
+const authRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: 15,
+  message: "Too many authentication attempts. Please wait a minute before trying again.",
+});
+
+const submissionRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: 20,
+  message: "Submission rate limit exceeded. Please wait a moment before submitting another score.",
+});
+
+const aiCoachRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: "AI coach rate limit reached. Please wait a moment before requesting another analysis.",
+});
 
 const getAiClient = () => {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -153,7 +217,7 @@ TypeBlast is a fast, responsive online typing speed test, touch-typing practice 
 });
 
 // Auth API Endpoints
-app.post("/api/auth/signup", (req, res) => {
+app.post("/api/auth/signup", authRateLimiter, (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
@@ -169,7 +233,7 @@ app.post("/api/auth/signup", (req, res) => {
   }
 });
 
-app.post("/api/auth/login", (req, res) => {
+app.post("/api/auth/login", authRateLimiter, (req, res) => {
   try {
     const { emailOrUsername, password } = req.body;
     if (!emailOrUsername || !password) {
@@ -214,7 +278,7 @@ app.get("/api/leaderboard", (req, res) => {
 });
 
 // Secure Leaderboard Submission Endpoint
-app.post("/api/leaderboard/submit", (req, res) => {
+app.post("/api/leaderboard/submit", submissionRateLimiter, (req, res) => {
   try {
     const token = getAuthToken(req);
     const user = token ? getUserByToken(token) : null;
@@ -267,7 +331,7 @@ app.post("/api/leaderboard/submit", (req, res) => {
 });
 
 // Game Score Submission Endpoint (with strict server-side validation)
-app.post("/api/games/submit", (req, res) => {
+app.post("/api/games/submit", submissionRateLimiter, (req, res) => {
   try {
     const token = getAuthToken(req);
     const user = token ? getUserByToken(token) : null;
@@ -392,7 +456,7 @@ app.get("/api/daily-challenge/challenge", (req, res) => {
   }
 });
 
-app.post("/api/daily-challenge/submit", (req, res) => {
+app.post("/api/daily-challenge/submit", submissionRateLimiter, (req, res) => {
   try {
     const token = getAuthToken(req);
     const user = token ? getUserByToken(token) : null;
@@ -463,7 +527,7 @@ app.post("/api/daily-challenge/submit", (req, res) => {
 });
 
 // Test Results Recording Endpoint
-app.post("/api/user/test-results", (req, res) => {
+app.post("/api/user/test-results", submissionRateLimiter, (req, res) => {
   const token = getAuthToken(req);
   if (!token) return res.status(401).json({ error: "Authentication token required." });
 
@@ -518,19 +582,25 @@ app.post("/api/user/test-results", (req, res) => {
   }
 });
 
-// Game Scores Endpoint
-app.post("/api/user/game-scores", (req, res) => {
+// Game Scores Endpoint with strict payload validation
+app.post("/api/user/game-scores", submissionRateLimiter, (req, res) => {
   const token = getAuthToken(req);
   if (!token) return res.status(401).json({ error: "Authentication token required." });
 
   try {
     const { gameId, gameName, score, wpm, accuracy } = req.body;
+    const validGames = ["word-blast", "time-attack", "typing-race", "daily-challenge"];
+    const cleanGameId = String(gameId || "");
+    if (!validGames.includes(cleanGameId)) {
+      return res.status(400).json({ error: "Invalid game identifier." });
+    }
+
     const updatedUser = addGameScoreToUser(token, {
-      gameId: String(gameId),
-      gameName: String(gameName),
-      score: Number(score) || 0,
-      wpm: Number(wpm) || 0,
-      accuracy: Number(accuracy) || 0,
+      gameId: cleanGameId,
+      gameName: String(gameName || "Typing Game"),
+      score: Math.min(10000, Math.max(0, Number(score) || 0)),
+      wpm: Math.min(230, Math.max(0, Number(wpm) || 0)),
+      accuracy: Math.min(100, Math.max(0, Number(accuracy) || 0)),
     });
     res.json({ status: "success", user: updatedUser });
   } catch (error: any) {
@@ -568,7 +638,7 @@ app.get("/api/user/public-profile/:id", (req, res) => {
 });
 
 // AI Typing Coach Endpoint
-app.post("/api/ai-coach", async (req, res) => {
+app.post("/api/ai-coach", aiCoachRateLimiter, async (req, res) => {
   try {
     const { wpm, accuracy, duration, testType, errorKeys, slowKeys, recentHistory } = req.body;
 

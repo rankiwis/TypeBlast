@@ -89,9 +89,6 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
   // Share Feedback State
   const [shareCopied, setShareCopied] = useState(false);
 
-  // FAQ Accordion active state
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number | null>(null);
@@ -350,34 +347,6 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
       });
     }
   };
-
-  // FAQ Items
-  const faqList = [
-    {
-      q: "How is typing speed (WPM) calculated on TypeBlast?",
-      a: "Net WPM is calculated using the international standard formula: (Total Correct Characters / 5) divided by Elapsed Minutes. Uncorrected errors reduce your net WPM score, rewarding both high speed and precision."
-    },
-    {
-      q: "Is TypeBlast free to use?",
-      a: "Yes! All typing speed tests, custom test durations, practice modules, arcade games, daily sprints, and certificates are 100% free."
-    },
-    {
-      q: "How does score validation work?",
-      a: "TypeBlast validates keystroke timing logs, elapsed time, and mathematical character metrics before saving or posting scores to prevent tampered or auto-scripted entries on global leaderboards."
-    },
-    {
-      q: "How can I improve my typing speed and accuracy?",
-      a: "Focus on touch typing fundamentals: maintain finger positioning on the Home Row (ASDF JKL;), avoid looking down at keys, and build a smooth typing rhythm. Use our Gemini AI Coach view for targeted error diagnostics."
-    },
-    {
-      q: "Does TypeBlast support code typing practice for programmers?",
-      a: "Yes! We offer specialized programming code test passages featuring real JavaScript, Python, C++, and HTML syntax to help developers build speed with brackets, semicolons, and indentation."
-    },
-    {
-      q: "Can teachers track student typing progress?",
-      a: "Yes! Teachers can utilize the Teachers & Schools Portal to manage student rosters, monitor average WPM benchmarks, track completed lessons, and export gradebook CSV reports."
-    }
-  ];
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6 space-y-16">
@@ -1126,50 +1095,6 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
               Clean, distraction-free typing environment focused purely on speed, accuracy, and user growth.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* HOMEPAGE SECTION 7: FAQ */}
-      <section className="space-y-6 pt-6 border-t border-slate-800/80">
-        <div className="text-center space-y-2 max-w-xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold">
-            <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Frequently Asked Questions</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white">Everything You Need To Know</h2>
-          <p className="text-xs sm:text-sm text-slate-300">
-            Answers to common questions about typing speed tests, WPM benchmarks, and keyboard practice.
-          </p>
-        </div>
-
-        <div className="max-w-3xl mx-auto space-y-3">
-          {faqList.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
-            return (
-              <div
-                key={idx}
-                className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden transition-colors"
-              >
-                <button
-                  onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm text-slate-100 hover:text-cyan-300 transition-colors"
-                >
-                  <span>{faq.q}</span>
-                  {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-cyan-400 shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />
-                  )}
-                </button>
-
-                {isOpen && (
-                  <div className="px-5 pb-5 pt-1 text-xs text-slate-300 leading-relaxed border-t border-slate-800/60 font-medium">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
         </div>
       </section>
 

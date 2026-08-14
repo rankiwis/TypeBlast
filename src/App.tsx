@@ -240,7 +240,11 @@ function MainAppContent() {
         {!isKnownPath && (
           <>
             {activeTab === "test" && (
-              <TypingTestView onTestComplete={handleTestComplete} setActiveTab={setActiveTab} />
+              <TypingTestPage
+                onTestComplete={handleTestComplete}
+                setActiveTab={setActiveTab}
+                onNavigatePath={navigateToPath}
+              />
             )}
             {activeTab === "games" && <GamesHubView />}
             {activeTab === "practice" && <PracticeView />}

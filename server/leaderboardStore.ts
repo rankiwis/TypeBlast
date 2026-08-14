@@ -119,6 +119,19 @@ export function calculateScore(wpm: number, accuracy: number, duration: number):
   return Math.max(1, rawScore);
 }
 
+/**
+ * Robust text sanitization utility preventing XSS, control characters, and injection attacks.
+ */
+export function sanitizeText(str: any, maxLength: number = 24): string {
+  if (typeof str !== "string") return "";
+  return str
+    .replace(/[\x00-\x1F\x7F]/g, "") // remove control characters
+    .replace(/<[^>]*>?/gm, "") // strip full HTML tag constructs
+    .replace(/[<>"'/\\`&]/g, "") // strip any isolated dangerous HTML characters
+    .trim()
+    .substring(0, maxLength);
+}
+
 // Security Validation
 export interface TestSubmissionInput {
   wpm: number;
@@ -138,55 +151,111 @@ export interface TestSubmissionInput {
 export function validateAndSanitizeSubmission(
   input: TestSubmissionInput
 ): { isValid: boolean; error?: string; record?: Omit<LeaderboardRecord, "id"> } {
-  const duration = Number(input.duration) || 30;
-  const wpm = Number(input.wpm) || 0;
-  const rawWpm = Number(input.rawWpm) || wpm;
-  const accuracy = Number(input.accuracy) || 0;
-  const totalChars = Number(input.totalChars) || 0;
-  const correctChars = Number(input.correctChars) || 0;
+  // Validate input type integrity
+  if (typeof input !== "object" || input === null) {
+    return { isValid: false, error: "Invalid submission payload." };
+  }
 
-  // 1. Duration check
+  const duration = Number(input.duration);
+  const wpm = Number(input.wpm);
+  const rawWpm = Number(input.rawWpm ?? input.wpm);
+  const accuracy = Number(input.accuracy);
+  const totalChars = Number(input.totalChars ?? 0);
+  const correctChars = Number(input.correctChars ?? 0);
+  const errorCount = Number(input.errorCount ?? 0);
+
+  // 1. Numeric sanity check (no NaN, non-finite, or negative numbers)
+  if (
+    !Number.isFinite(duration) ||
+    !Number.isFinite(wpm) ||
+    !Number.isFinite(rawWpm) ||
+    !Number.isFinite(accuracy) ||
+    !Number.isFinite(totalChars) ||
+    !Number.isFinite(correctChars) ||
+    !Number.isFinite(errorCount)
+  ) {
+    return { isValid: false, error: "Submission rejected: Non-numeric or invalid metrics received." };
+  }
+
+  // 2. Duration check (5s to 600s)
   if (duration < 5 || duration > 600) {
     return { isValid: false, error: "Invalid test duration (must be between 5s and 600s)." };
   }
 
-  // 2. Reject impossible WPM (> 250 WPM)
-  if (wpm < 0 || wpm > 250) {
-    return { isValid: false, error: "Submission rejected: Speed exceeds maximum humanly possible limit (Max 250 WPM)." };
+  // 3. Human physiological speed threshold verification
+  // World record speeds: 15s max ~225-230 WPM, 60s max ~210 WPM, 120s+ max ~185 WPM
+  let maxSpeedLimit = 220;
+  if (duration <= 15) maxSpeedLimit = 230;
+  else if (duration <= 30) maxSpeedLimit = 220;
+  else if (duration <= 60) maxSpeedLimit = 210;
+  else maxSpeedLimit = 190;
+
+  if (wpm < 0 || wpm > maxSpeedLimit) {
+    return {
+      isValid: false,
+      error: `Submission rejected: Speed (${wpm} WPM) exceeds verified human physical limit (${maxSpeedLimit} WPM for ${duration}s test).`,
+    };
   }
 
-  // 3. Accuracy bounds check
+  // 4. Accuracy bounds check
   if (accuracy < 0 || accuracy > 100) {
     return { isValid: false, error: "Submission rejected: Accuracy must be between 0% and 100%." };
   }
 
-  // 4. Mathematical verification of keystroke counts if provided
-  if (totalChars > 0 && correctChars >= 0) {
+  // 5. Gross vs Net WPM physical relationship (Gross WPM >= Net WPM)
+  if (rawWpm < wpm - 1) {
+    return { isValid: false, error: "Submission rejected: Gross WPM cannot be less than Net WPM." };
+  }
+
+  // 6. Mandatory Keystroke & Character verification for non-zero scores
+  if (wpm > 0) {
+    if (totalChars <= 0 || correctChars <= 0) {
+      return {
+        isValid: false,
+        error: "Submission rejected: Typing score requires verified keystroke telemetry data.",
+      };
+    }
+
     if (correctChars > totalChars) {
       return { isValid: false, error: "Submission rejected: Correct characters cannot exceed total characters." };
     }
 
+    // Expected Accuracy from character counts
     const expectedAcc = Math.round((correctChars / totalChars) * 100);
-    if (Math.abs(accuracy - expectedAcc) > 3) {
-      return { isValid: false, error: "Submission rejected: Submitted accuracy does not match keystroke logs." };
-    }
-
-    // Expected Max WPM = (correctChars / 5) / (duration / 60)
-    const expectedWpm = Math.round((correctChars / 5) / (duration / 60));
-    if (wpm > expectedWpm + 5 && expectedWpm > 0) {
+    if (Math.abs(accuracy - expectedAcc) > 2) {
       return {
         isValid: false,
-        error: `Submission rejected: Submitted WPM (${wpm}) exceeds calculated speed limit (${expectedWpm} WPM) for typing data.`
+        error: `Submission rejected: Accuracy mismatch (reported: ${accuracy}%, expected: ${expectedAcc}%).`,
+      };
+    }
+
+    // Expected Net WPM: (correctChars / 5) / (duration / 60)
+    const expectedWpm = Math.round((correctChars / 5) / (duration / 60));
+    if (Math.abs(wpm - expectedWpm) > 3) {
+      return {
+        isValid: false,
+        error: `Submission rejected: Submitted WPM (${wpm}) does not match keystrokes (${expectedWpm} WPM for ${correctChars} chars in ${duration}s).`,
+      };
+    }
+
+    // Expected Gross WPM: (totalChars / 5) / (duration / 60)
+    const expectedRawWpm = Math.round((totalChars / 5) / (duration / 60));
+    if (Math.abs(rawWpm - expectedRawWpm) > 4) {
+      return {
+        isValid: false,
+        error: `Submission rejected: Raw WPM (${rawWpm}) does not match total characters typed (${expectedRawWpm} raw WPM).`,
       };
     }
   }
 
-  // Clean public display name (strictly remove HTML/script tags and restrict length)
-  let cleanName = (input.displayName || input.username || "Speed Typist").trim();
-  cleanName = cleanName.replace(/<[^>]*>?/gm, "").substring(0, 24);
+  // Strict Sanitization of display name and username against XSS
+  let cleanName = sanitizeText(input.displayName || input.username, 24);
   if (!cleanName) cleanName = "Speed Typist";
 
-  let cleanUsername = (input.username || "user").trim().replace(/<[^>]*>?/gm, "").substring(0, 24);
+  let cleanUsername = sanitizeText(input.username, 24);
+  if (!cleanUsername) cleanUsername = "guest";
+
+  const cleanCategory = sanitizeText(input.category || "words", 32);
 
   const score = calculateScore(wpm, accuracy, duration);
   const badge = calculateTierBadge(wpm);
@@ -194,7 +263,7 @@ export function validateAndSanitizeSubmission(
   return {
     isValid: true,
     record: {
-      userId: input.userId,
+      userId: input.userId ? sanitizeText(input.userId, 64) : undefined,
       displayName: cleanName,
       username: cleanUsername,
       wpm,
@@ -202,7 +271,7 @@ export function validateAndSanitizeSubmission(
       accuracy,
       score,
       duration,
-      category: String(input.category || "words"),
+      category: cleanCategory || "words",
       timestamp: new Date().toISOString(),
       badge,
       verified: true,
