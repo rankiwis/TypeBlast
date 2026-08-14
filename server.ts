@@ -734,7 +734,13 @@ Provide feedback in strict JSON matching the schema:
   }
 });
 
-// Sitemap & Robots.txt Direct Serving
+// Favicon, Sitemap & Robots.txt Direct Serving
+app.get(["/favicon.svg", "/favicon.ico"], (_req, res) => {
+  const faviconPath = path.join(process.cwd(), "public", "favicon.svg");
+  res.type("image/svg+xml");
+  res.sendFile(faviconPath);
+});
+
 app.get("/sitemap.xml", (_req, res) => {
   const sitemapPath = path.join(process.cwd(), "public", "sitemap.xml");
   res.type("application/xml");
