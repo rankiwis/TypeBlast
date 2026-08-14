@@ -8,3 +8,4 @@ Disallow: /signup/
 Disallow: /api/
 
 Sitemap: https://typeblast.com/sitemap.xml
+Sitemap: https://www.typeblast.com/sitemap.xml

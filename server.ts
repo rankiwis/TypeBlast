@@ -734,6 +734,19 @@ Provide feedback in strict JSON matching the schema:
   }
 });
 
+// Sitemap & Robots.txt Direct Serving
+app.get("/sitemap.xml", (_req, res) => {
+  const sitemapPath = path.join(process.cwd(), "public", "sitemap.xml");
+  res.type("application/xml");
+  res.sendFile(sitemapPath);
+});
+
+app.get("/robots.txt", (_req, res) => {
+  const robotsPath = path.join(process.cwd(), "public", "robots.txt");
+  res.type("text/plain");
+  res.sendFile(robotsPath);
+});
+
 // Setup Vite or Static File Serving
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
