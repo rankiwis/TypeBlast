@@ -1,9 +1,9 @@
 import React from "react";
-import { Keyboard, CheckCircle2, ShieldCheck, Clock, Zap, BarChart2 } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Clock, BarChart2 } from "lucide-react";
 import { SeoHead } from "../SeoHead";
 import { InternalLinksNav } from "../InternalLinksNav";
 import { FaqSection } from "../FaqSection";
-import { Breadcrumbs, generateBreadcrumbSchema } from "../Breadcrumbs";
+import { generateBreadcrumbSchema } from "../Breadcrumbs";
 import { TypingTestView } from "../../TypingTest/TypingTestView";
 import { TypingStats, TabType } from "../../../types";
 
@@ -91,7 +91,7 @@ export const TypingTestPage: React.FC<TypingTestPageProps> = ({
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 py-6 space-y-8">
       <SeoHead
         title={pageTitle}
         description={metaDescription}
@@ -99,35 +99,8 @@ export const TypingTestPage: React.FC<TypingTestPageProps> = ({
         structuredData={structuredData}
       />
 
-      {/* Breadcrumbs */}
-      <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
-
-      {/* Hero / Intro Header */}
-      <header className="space-y-4 text-center sm:text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold">
-          <Keyboard className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Standardized Online Assessment</span>
-        </div>
-
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-          Free Online Typing Test
-        </h1>
-
-        <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
-          Welcome to the official <strong>free typing test</strong> engine on TypeBlast. Evaluate your typing speed in <strong>Words Per Minute (WPM)</strong>, monitor real-time keystroke accuracy, and identify specific error keys. Designed for job applicants, students, developers, and speed typing enthusiasts.
-        </p>
-      </header>
-
       {/* Embedded Interactive Typing Test Tool */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider px-1">
-          <span className="flex items-center gap-1.5 text-cyan-400">
-            <Zap className="w-4 h-4" /> Live Interactive Typing Canvas
-          </span>
-          <span>Start typing to launch timer</span>
-        </div>
-        <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} />
-      </div>
+      <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} />
 
       {/* Helpful Educational H2 Sections */}
       <article className="space-y-8 text-slate-300 text-sm sm:text-base leading-relaxed border-t border-slate-800/80 pt-10">
