@@ -22,6 +22,55 @@
       gtag('js', new Date());
       gtag('config', 'G-SSCZXRY8B8');
     </script>
+    <!-- Structured Data (Schema.org JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.typeblast.com/#organization",
+          "name": "TypeBlast",
+          "url": "https://www.typeblast.com/"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.typeblast.com/#website",
+          "name": "TypeBlast",
+          "url": "https://www.typeblast.com/",
+          "publisher": {
+            "@id": "https://www.typeblast.com/#organization"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://www.typeblast.com/#webapplication",
+          "name": "TypeBlast",
+          "url": "https://www.typeblast.com/",
+          "description": "Free online typing speed test to measure and improve typing speed and accuracy.",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web Browser",
+          "isAccessibleForFree": true,
+          "publisher": {
+            "@id": "https://www.typeblast.com/#organization"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.typeblast.com/#webpage",
+          "name": "Free Typing Speed Test Online - TypeBlast",
+          "url": "https://www.typeblast.com/",
+          "description": "Test your typing speed and accuracy online with standard 15s, 30s, and 60s WPM tests. Track progress and get custom AI practice drills.",
+          "isPartOf": {
+            "@id": "https://www.typeblast.com/#website"
+          },
+          "about": {
+            "@id": "https://www.typeblast.com/#webapplication"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
