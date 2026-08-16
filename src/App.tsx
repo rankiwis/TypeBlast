@@ -15,6 +15,7 @@ import { KidsView } from "./components/Kids/KidsView";
 import { TeachersView } from "./components/Teachers/TeachersView";
 import { BlogView } from "./components/Blog/BlogView";
 import { PricingView } from "./components/Pricing/PricingView";
+import { getBlogPostBySlug } from "./data/blogData";
 
 // Auth & Dashboard Imports
 import { LoginPage } from "./components/Auth/LoginPage";
@@ -144,7 +145,9 @@ function MainAppContent() {
   ];
 
   const isHome = currentPath === "/" || currentPath === "";
-  const isKnownPath = isHome || knownPaths.includes(currentPath) || currentPath.startsWith("/blog/");
+  const isBlogHub = currentPath === "/blog/";
+  const isBlogPost = currentPath.startsWith("/blog/") && currentPath !== "/blog/" && Boolean(getBlogPostBySlug(currentPath.replace(/^\/blog\/?|\/$/g, "")));
+  const isKnownPath = isHome || knownPaths.includes(currentPath) || isBlogHub || isBlogPost;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
@@ -233,7 +236,7 @@ function MainAppContent() {
           <TermsOfServicePage onNavigatePath={navigateToPath} />
         )}
         {currentPath === "/leaderboard/" && <LeaderboardView onNavigatePath={navigateToPath} />}
-        {(currentPath === "/blog/" || currentPath.startsWith("/blog/")) && (
+        {(isBlogHub || isBlogPost) && (
           <BlogView onNavigatePath={navigateToPath} />
         )}
         {currentPath === "/lessons/" && <LessonsView />}
