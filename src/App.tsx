@@ -37,6 +37,7 @@ import { AboutPage } from "./components/SEO/SeoPages/AboutPage";
 import { ContactPage } from "./components/SEO/SeoPages/ContactPage";
 import { PrivacyPolicyPage } from "./components/SEO/SeoPages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./components/SEO/SeoPages/TermsOfServicePage";
+import { NotFoundPage } from "./components/SEO/SeoPages/NotFoundPage";
 
 function normalizePath(path: string): string {
   let cleaned = path.trim().toLowerCase();
@@ -125,7 +126,9 @@ function MainAppContent() {
     "/about/",
     "/contact/",
     "/privacy/",
+    "/privacy-policy/",
     "/terms/",
+    "/terms-of-service/",
     "/leaderboard/",
     "/blog/",
     "/lessons/",
@@ -140,7 +143,8 @@ function MainAppContent() {
     "/profile/",
   ];
 
-  const isKnownPath = knownPaths.includes(currentPath) || currentPath.startsWith("/blog/");
+  const isHome = currentPath === "/" || currentPath === "";
+  const isKnownPath = isHome || knownPaths.includes(currentPath) || currentPath.startsWith("/blog/");
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
@@ -156,6 +160,9 @@ function MainAppContent() {
 
       {/* Main View Container */}
       <main className="flex-1">
+        {/* 404 Fallback for unknown URLs */}
+        {!isKnownPath && <NotFoundPage onNavigatePath={navigateToPath} />}
+
         {/* Auth & User Account Routes */}
         {currentPath === "/login/" && <LoginPage onNavigatePath={navigateToPath} />}
         {currentPath === "/signup/" && <SignupPage onNavigatePath={navigateToPath} />}
@@ -219,10 +226,10 @@ function MainAppContent() {
         {currentPath === "/contact/" && (
           <ContactPage onNavigatePath={navigateToPath} />
         )}
-        {currentPath === "/privacy/" && (
+        {(currentPath === "/privacy/" || currentPath === "/privacy-policy/") && (
           <PrivacyPolicyPage onNavigatePath={navigateToPath} />
         )}
-        {currentPath === "/terms/" && (
+        {(currentPath === "/terms/" || currentPath === "/terms-of-service/") && (
           <TermsOfServicePage onNavigatePath={navigateToPath} />
         )}
         {currentPath === "/leaderboard/" && <LeaderboardView onNavigatePath={navigateToPath} />}
@@ -236,8 +243,8 @@ function MainAppContent() {
         {currentPath === "/teachers/" && <TeachersView />}
         {currentPath === "/pricing/" && <PricingView />}
 
-        {/* Fallback for Root Homepage ("/") or unknown path */}
-        {!isKnownPath && (
+        {/* Root Homepage ("/") with tab switching */}
+        {isHome && (
           <>
             {activeTab === "test" && (
               <TypingTestView

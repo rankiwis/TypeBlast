@@ -63,7 +63,7 @@ interface HistoryItem {
 }
 
 export const DailyChallengeView: React.FC<DailyChallengeViewProps> = () => {
-  const { user } = useAuth();
+  const { user, token: authToken } = useAuth();
 
   // Challenge state
   const [selectedDateKey, setSelectedDateKey] = useState<string>("");
@@ -100,7 +100,7 @@ export const DailyChallengeView: React.FC<DailyChallengeViewProps> = () => {
     setIsLoading(true);
     setSubmitError(null);
     try {
-      const token = localStorage.getItem("typeblast_token");
+      const token = authToken || localStorage.getItem("typeblast_auth_token");
       const url = dateKey
         ? `/api/daily-challenge/challenge?date=${dateKey}`
         : "/api/daily-challenge/today";
@@ -187,7 +187,7 @@ export const DailyChallengeView: React.FC<DailyChallengeViewProps> = () => {
       });
 
       try {
-        const token = localStorage.getItem("typeblast_token");
+        const token = authToken || localStorage.getItem("typeblast_auth_token");
         const res = await fetch("/api/daily-challenge/submit", {
           method: "POST",
           headers: {

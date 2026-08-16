@@ -336,10 +336,12 @@ export interface LeaderboardQueryOptions {
   duration?: number;
   category?: string;
   search?: string;
+  userLookup?: string;
 }
 
 export interface LeaderboardQueryResult {
   entries: (LeaderboardRecord & { rank: number })[];
+  userEntry?: (LeaderboardRecord & { rank: number }) | null;
   pagination: {
     total: number;
     page: number;
@@ -427,6 +429,36 @@ export function queryLeaderboard(options: LeaderboardQueryOptions = {}): Leaderb
     rank: startIndex + idx + 1,
   }));
 
+  // Find user entry across all filtered records if userLookup provided
+  let userEntry: (LeaderboardRecord & { rank: number }) | null = null;
+  if (options.userLookup) {
+    const lookupLower = options.userLookup.trim().toLowerCase();
+    const userIdx = filtered.findIndex(
+      (r) =>
+        r.username.toLowerCase() === lookupLower ||
+        r.displayName.toLowerCase() === lookupLower ||
+        (r.userId && r.userId.toLowerCase() === lookupLower)
+    );
+    if (userIdx !== -1) {
+      const match = filtered[userIdx];
+      userEntry = {
+        id: match.id,
+        rank: userIdx + 1,
+        displayName: match.displayName,
+        username: match.username,
+        wpm: match.wpm,
+        rawWpm: match.rawWpm,
+        accuracy: match.accuracy,
+        score: match.score,
+        duration: match.duration,
+        category: match.category,
+        timestamp: match.timestamp,
+        badge: match.badge,
+        verified: match.verified,
+      };
+    }
+  }
+
   // Sanitize out any sensitive information (privacy rule: NEVER expose email or user secrets)
   const sanitizedEntries = entriesWithRank.map((e) => ({
     id: e.id,
@@ -446,6 +478,7 @@ export function queryLeaderboard(options: LeaderboardQueryOptions = {}): Leaderb
 
   return {
     entries: sanitizedEntries,
+    userEntry,
     pagination: {
       total: totalSubmissions,
       page,

@@ -73,6 +73,26 @@ export function calculateCompletedWords(userInput: string, targetText: string): 
   return completedCount;
 }
 
+/**
+ * Calculates correct and incorrect character counts deterministically by comparing
+ * the user's input with the target text.
+ */
+export function calculateCharacterCounts(userInput: string, targetText: string): {
+  correctChars: number;
+  incorrectChars: number;
+} {
+  let correct = 0;
+  let incorrect = 0;
+  for (let i = 0; i < userInput.length; i++) {
+    if (i < targetText.length && userInput[i] === targetText[i]) {
+      correct++;
+    } else {
+      incorrect++;
+    }
+  }
+  return { correctChars: correct, incorrectChars: incorrect };
+}
+
 export interface TestResultPayload {
   wpm: number;
   rawWpm: number;

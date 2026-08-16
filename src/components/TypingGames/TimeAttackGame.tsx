@@ -21,7 +21,7 @@ import { trackEvent } from "../../utils/analytics";
 type TimeOption = 15 | 30 | 60;
 
 export const TimeAttackGame: React.FC = () => {
-  const { user } = useAuth();
+  const { user, token: authToken } = useAuth();
 
   // Settings
   const [selectedDuration, setSelectedDuration] = useState<TimeOption>(30);
@@ -108,7 +108,7 @@ export const TimeAttackGame: React.FC = () => {
       });
 
       try {
-        const token = localStorage.getItem("typeblast_token");
+        const token = authToken || localStorage.getItem("typeblast_auth_token");
         const res = await fetch("/api/games/submit", {
           method: "POST",
           headers: {

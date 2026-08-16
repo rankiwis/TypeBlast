@@ -43,6 +43,7 @@ import {
   calculateCpm,
   calculateCompletedWords,
   validateTestResult,
+  calculateCharacterCounts,
 } from "../../utils/typingCalculator";
 import { trackEvent } from "../../utils/analytics";
 
@@ -149,10 +150,12 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
       ? Math.min(duration, Math.max(0.1, (performance.now() - startTimeRef.current) / 1000))
       : duration;
 
-    const finalWpm = calculateWpm(correctChars, elapsedSeconds);
+    const deterministicCounts = calculateCharacterCounts(userInput, textToType);
+    const calculatedCorrectChars = deterministicCounts.correctChars;
+    const finalWpm = calculateWpm(calculatedCorrectChars, elapsedSeconds);
     const rawWpm = calculateGrossWpm(userInput.length, elapsedSeconds);
-    const accuracy = calculateAccuracy(correctChars, userInput.length);
-    const cpm = calculateCpm(correctChars, elapsedSeconds);
+    const accuracy = calculateAccuracy(calculatedCorrectChars, userInput.length);
+    const cpm = calculateCpm(calculatedCorrectChars, elapsedSeconds);
     const completedWords = calculateCompletedWords(userInput, textToType);
 
     const statsPayload: TypingStats = {
@@ -161,7 +164,7 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
       accuracy,
       cpm,
       totalChars: userInput.length,
-      correctChars,
+      correctChars: calculatedCorrectChars,
       errorCount,
       completedWords,
       timeElapsed: Math.round(elapsedSeconds),
@@ -179,7 +182,7 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
       duration,
       timeElapsed: elapsedSeconds,
       totalChars: userInput.length,
-      correctChars,
+      correctChars: calculatedCorrectChars,
       errorCount,
     });
 
@@ -206,7 +209,6 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
     });
   }, [
     duration,
-    correctChars,
     userInput,
     textToType,
     errorCount,
@@ -271,11 +273,13 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
     const lastCharTyped = val[val.length - 1];
     const targetChar = textToType[val.length - 1];
 
+    const currentCounts = calculateCharacterCounts(val, textToType);
+    setCorrectChars(currentCounts.correctChars);
+
     if (val.length > userInput.length) {
       // Character added
       const isSpace = lastCharTyped === " ";
       if (lastCharTyped === targetChar) {
-        setCorrectChars((prev) => prev + 1);
         soundEngine.playKeyPress(isSpace, false);
       } else {
         setErrorCount((prev) => prev + 1);
@@ -597,7 +601,12 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
 
         {/* POST-TEST RESULTS SCREEN */}
         {isFinished && finalStats && (
-          <div className="p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6 animate-in fade-in zoom-in duration-200">
+          <div
+            role="status"
+            aria-live="polite"
+            aria-label="Typing test completed results summary"
+            className="p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6 animate-in fade-in zoom-in duration-200"
+          >
             {/* Header Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
               <div className="flex items-center gap-3">
@@ -654,37 +663,37 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
             {/* Key Stat Cards Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
               <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Net WPM</div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">Net WPM</div>
                 <div className="text-3xl font-extrabold text-cyan-400 font-mono">{finalStats.wpm}</div>
                 <div className="text-[10px] text-slate-400 mt-1">Raw: {finalStats.rawWpm}</div>
               </div>
 
               <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Accuracy</div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">Accuracy</div>
                 <div className="text-3xl font-extrabold text-emerald-400 font-mono">{finalStats.accuracy}%</div>
                 <div className="text-[10px] text-slate-400 mt-1">{finalStats.correctChars}/{finalStats.totalChars} chars</div>
               </div>
 
               <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Correct Chars</div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">Correct Chars</div>
                 <div className="text-3xl font-extrabold text-slate-200 font-mono">{finalStats.correctChars}</div>
                 <div className="text-[10px] text-slate-400 mt-1">Valid keyhits</div>
               </div>
 
               <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Incorrect Chars</div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">Incorrect Chars</div>
                 <div className="text-3xl font-extrabold text-rose-400 font-mono">{finalStats.errorCount}</div>
                 <div className="text-[10px] text-slate-400 mt-1">Mistypes</div>
               </div>
 
               <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Completed Words</div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">Completed Words</div>
                 <div className="text-3xl font-extrabold text-blue-400 font-mono">{finalStats.completedWords || 0}</div>
                 <div className="text-[10px] text-slate-400 mt-1">Full words</div>
               </div>
 
               <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Personal Best</div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">Personal Best</div>
                 <div className="text-3xl font-extrabold text-amber-400 font-mono">{personalBest}</div>
                 <div className="text-[10px] text-slate-400 mt-1">All-time WPM</div>
               </div>

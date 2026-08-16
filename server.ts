@@ -263,14 +263,21 @@ app.post("/api/auth/logout", (req, res) => {
 // Leaderboard Query Endpoint (Today, Week, Month, All Time)
 app.get("/api/leaderboard", (req, res) => {
   try {
+    const token = getAuthToken(req);
+    const user = token ? getUserByToken(token) : null;
     const period = (req.query.period as any) || "alltime";
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 15;
     const duration = req.query.duration ? Number(req.query.duration) : undefined;
     const category = req.query.category ? String(req.query.category) : undefined;
     const search = req.query.search ? String(req.query.search) : undefined;
+    const userLookup = req.query.userLookup
+      ? String(req.query.userLookup)
+      : user
+      ? user.username
+      : undefined;
 
-    const result = queryLeaderboard({ period, page, limit, duration, category, search });
+    const result = queryLeaderboard({ period, page, limit, duration, category, search, userLookup });
     res.json({ status: "success", ...result });
   } catch (error: any) {
     res.status(500).json({ error: error.message || "Failed to fetch leaderboard" });
@@ -683,7 +690,7 @@ Provide feedback in strict JSON matching the schema:
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: "gemini-3.7-flash",
       contents: prompt,
       config: {
         responseMimeType: "application/json",

@@ -70,13 +70,15 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ onNavigatePath
   const [limit, setLimit] = useState<number>(15);
 
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [userRankEntry, setUserRankEntry] = useState<LeaderboardEntry | null>(null);
   const [pagination, setPagination] = useState<PaginationInfo>({ total: 0, page: 1, limit: 15, totalPages: 1 });
   const [statsSummary, setStatsSummary] = useState<StatsSummary>({ totalSubmissions: 0, topWpm: 0, avgWpm: 0, avgAccuracy: 0 });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // User rank in current period
-  const userEntry = user ? entries.find((e) => e.username.toLowerCase() === user.username.toLowerCase() || e.displayName.toLowerCase() === (user.displayName || user.username).toLowerCase()) : null;
+  // User rank in current period (server-calculated across entire dataset, fallback to page match)
+  const pageUserMatch = user ? entries.find((e) => e.username.toLowerCase() === user.username.toLowerCase() || e.displayName.toLowerCase() === (user.displayName || user.username).toLowerCase()) : null;
+  const userEntry = userRankEntry || pageUserMatch;
 
   // Fetch leaderboard data
   const fetchLeaderboard = useCallback(async () => {
@@ -96,8 +98,16 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ onNavigatePath
       if (searchQuery.trim()) {
         params.append("search", searchQuery.trim());
       }
+      if (user?.username) {
+        params.append("userLookup", user.username);
+      }
 
-      const res = await fetch(`/api/leaderboard?${params.toString()}`);
+      const token = localStorage.getItem("typeblast_auth_token");
+      const res = await fetch(`/api/leaderboard?${params.toString()}`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
       if (!res.ok) {
         throw new Error("Failed to load leaderboard entries.");
       }
@@ -105,6 +115,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ onNavigatePath
       const data = await res.json();
       if (data.status === "success") {
         setEntries(data.entries || []);
+        setUserRankEntry(data.userEntry || null);
         setPagination(data.pagination || { total: 0, page: 1, limit, totalPages: 1 });
         setStatsSummary(data.statsSummary || { totalSubmissions: 0, topWpm: 0, avgWpm: 0, avgAccuracy: 0 });
 
@@ -121,7 +132,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ onNavigatePath
     } finally {
       setIsLoading(false);
     }
-  }, [period, page, limit, durationFilter, searchQuery]);
+  }, [period, page, limit, durationFilter, searchQuery, user?.username]);
 
   useEffect(() => {
     fetchLeaderboard();

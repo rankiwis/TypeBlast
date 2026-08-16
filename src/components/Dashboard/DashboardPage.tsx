@@ -270,7 +270,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigatePath }) 
               </svg>
             </div>
 
-            <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+            <div className="flex justify-between text-[10px] text-slate-400 font-mono">
               <span>First Session</span>
               <span>{historyForChart.length} Total Sessions Plotted</span>
               <span>Latest Session</span>
@@ -298,12 +298,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigatePath }) 
         </div>
 
         {testHistory.length === 0 ? (
-          <p className="text-xs text-slate-500 text-center py-6">No test results recorded yet.</p>
+          <p className="text-xs text-slate-400 text-center py-6">No test results recorded yet.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-500 font-mono text-[10px] uppercase">
+                <tr className="border-b border-slate-800 text-slate-400 font-mono text-[10px] uppercase">
                   <th className="py-3 px-4">Date / Time</th>
                   <th className="py-3 px-4">Net WPM</th>
                   <th className="py-3 px-4">Raw WPM</th>
@@ -347,14 +347,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigatePath }) 
           </h3>
 
           {gameScores.length === 0 ? (
-            <p className="text-xs text-slate-500 py-4">No game scores recorded yet. Play games in the Arcade Hub!</p>
+            <p className="text-xs text-slate-400 py-4">No game scores recorded yet. Play games in the Arcade Hub!</p>
           ) : (
             <div className="space-y-2">
               {gameScores.slice(0, 5).map((g, idx) => (
                 <div key={idx} className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
                   <div>
                     <div className="font-bold text-white">{g.gameName}</div>
-                    <div className="text-[10px] text-slate-500">{new Date(g.timestamp).toLocaleDateString()}</div>
+                    <div className="text-[10px] text-slate-400">{new Date(g.timestamp).toLocaleDateString()}</div>
                   </div>
                   <div className="text-right">
                     <div className="font-mono font-bold text-purple-400 text-sm">{g.score} pts</div>

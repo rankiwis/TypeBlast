@@ -27,7 +27,7 @@ interface BotRacer {
 }
 
 export const TypingRaceGame: React.FC = () => {
-  const { user } = useAuth();
+  const { user, token: authToken } = useAuth();
 
   // Passage & Race state
   const [passageText, setPassageText] = useState<string>("");
@@ -120,7 +120,7 @@ export const TypingRaceGame: React.FC = () => {
       });
 
       try {
-        const token = localStorage.getItem("typeblast_token");
+        const token = authToken || localStorage.getItem("typeblast_auth_token");
         const res = await fetch("/api/games/submit", {
           method: "POST",
           headers: {

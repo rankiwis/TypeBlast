@@ -27,7 +27,7 @@ interface FallingWord {
 }
 
 export const WordBlastGame: React.FC = () => {
-  const { user } = useAuth();
+  const { user, token: authToken } = useAuth();
 
   // Game state
   const [gameState, setGameState] = useState<"idle" | "playing" | "gameover">("idle");
@@ -130,7 +130,7 @@ export const WordBlastGame: React.FC = () => {
       });
 
       try {
-        const token = localStorage.getItem("typeblast_token");
+        const token = authToken || localStorage.getItem("typeblast_auth_token");
         const res = await fetch("/api/games/submit", {
           method: "POST",
           headers: {

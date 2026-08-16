@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
   return (
     <footer className="border-t border-slate-900 bg-slate-950/95 py-12 px-4 text-xs text-slate-400">
       <div className="max-w-7xl mx-auto space-y-10">
-        {/* Main 4-Column Footer Navigation */}
+        {/* Main 5-Column Footer Navigation */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {/* Brand Col */}
           <div className="col-span-2 lg:col-span-1 space-y-3">
@@ -50,6 +50,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Typing Test
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleLink("/typing-speed-test/", "test")}
+                  className="hover:text-cyan-300 transition-colors text-left"
+                >
+                  Typing Speed Test
                 </button>
               </li>
               <li>
@@ -177,15 +185,31 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* About & Legal */}
           <div className="space-y-3">
             <h3 className="font-mono font-bold text-slate-200 text-xs uppercase tracking-wider text-cyan-400">
-              Legal
+              Company & Legal
             </h3>
             <ul className="space-y-2 text-[11px]">
               <li>
                 <button
-                  onClick={() => handleLink("/privacy/")}
+                  onClick={() => handleLink("/about/")}
+                  className="hover:text-cyan-300 transition-colors text-left"
+                >
+                  About Us
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleLink("/contact/")}
+                  className="hover:text-cyan-300 transition-colors text-left"
+                >
+                  Contact Support
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleLink("/privacy-policy/")}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Privacy Policy
