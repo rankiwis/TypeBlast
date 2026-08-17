@@ -1,0 +1,218 @@
+{
+  "usr_a15813bd20358b70": {
+    "id": "usr_a15813bd20358b70",
+    "username": "testuser1",
+    "email": "test1@typeblast.com",
+    "passwordHash": "bf617be7fa6aabaae7c6cfae22bd0373fa7f9015b39c77141713a3d7e3acff9d6dfd00df5b9899d099fd64ad4825a09378c96fe2024ce049987602f99c5da066",
+    "salt": "fe5cd9690b70eef1165872456d6f9245",
+    "createdAt": "2026-08-17T03:19:27.683Z",
+    "displayName": "testuser1",
+    "bio": "TypeBlast enthusiast mastering speed touch typing.",
+    "keyboardLayout": "QWERTY",
+    "soundPreference": "mechanical",
+    "personalBestWpm": 0,
+    "averageWpm": 0,
+    "averageAccuracy": 0,
+    "testsCompleted": 0,
+    "currentStreak": 1,
+    "lastTestDate": null,
+    "xp": 100,
+    "testHistory": [],
+    "gameScores": [],
+    "achievements": [
+      {
+        "id": "first_test",
+        "title": "First Blast",
+        "description": "Complete your first typing speed test",
+        "icon": "⚡",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_50",
+        "title": "Speedster (50 WPM)",
+        "description": "Reach 50+ WPM on a completed test",
+        "icon": "🚀",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_70",
+        "title": "Velocity Master (70 WPM)",
+        "description": "Break the 70 WPM barrier",
+        "icon": "🏎️",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_100",
+        "title": "Century Typist (100 WPM)",
+        "description": "Achieve triple-digit 100+ WPM speed",
+        "icon": "👑",
+        "unlockedAt": null
+      },
+      {
+        "id": "sniper",
+        "title": "Precision Sniper (99%+)",
+        "description": "Complete a test with 99%+ accuracy",
+        "icon": "🎯",
+        "unlockedAt": null
+      },
+      {
+        "id": "marathon_10",
+        "title": "Test Marathon (10 Tests)",
+        "description": "Complete 10 total typing tests",
+        "icon": "🏆",
+        "unlockedAt": null
+      },
+      {
+        "id": "streak_3",
+        "title": "Streak Committer (3 Days)",
+        "description": "Maintain a 3-day typing streak",
+        "icon": "🔥",
+        "unlockedAt": null
+      }
+    ]
+  },
+  "usr_67b1d4b6b2061ccc": {
+    "id": "usr_67b1d4b6b2061ccc",
+    "username": "typeblast",
+    "email": "admin@typeblast.com",
+    "passwordHash": "f2a3f4bea8df1b42e720459996334e1bb71d49ee97686464d5b35f2f938dbe28b26df16e13d7a523ad87835aba87e235be099bc70cfc66291b8fe113b8370442",
+    "salt": "1ed286edca861b7274ff32ca0b5be29f",
+    "createdAt": "2026-08-17T03:19:31.908Z",
+    "displayName": "typeblast",
+    "bio": "TypeBlast enthusiast mastering speed touch typing.",
+    "keyboardLayout": "QWERTY",
+    "soundPreference": "mechanical",
+    "personalBestWpm": 0,
+    "averageWpm": 0,
+    "averageAccuracy": 0,
+    "testsCompleted": 0,
+    "currentStreak": 1,
+    "lastTestDate": null,
+    "xp": 100,
+    "testHistory": [],
+    "gameScores": [],
+    "achievements": [
+      {
+        "id": "first_test",
+        "title": "First Blast",
+        "description": "Complete your first typing speed test",
+        "icon": "⚡",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_50",
+        "title": "Speedster (50 WPM)",
+        "description": "Reach 50+ WPM on a completed test",
+        "icon": "🚀",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_70",
+        "title": "Velocity Master (70 WPM)",
+        "description": "Break the 70 WPM barrier",
+        "icon": "🏎️",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_100",
+        "title": "Century Typist (100 WPM)",
+        "description": "Achieve triple-digit 100+ WPM speed",
+        "icon": "👑",
+        "unlockedAt": null
+      },
+      {
+        "id": "sniper",
+        "title": "Precision Sniper (99%+)",
+        "description": "Complete a test with 99%+ accuracy",
+        "icon": "🎯",
+        "unlockedAt": null
+      },
+      {
+        "id": "marathon_10",
+        "title": "Test Marathon (10 Tests)",
+        "description": "Complete 10 total typing tests",
+        "icon": "🏆",
+        "unlockedAt": null
+      },
+      {
+        "id": "streak_3",
+        "title": "Streak Committer (3 Days)",
+        "description": "Maintain a 3-day typing streak",
+        "icon": "🔥",
+        "unlockedAt": null
+      }
+    ]
+  },
+  "usr_e8a6a61d37ddc485": {
+    "id": "usr_e8a6a61d37ddc485",
+    "username": "speedmaster99",
+    "email": "speed99@typeblast.com",
+    "passwordHash": "e3f39d9edae1b3c61fe7be0304007f19183bcf82acafd31dbd87cd6021b61b6af7c6d78f5c96402977b8f14b3c38bbbb72e9314906fb8ae034c8c4bd86750c59",
+    "salt": "ae040c5fdeda886070c60acdb84adb75",
+    "createdAt": "2026-08-17T03:20:13.044Z",
+    "displayName": "speedmaster99",
+    "bio": "TypeBlast enthusiast mastering speed touch typing.",
+    "keyboardLayout": "QWERTY",
+    "soundPreference": "mechanical",
+    "personalBestWpm": 0,
+    "averageWpm": 0,
+    "averageAccuracy": 0,
+    "testsCompleted": 0,
+    "currentStreak": 1,
+    "lastTestDate": null,
+    "xp": 100,
+    "testHistory": [],
+    "gameScores": [],
+    "achievements": [
+      {
+        "id": "first_test",
+        "title": "First Blast",
+        "description": "Complete your first typing speed test",
+        "icon": "⚡",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_50",
+        "title": "Speedster (50 WPM)",
+        "description": "Reach 50+ WPM on a completed test",
+        "icon": "🚀",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_70",
+        "title": "Velocity Master (70 WPM)",
+        "description": "Break the 70 WPM barrier",
+        "icon": "🏎️",
+        "unlockedAt": null
+      },
+      {
+        "id": "speed_100",
+        "title": "Century Typist (100 WPM)",
+        "description": "Achieve triple-digit 100+ WPM speed",
+        "icon": "👑",
+        "unlockedAt": null
+      },
+      {
+        "id": "sniper",
+        "title": "Precision Sniper (99%+)",
+        "description": "Complete a test with 99%+ accuracy",
+        "icon": "🎯",
+        "unlockedAt": null
+      },
+      {
+        "id": "marathon_10",
+        "title": "Test Marathon (10 Tests)",
+        "description": "Complete 10 total typing tests",
+        "icon": "🏆",
+        "unlockedAt": null
+      },
+      {
+        "id": "streak_3",
+        "title": "Streak Committer (3 Days)",
+        "description": "Maintain a 3-day typing streak",
+        "icon": "🔥",
+        "unlockedAt": null
+      }
+    ]
+  }
+}

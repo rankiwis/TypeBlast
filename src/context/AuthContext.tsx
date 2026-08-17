@@ -82,6 +82,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  async function parseJsonResponse(res: Response, defaultErrorMsg: string) {
+    const text = await res.text();
+    let data: any = null;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      // Non-JSON response (e.g. 502, 503 or HTML gateway error)
+      if (!res.ok) {
+        throw new Error(`Server temporarily unavailable (${res.status}). Please try again in a few seconds.`);
+      }
+      throw new Error("Received unexpected response format from server.");
+    }
+
+    if (!res.ok) {
+      throw new Error(data?.error || defaultErrorMsg);
+    }
+
+    return data;
+  }
+
   // Fetch logged in user profile on initial load
   useEffect(() => {
     const fetchUser = async () => {
@@ -123,10 +143,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       body: JSON.stringify({ username, email, password }),
     });
 
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || "Failed to create account.");
-    }
+    const data = await parseJsonResponse(res, "Failed to create account.");
 
     localStorage.setItem(TOKEN_KEY, data.token);
     setToken(data.token);
@@ -141,10 +158,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       body: JSON.stringify({ emailOrUsername, password }),
     });
 
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || "Invalid username/email or password.");
-    }
+    const data = await parseJsonResponse(res, "Invalid username/email or password.");
 
     localStorage.setItem(TOKEN_KEY, data.token);
     setToken(data.token);
@@ -245,11 +259,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       body: JSON.stringify(data),
     });
 
-    const resData = await res.json();
-    if (!res.ok) {
-      throw new Error(resData.error || "Failed to update profile.");
-    }
-
+    const resData = await parseJsonResponse(res, "Failed to update profile.");
     setUser(resData.user);
   };
 
