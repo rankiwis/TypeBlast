@@ -40,9 +40,24 @@ export const TypingTipsPage: React.FC<TypingTipsPageProps> = ({ onNavigatePath }
       headline: pageTitle,
       description: metaDescription,
       url: canonicalUrl,
+      image: "https://www.typeblast.com/icon.png",
+      datePublished: "2025-01-15T08:00:00+00:00",
+      dateModified: "2026-02-10T08:00:00+00:00",
       author: {
         "@type": "Organization",
         name: "TypeBlast Speed Typing Experts",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "TypeBlast",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://www.typeblast.com/icon.png",
+        },
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
       },
     },
     {
