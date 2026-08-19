@@ -63,6 +63,8 @@ interface AuthContextType {
   signup: (username: string, email: string, password: string) => Promise<void>;
   login: (emailOrUsername: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<{ message: string; previewResetUrl?: string }>;
+  resetPassword: (token: string, password: string) => Promise<{ message: string }>;
   recordTestResult: (stats: TypingStats) => Promise<void>;
   recordGameScore: (gameId: string, gameName: string, score: number, wpm: number, accuracy: number) => Promise<void>;
   updateProfile: (data: { displayName?: string; bio?: string; keyboardLayout?: string; soundPreference?: string }) => Promise<void>;
@@ -182,6 +184,38 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
   };
 
+  const forgotPassword = async (email: string) => {
+    const res = await fetch("/api/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await parseJsonResponse(
+      res,
+      "If an account exists for this email, you will receive a password reset link shortly."
+    );
+    trackEvent("forgot_password_requested", { method: "email" });
+    return {
+      message: data.message || "If an account exists for this email, you will receive a password reset link shortly.",
+      previewResetUrl: data.previewResetUrl,
+    };
+  };
+
+  const resetPassword = async (resetToken: string, password: string) => {
+    const res = await fetch("/api/auth/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: resetToken, password }),
+    });
+
+    const data = await parseJsonResponse(res, "Failed to reset password.");
+    trackEvent("password_reset_success", { method: "token" });
+    return {
+      message: data.message || "Your password has been reset successfully.",
+    };
+  };
+
   const recordTestResult = async (stats: TypingStats) => {
     if (!token) return;
 
@@ -272,6 +306,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         signup,
         login,
         logout,
+        forgotPassword,
+        resetPassword,
         recordTestResult,
         recordGameScore,
         updateProfile,

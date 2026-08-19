@@ -20,6 +20,8 @@ import { getBlogPostBySlug } from "./data/blogData";
 // Auth & Dashboard Imports
 import { LoginPage } from "./components/Auth/LoginPage";
 import { SignupPage } from "./components/Auth/SignupPage";
+import { ForgotPasswordPage } from "./components/Auth/ForgotPasswordPage";
+import { ResetPasswordPage } from "./components/Auth/ResetPasswordPage";
 import { DashboardPage } from "./components/Dashboard/DashboardPage";
 import { ProfilePage } from "./components/Profile/ProfilePage";
 
@@ -41,7 +43,8 @@ import { TermsOfServicePage } from "./components/SEO/SeoPages/TermsOfServicePage
 import { NotFoundPage } from "./components/SEO/SeoPages/NotFoundPage";
 
 function normalizePath(path: string): string {
-  let cleaned = path.trim().toLowerCase();
+  const [pathname] = path.split(/[?#]/);
+  let cleaned = pathname.trim().toLowerCase();
   if (cleaned.length > 1 && !cleaned.endsWith("/")) {
     cleaned += "/";
   }
@@ -78,7 +81,9 @@ function MainAppContent() {
   const navigateToPath = (path: string) => {
     const normalized = normalizePath(path);
     if (typeof window !== "undefined") {
-      window.history.pushState({}, "", normalized);
+      const queryIndex = path.indexOf("?");
+      const queryPart = queryIndex !== -1 ? path.substring(queryIndex) : "";
+      window.history.pushState({}, "", normalized + queryPart);
     }
     setCurrentPath(normalized);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -140,6 +145,8 @@ function MainAppContent() {
     "/pricing/",
     "/login/",
     "/signup/",
+    "/forgot-password/",
+    "/reset-password/",
     "/dashboard/",
     "/profile/",
   ];
@@ -169,6 +176,8 @@ function MainAppContent() {
         {/* Auth & User Account Routes */}
         {currentPath === "/login/" && <LoginPage onNavigatePath={navigateToPath} />}
         {currentPath === "/signup/" && <SignupPage onNavigatePath={navigateToPath} />}
+        {currentPath === "/forgot-password/" && <ForgotPasswordPage onNavigatePath={navigateToPath} />}
+        {currentPath === "/reset-password/" && <ResetPasswordPage onNavigatePath={navigateToPath} />}
         {currentPath === "/dashboard/" && <DashboardPage onNavigatePath={navigateToPath} />}
         {currentPath === "/profile/" && <ProfilePage onNavigatePath={navigateToPath} />}
 

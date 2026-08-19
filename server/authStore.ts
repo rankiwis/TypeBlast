@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import nodemailer from "nodemailer";
 import { sanitizeText } from "./leaderboardStore";
 
 export interface UserTestResult {
@@ -78,9 +79,19 @@ export interface SessionData {
   expiresAt: number;
 }
 
+export interface PasswordResetToken {
+  token: string;
+  userId: string;
+  email: string;
+  createdAt: number;
+  expiresAt: number;
+  used: boolean;
+}
+
 const DATA_DIR = path.join(process.cwd(), "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const SESSIONS_FILE = path.join(DATA_DIR, "sessions.json");
+const RESETS_FILE = path.join(DATA_DIR, "password_resets.json");
 
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -90,9 +101,12 @@ if (!fs.existsSync(DATA_DIR)) {
 // In-memory data structures synced with disk
 let users: Record<string, UserAccount> = {};
 let sessions: Record<string, SessionData> = {}; // token -> SessionData
+let passwordResets: Record<string, PasswordResetToken> = {}; // token -> PasswordResetToken
 
 // Session TTL: 30 days in milliseconds
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+// Reset Token TTL: 1 hour in milliseconds
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 
 // Load initial data
 try {
@@ -109,7 +123,6 @@ try {
   if (fs.existsSync(SESSIONS_FILE)) {
     const raw = fs.readFileSync(SESSIONS_FILE, "utf-8");
     const parsed = JSON.parse(raw);
-    // Backward-compatibility: convert old string sessions to SessionData
     const now = Date.now();
     for (const [token, val] of Object.entries(parsed)) {
       if (typeof val === "string") {
@@ -128,6 +141,16 @@ try {
   sessions = {};
 }
 
+try {
+  if (fs.existsSync(RESETS_FILE)) {
+    const raw = fs.readFileSync(RESETS_FILE, "utf-8");
+    passwordResets = JSON.parse(raw);
+  }
+} catch (e) {
+  console.error("Error loading password resets database:", e);
+  passwordResets = {};
+}
+
 function saveUsers() {
   try {
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf-8");
@@ -141,6 +164,14 @@ function saveSessions() {
     fs.writeFileSync(SESSIONS_FILE, JSON.stringify(sessions, null, 2), "utf-8");
   } catch (e) {
     console.error("Failed to save sessions database:", e);
+  }
+}
+
+function savePasswordResets() {
+  try {
+    fs.writeFileSync(RESETS_FILE, JSON.stringify(passwordResets, null, 2), "utf-8");
+  } catch (e) {
+    console.error("Failed to save password resets database:", e);
   }
 }
 
@@ -571,4 +602,331 @@ export function updateUserProfile(
 
   saveUsers();
   return sanitizeUser(user);
+}
+
+// Helper to send registration confirmation / welcome email
+export async function sendWelcomeEmail(params: {
+  toEmail: string;
+  username: string;
+  loginUrl: string;
+}): Promise<boolean> {
+  const { toEmail, username, loginUrl } = params;
+
+  console.log(`\n==================================================`);
+  console.log(`[WELCOME CONFIRMATION EMAIL DISPATCHED]`);
+  console.log(`To: ${toEmail} (${username})`);
+  console.log(`Login URL: ${loginUrl}`);
+  console.log(`Subject: Welcome to TypeBlast – Your Account Is Ready`);
+  console.log(`==================================================\n`);
+
+  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    try {
+      const port = Number(process.env.SMTP_PORT) || 587;
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port,
+        secure: port === 465,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+
+      const fromAddress = process.env.SMTP_FROM || `"TypeBlast Support" <no-reply@typeblast.com>`;
+
+      await transporter.sendMail({
+        from: fromAddress,
+        to: toEmail,
+        subject: "Welcome to TypeBlast – Your Account Is Ready",
+        text: `Hi ${username},\n\nWelcome to TypeBlast! Your account has been successfully created.\n\nYou can now log in to track your typing speed progress, earn speed certificates, compete on global leaderboards, and access custom touch typing lessons.\n\nLog in to your account here: ${loginUrl}\n\nHappy typing,\nThe TypeBlast Team`,
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 20px; background-color: #090d16; color: #f1f5f9; border-radius: 16px; border: 1px solid #1e293b;">
+            <div style="text-align: center; margin-bottom: 24px;">
+              <span style="font-size: 26px; font-weight: 900; color: #06b6d4; letter-spacing: -0.5px;">⚡ TYPEBLAST</span>
+            </div>
+            <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-top: 0; text-align: center;">Welcome to TypeBlast!</h2>
+            <p style="font-size: 14px; line-height: 1.6; color: #94a3b8; margin-top: 16px;">
+              Hi <strong>${username}</strong>,
+            </p>
+            <p style="font-size: 14px; line-height: 1.6; color: #94a3b8;">
+              Your TypeBlast account has been successfully created. You're all set to elevate your typing speed, build muscle memory, and unlock achievements.
+            </p>
+            
+            <div style="background-color: #020617; border: 1px solid #1e293b; border-radius: 12px; padding: 18px; margin: 20px 0;">
+              <div style="font-size: 12px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">What you can do next:</div>
+              <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                <li>⚡ Take WPM typing speed tests and save your personal records</li>
+                <li>🎯 Practice speed drills, punctuation, and code snippets</li>
+                <li>🏆 Compete on global leaderboards across timeframes</li>
+                <li>📜 Earn verified official typing certificates</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center; margin: 28px 0;">
+              <a href="${loginUrl}" style="display: inline-block; background-color: #06b6d4; color: #020617; font-weight: 800; font-size: 14px; text-decoration: none; padding: 14px 28px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Log In to Your Account</a>
+            </div>
+
+            <p style="font-size: 12px; color: #64748b; line-height: 1.5; text-align: center;">
+              Or copy this link to log in: <a href="${loginUrl}" style="color: #06b6d4; word-break: break-all;">${loginUrl}</a>
+            </p>
+
+            <hr style="border: none; border-top: 1px solid #1e293b; margin: 24px 0;" />
+            <p style="font-size: 11px; color: #475569; text-align: center; margin-bottom: 0;">
+              You received this confirmation email because a new account was registered on TypeBlast.
+            </p>
+          </div>
+        `,
+      });
+      return true;
+    } catch (error) {
+      console.error("Failed to send welcome confirmation email via SMTP:", error);
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// Helper to send password reset email via SMTP (if configured) or logged securely
+export async function sendPasswordResetEmail(params: {
+  toEmail: string;
+  username: string;
+  resetUrl: string;
+}): Promise<boolean> {
+  const { toEmail, username, resetUrl } = params;
+
+  console.log(`\n==================================================`);
+  console.log(`[PASSWORD RESET EMAIL DISPATCHED]`);
+  console.log(`To: ${toEmail} (${username})`);
+  console.log(`Reset URL: ${resetUrl}`);
+  console.log(`Token Validity: 1 hour (single-use)`);
+  console.log(`==================================================\n`);
+
+  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    try {
+      const port = Number(process.env.SMTP_PORT) || 587;
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port,
+        secure: port === 465,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+
+      const fromAddress = process.env.SMTP_FROM || `"TypeBlast Support" <no-reply@typeblast.com>`;
+
+      await transporter.sendMail({
+        from: fromAddress,
+        to: toEmail,
+        subject: "Reset Your TypeBlast Password",
+        text: `Hi ${username},\n\nWe received a request to reset your TypeBlast password. Click the link below to set a new password:\n\n${resetUrl}\n\nThis single-use link will expire in 1 hour. If you did not make this request, you can safely ignore this email.\n\nHappy typing,\nThe TypeBlast Team`,
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 20px; background-color: #090d16; color: #f1f5f9; border-radius: 16px; border: 1px solid #1e293b;">
+            <div style="text-align: center; margin-bottom: 24px;">
+              <span style="font-size: 24px; font-weight: 900; color: #06b6d4; letter-spacing: -0.5px;">⚡ TYPEBLAST</span>
+            </div>
+            <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-top: 0;">Reset Your Password</h2>
+            <p style="font-size: 14px; line-height: 1.6; color: #94a3b8;">
+              Hi <strong>${username}</strong>,<br/>
+              We received a request to reset the password for your TypeBlast account. Click the button below to choose a new password:
+            </p>
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="${resetUrl}" style="display: inline-block; background-color: #06b6d4; color: #020617; font-weight: 800; font-size: 14px; text-decoration: none; padding: 14px 28px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Reset Password</a>
+            </div>
+            <p style="font-size: 12px; color: #64748b; line-height: 1.5;">
+              This link is secure, single-use, and expires in <strong>1 hour</strong>.<br/>
+              If the button above does not work, copy and paste this URL into your browser:<br/>
+              <a href="${resetUrl}" style="color: #06b6d4; word-break: break-all;">${resetUrl}</a>
+            </p>
+            <hr style="border: none; border-top: 1px solid #1e293b; margin: 24px 0;" />
+            <p style="font-size: 11px; color: #475569; text-align: center; margin-bottom: 0;">
+              If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
+            </p>
+          </div>
+        `,
+      });
+      return true;
+    } catch (error) {
+      console.error("Failed to send SMTP email:", error);
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// Request a password reset (creates single-use 1-hour token and dispatches email)
+export async function createPasswordResetRequest(
+  emailOrUsername: string,
+  baseUrl: string
+): Promise<{ success: boolean; previewResetUrl?: string; token?: string }> {
+  if (!emailOrUsername || typeof emailOrUsername !== "string") {
+    return { success: true };
+  }
+
+  const query = emailOrUsername.trim().toLowerCase();
+  const user = Object.values(users).find(
+    (u) => u.email.toLowerCase() === query || u.username.toLowerCase() === query
+  );
+
+  // If user does not exist, return generic success without leaking existence
+  if (!user) {
+    return { success: true };
+  }
+
+  // Invalidate any existing unused reset tokens for this user
+  const now = Date.now();
+  for (const t of Object.values(passwordResets)) {
+    if (t.userId === user.id && !t.used) {
+      t.used = true;
+    }
+  }
+
+  // Generate cryptographically secure random token (32 bytes hex)
+  const token = crypto.randomBytes(32).toString("hex");
+  const expiresAt = now + RESET_TOKEN_TTL_MS;
+
+  passwordResets[token] = {
+    token,
+    userId: user.id,
+    email: user.email,
+    createdAt: now,
+    expiresAt,
+    used: false,
+  };
+  savePasswordResets();
+
+  const cleanBaseUrl = baseUrl.replace(/\/+$/, "");
+  const resetUrl = `${cleanBaseUrl}/reset-password/?token=${token}`;
+
+  await sendPasswordResetEmail({
+    toEmail: user.email,
+    username: user.username,
+    resetUrl,
+  });
+
+  return {
+    success: true,
+    previewResetUrl: resetUrl,
+    token,
+  };
+}
+
+// Validate a reset token (returns status and masked email if valid)
+export function validatePasswordResetToken(token: string): {
+  valid: boolean;
+  error?: string;
+  email?: string;
+} {
+  if (!token || typeof token !== "string") {
+    return {
+      valid: false,
+      error: "Missing or invalid password reset token.",
+    };
+  }
+
+  const resetRecord = passwordResets[token];
+  if (!resetRecord) {
+    return {
+      valid: false,
+      error: "This password reset link is invalid or does not exist.",
+    };
+  }
+
+  if (resetRecord.used) {
+    return {
+      valid: false,
+      error: "This password reset link has already been used. Please request a new one.",
+    };
+  }
+
+  const now = Date.now();
+  if (resetRecord.expiresAt < now) {
+    return {
+      valid: false,
+      error: "This password reset link has expired (links are valid for 1 hour). Please request a new one.",
+    };
+  }
+
+  const user = users[resetRecord.userId];
+  if (!user) {
+    return {
+      valid: false,
+      error: "The account associated with this reset link no longer exists.",
+    };
+  }
+
+  const [localPart, domain] = user.email.split("@");
+  const maskedLocal =
+    localPart.length > 2
+      ? localPart[0] + "***" + localPart[localPart.length - 1]
+      : localPart[0] + "***";
+  const maskedEmail = `${maskedLocal}@${domain}`;
+
+  return {
+    valid: true,
+    email: maskedEmail,
+  };
+}
+
+// Reset password with valid token and invalidate token + existing sessions
+export function resetPasswordWithToken(
+  token: string,
+  newPassword: string
+): { success: boolean; message: string } {
+  if (!token || typeof token !== "string") {
+    throw new Error("Invalid password reset token.");
+  }
+
+  const resetRecord = passwordResets[token];
+  if (!resetRecord || resetRecord.used) {
+    throw new Error("This password reset link is invalid or has already been used.");
+  }
+
+  const now = Date.now();
+  if (resetRecord.expiresAt < now) {
+    throw new Error("This password reset link has expired. Please request a new one.");
+  }
+
+  if (!newPassword || typeof newPassword !== "string") {
+    throw new Error("New password is required.");
+  }
+
+  if (newPassword.length < 6) {
+    throw new Error("Password must be at least 6 characters long.");
+  }
+
+  if (newPassword.length > 128) {
+    throw new Error("Password cannot exceed 128 characters.");
+  }
+
+  const user = users[resetRecord.userId];
+  if (!user) {
+    throw new Error("Account not found.");
+  }
+
+  // Hash new password using PBKDF2 with 100,000 iterations & new salt
+  const { hash, salt } = hashPassword(newPassword);
+  user.passwordHash = hash;
+  user.salt = salt;
+  saveUsers();
+
+  // Invalidate token immediately
+  resetRecord.used = true;
+  savePasswordResets();
+
+  // Invalidate any active sessions for this user for security
+  for (const [sToken, sData] of Object.entries(sessions)) {
+    if (sData.userId === user.id) {
+      delete sessions[sToken];
+    }
+  }
+  saveSessions();
+
+  return {
+    success: true,
+    message: "Your password has been successfully reset. You can now log in with your new password.",
+  };
 }

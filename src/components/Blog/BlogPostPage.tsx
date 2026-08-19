@@ -106,6 +106,29 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
     currentUrl
   )}`;
 
+  const isPillar = post.tags?.includes("Pillar Guide") || post.slug === "improve-typing-speed-guide";
+
+  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    const anchor = target.closest("a");
+    if (anchor) {
+      const href = anchor.getAttribute("href");
+      if (href) {
+        if (href.startsWith("#")) {
+          e.preventDefault();
+          const targetId = href.slice(1);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+          }
+        } else if (href.startsWith("/") && !href.startsWith("//")) {
+          e.preventDefault();
+          onNavigatePath(href);
+        }
+      }
+    }
+  };
+
   return (
     <article className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       <SeoHead
@@ -131,9 +154,15 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
       {/* Article Header */}
       <header className="space-y-4 border-b border-slate-800 pb-6">
         <div className="flex flex-wrap items-center gap-3 text-xs">
-          <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-bold uppercase tracking-wider text-[10px]">
-            {post.category}
-          </span>
+          {isPillar ? (
+            <span className="px-3 py-1 rounded-full bg-cyan-500 text-slate-950 font-black uppercase tracking-wider text-[10px] shadow-md shadow-cyan-500/20 flex items-center gap-1">
+              <span>🌟 Master Pillar Hub</span>
+            </span>
+          ) : (
+            <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-bold uppercase tracking-wider text-[10px]">
+              {post.category}
+            </span>
+          )}
           <span className="text-slate-600">•</span>
           <span className="text-slate-400 flex items-center gap-1">
             <Clock className="w-3.5 h-3.5 text-slate-500" />
@@ -231,16 +260,19 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
       <div className="relative rounded-2xl overflow-hidden border border-slate-800 aspect-video max-h-[420px] shadow-xl">
         <img
           src={post.featuredImage}
-          alt={post.title}
+          alt={post.imageAlt || post.title}
           className="w-full h-full object-cover"
         />
       </div>
 
       {/* Main Article Body */}
-      <div className="prose prose-invert max-w-none space-y-6 text-slate-200 text-sm leading-relaxed antialiased">
+      <div 
+        onClick={handleContentClick}
+        className="prose prose-invert max-w-none space-y-6 text-slate-200 text-sm leading-relaxed antialiased"
+      >
         <div
           dangerouslySetInnerHTML={{ __html: post.content }}
-          className="[&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-8 [&>h2]:mb-3 [&>h2]:border-b [&>h2]:border-slate-800 [&>h2]:pb-2 [&>p]:text-slate-300 [&>p]:leading-relaxed [&>p]:mb-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1.5 [&>ul]:text-slate-300 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1.5 [&>ol]:text-slate-300"
+          className="[&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-8 [&>h2]:mb-3 [&>h2]:border-b [&>h2]:border-slate-800 [&>h2]:pb-2 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:text-cyan-400 [&>h3]:mt-6 [&>h3]:mb-2 [&>p]:text-slate-300 [&>p]:leading-relaxed [&>p]:mb-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1.5 [&>ul]:text-slate-300 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1.5 [&>ol]:text-slate-300 [&_a]:text-cyan-400 [&_a]:underline [&_a:hover]:text-cyan-300 [&_code]:text-cyan-300 [&_code]:bg-slate-900 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-xs [&_code]:font-mono"
         />
       </div>
 
@@ -317,7 +349,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
                 <div className="aspect-video rounded-lg overflow-hidden">
                   <img
                     src={rel.featuredImage}
-                    alt={rel.title}
+                    alt={rel.imageAlt || rel.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>

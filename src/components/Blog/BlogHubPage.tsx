@@ -173,7 +173,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
             <div className="lg:col-span-5 relative min-h-[220px] lg:min-h-full overflow-hidden">
               <img
                 src={featuredPost.featuredImage}
-                alt={featuredPost.title}
+                alt={featuredPost.imageAlt || featuredPost.title}
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent lg:bg-gradient-to-r lg:from-slate-900 lg:via-transparent lg:to-transparent" />
@@ -251,7 +251,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
                 <div className="relative aspect-video overflow-hidden">
                   <img
                     src={post.featuredImage}
-                    alt={post.title}
+                    alt={post.imageAlt || post.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 flex items-center gap-2">

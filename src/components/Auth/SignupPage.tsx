@@ -136,6 +136,11 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigatePath }) => {
             </div>
           </div>
 
+          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400 flex items-center gap-2">
+            <Mail className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span>We'll send a welcome confirmation email to your address once created.</span>
+          </div>
+
           <button
             type="submit"
             disabled={isSubmitting}

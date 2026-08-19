@@ -11,7 +11,11 @@ import {
   addTestResultToUser,
   addGameScoreToUser,
   updateUserProfile,
-  getPublicProfile
+  getPublicProfile,
+  createPasswordResetRequest,
+  validatePasswordResetToken,
+  resetPasswordWithToken,
+  sendWelcomeEmail,
 } from "./server/authStore";
 import {
   queryLeaderboard,
@@ -126,6 +130,8 @@ app.get("/sitemap.xml", (_req, res) => {
     { path: "/typing-test/", priority: "0.9", changefreq: "daily" },
     { path: "/daily-typing-challenge/", priority: "0.9", changefreq: "daily" },
     { path: "/blog/", priority: "0.9", changefreq: "daily" },
+    { path: "/blog/improve-typing-speed-guide/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/good-typing-speed-wpm-benchmarks/", priority: "0.8", changefreq: "weekly" },
     { path: "/blog/how-to-type-100-wpm-touch-typing-guide/", priority: "0.8", changefreq: "weekly" },
     { path: "/blog/home-row-finger-placement-mastery/", priority: "0.8", changefreq: "weekly" },
     { path: "/blog/ergonomics-and-wrist-health-for-typists/", priority: "0.8", changefreq: "weekly" },
@@ -217,7 +223,7 @@ TypeBlast is a fast, responsive online typing speed test, touch-typing practice 
 });
 
 // Auth API Endpoints
-app.post("/api/auth/signup", authRateLimiter, (req, res) => {
+app.post("/api/auth/signup", authRateLimiter, async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
@@ -226,7 +232,28 @@ app.post("/api/auth/signup", authRateLimiter, (req, res) => {
     if (password.length < 6) {
       return res.status(400).json({ error: "Password must be at least 6 characters long." });
     }
+    
+    // Create user in store (validates formats, hashes password, saves record)
     const result = createUser(username, email, password);
+
+    // Compute dynamic login link for this environment
+    const hostHeader = req.get("host") || "";
+    const proto = req.get("x-forwarded-proto") || req.protocol || "http";
+    const origin =
+      req.get("origin") ||
+      (hostHeader ? `${proto}://${hostHeader}` : process.env.APP_URL || "https://www.typeblast.com");
+    const cleanBaseUrl = origin.replace(/\/+$/, "");
+    const loginUrl = `${cleanBaseUrl}/login/`;
+
+    // Dispatch welcome email asynchronously without blocking registration or throwing errors
+    sendWelcomeEmail({
+      toEmail: result.user.email,
+      username: result.user.displayName || result.user.username,
+      loginUrl,
+    }).catch((err) => {
+      console.error("Welcome email delivery failed (handled gracefully):", err);
+    });
+
     res.json({ status: "success", user: result.user, token: result.token });
   } catch (error: any) {
     res.status(400).json({ error: error.message || "Failed to create account." });
@@ -258,6 +285,79 @@ app.post("/api/auth/logout", (req, res) => {
   const token = getAuthToken(req);
   if (token) logoutToken(token);
   res.json({ status: "success", message: "Logged out" });
+});
+
+// Forgot Password Request Endpoint
+app.post("/api/auth/forgot-password", authRateLimiter, async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || typeof email !== "string" || !email.trim()) {
+      return res.status(400).json({ error: "Please provide a valid email address." });
+    }
+
+    // Determine current base URL
+    const hostHeader = req.get("host") || "";
+    const proto = req.get("x-forwarded-proto") || req.protocol || "http";
+    const origin =
+      req.get("origin") ||
+      (hostHeader ? `${proto}://${hostHeader}` : process.env.APP_URL || "https://www.typeblast.com");
+
+    const result = await createPasswordResetRequest(email.trim(), origin);
+
+    // Generic response to prevent user enumeration
+    res.json({
+      status: "success",
+      message: "If an account exists for this email, you will receive a password reset link shortly.",
+      previewResetUrl: result.previewResetUrl, // helpful for preview / dev environment testing
+    });
+  } catch (error: any) {
+    console.error("Forgot password error:", error);
+    // Return generic message even on unexpected errors
+    res.json({
+      status: "success",
+      message: "If an account exists for this email, you will receive a password reset link shortly.",
+    });
+  }
+});
+
+// Verify Reset Token Endpoint
+app.get("/api/auth/verify-reset-token", (req, res) => {
+  try {
+    const token = req.query.token ? String(req.query.token) : "";
+    if (!token) {
+      return res.status(400).json({ valid: false, error: "Password reset token is required." });
+    }
+
+    const verification = validatePasswordResetToken(token);
+    if (!verification.valid) {
+      return res.status(400).json({ valid: false, error: verification.error });
+    }
+
+    res.json({ status: "success", valid: true, email: verification.email });
+  } catch (error: any) {
+    res.status(400).json({ valid: false, error: error.message || "Invalid or expired reset token." });
+  }
+});
+
+// Reset Password Execution Endpoint
+app.post("/api/auth/reset-password", authRateLimiter, (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || typeof token !== "string") {
+      return res.status(400).json({ error: "Password reset token is required." });
+    }
+    if (!password || typeof password !== "string") {
+      return res.status(400).json({ error: "New password is required." });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters long." });
+    }
+
+    const result = resetPasswordWithToken(token, password);
+    res.json({ status: "success", message: result.message });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || "Failed to reset password." });
+  }
 });
 
 // Leaderboard Query Endpoint (Today, Week, Month, All Time)

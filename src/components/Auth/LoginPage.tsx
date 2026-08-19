@@ -75,9 +75,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigatePath }) => {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-300">Password</label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-300">Password</label>
+              <button
+                type="button"
+                id="login-forgot-password-link"
+                onClick={() => onNavigatePath("/forgot-password/")}
+                className="text-xs text-cyan-400 hover:text-cyan-300 hover:underline font-medium transition-colors cursor-pointer"
+              >
+                Forgot Password?
+              </button>
+            </div>
             <div className="relative">
               <input
+                id="login-password-input"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

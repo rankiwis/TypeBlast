@@ -13,6 +13,8 @@ export type AnalyticsEventName =
   | "daily_challenge_completed"
   | "account_created"
   | "login"
+  | "forgot_password_requested"
+  | "password_reset_success"
   | "leaderboard_viewed"
   | "result_shared";
 
@@ -58,6 +60,12 @@ export interface AnalyticsEventParams {
   };
   login: {
     method: "email" | "guest" | "oauth";
+  };
+  forgot_password_requested: {
+    method: "email";
+  };
+  password_reset_success: {
+    method: "token";
   };
   leaderboard_viewed: {
     category?: string;
