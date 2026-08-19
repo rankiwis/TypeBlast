@@ -5,6 +5,8 @@ import { BlogPostPage } from "./BlogPostPage";
 interface BlogViewProps {
   onNavigatePath?: (path: string) => void;
   slug?: string;
+  currentPath?: string;
+  initialCategory?: string;
 }
 
 export const BlogView: React.FC<BlogViewProps> = ({
@@ -15,21 +17,24 @@ export const BlogView: React.FC<BlogViewProps> = ({
     }
   },
   slug,
+  currentPath,
+  initialCategory,
 }) => {
   // If slug is provided directly, render the post page
   if (slug) {
     return <BlogPostPage slug={slug} onNavigatePath={onNavigatePath} />;
   }
 
-  // Otherwise check window.location.pathname for /blog/[slug]/
-  if (typeof window !== "undefined") {
-    const pathname = window.location.pathname.replace(/\/$/, ""); // trim trailing slash
-    const parts = pathname.split("/").filter(Boolean); // e.g. ["blog", "how-to-type-100-wpm-touch-typing-guide"]
-    if (parts.length >= 2 && parts[0] === "blog") {
-      const extractedSlug = parts[1];
-      return <BlogPostPage slug={extractedSlug} onNavigatePath={onNavigatePath} />;
-    }
+  // Determine path from currentPath prop or window.location.pathname
+  const effectivePath = currentPath || (typeof window !== "undefined" ? window.location.pathname : "/blog/");
+  const cleanPath = effectivePath.split("?")[0].replace(/\/$/, "");
+  const parts = cleanPath.split("/").filter(Boolean); // e.g. ["blog", "good-typing-speed-wpm-benchmarks"]
+
+  if (parts.length >= 2 && parts[0] === "blog") {
+    const extractedSlug = parts[1];
+    return <BlogPostPage slug={extractedSlug} onNavigatePath={onNavigatePath} />;
   }
 
-  return <BlogHubPage onNavigatePath={onNavigatePath} />;
+  return <BlogHubPage onNavigatePath={onNavigatePath} initialCategory={initialCategory} />;
 };
+

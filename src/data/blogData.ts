@@ -333,6 +333,34 @@ export const BLOG_POSTS: BlogPost[] = [
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+        <!-- Cluster Card 0: WPM Benchmarks -->
+        <a href="/blog/good-typing-speed-wpm-benchmarks/" class="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-cyan-950/20 to-slate-900 border border-cyan-500/40 hover:border-cyan-400 transition-all group block shadow-lg hover:-translate-y-0.5">
+          <div class="flex items-center justify-between text-xs text-cyan-400 font-mono mb-2">
+            <span class="font-bold">⚡ BENCHMARKS & ROLES</span>
+            <span class="text-cyan-400 group-hover:text-cyan-300 transition-colors">4 min read →</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-cyan-300 transition-colors mb-1.5">
+            What's a Good Typing Speed? WPM Benchmarks by Age & Job
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            See real WPM numbers across 8 professional careers and adult age brackets from 20s through 60s.
+          </p>
+        </a>
+
+        <!-- Cluster Card 0b: Typing Speed vs Reading Speed -->
+        <a href="/blog/typing-speed-vs-reading-speed/" class="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950/20 to-slate-900 border border-indigo-500/40 hover:border-indigo-400 transition-all group block shadow-lg hover:-translate-y-0.5">
+          <div class="flex items-center justify-between text-xs text-indigo-400 font-mono mb-2">
+            <span class="font-bold">🧠 COGNITIVE & READING</span>
+            <span class="text-indigo-400 group-hover:text-indigo-300 transition-colors">5 min read →</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-300 transition-colors mb-1.5">
+            Typing Speed vs Reading Speed: What's the Real Connection?
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Why adults read at 238 WPM but type at 50 WPM. The optical vs motor bottlenecks and where they overlap.
+          </p>
+        </a>
+
         <!-- Cluster Card 1 -->
         <a href="/blog/how-to-type-100-wpm-touch-typing-guide/" class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 transition-all group block shadow-lg hover:-translate-y-0.5">
           <div class="flex items-center justify-between text-xs text-cyan-400 font-mono mb-2">
@@ -977,6 +1005,326 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>
         The good news either way: typing speed is one of the most trainable skills out there. Most people move up 15–20 WPM within a couple of months of consistent, focused practice, no matter where they're starting from. <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">Test your current WPM here</a> to get a real baseline before deciding whether it's worth the effort.
       </p>
+
+      <div class="my-6 p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300">
+        <span class="text-cyan-400 font-bold mr-1">💡 Related Reading:</span>
+        Curious why your reading speed is 4x faster than your typing speed? Read <a href="/blog/typing-speed-vs-reading-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">our guide on Typing Speed vs. Reading Speed: What's the Real Connection?</a> to see how cognitive processing and motor bottlenecks interact.
+      </div>
+    `,
+  },
+  {
+    id: "post-typing-speed-vs-reading-speed",
+    slug: "typing-speed-vs-reading-speed",
+    title: "Typing Speed vs Reading Speed: What's the Real Connection?",
+    metaDescription: "Reading and typing use different skills, but they're more connected than you'd think. See the real WPM numbers and what actually links the two.",
+    excerpt: "The average adult reads at 238 WPM but types only 40–60 WPM. Discover why this 5x gap exists, the cognitive bottlenecks involved, and where the two skills actually overlap.",
+    category: "Typing Speed",
+    author: AUTHORS.typeBlastTeam,
+    publishedDate: "2026-08-19",
+    updatedDate: "2026-08-19",
+    featuredImage: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1200&auto=format&fit=crop&q=80",
+    imageAlt: "Books, reading material, and high-performance keyboard side by side representing reading speed vs typing speed",
+    readingTime: "5 min read",
+    tags: [
+      "Typing Speed vs Reading Speed",
+      "Reading Speed WPM",
+      "Typing Speed WPM",
+      "Words Per Minute Reading",
+      "Copy Typing Speed",
+      "Silent Reading Speed",
+      "Touch Typing",
+      "Transcription"
+    ],
+    featured: false,
+    content: `
+      <!-- Featured Snippet / Quotable Answer Block -->
+      <div class="my-6 p-5 rounded-2xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-100 shadow-lg">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2">
+          <span>⚡ Key Takeaway / Quick Answer</span>
+        </div>
+        <p class="text-sm text-slate-200 leading-relaxed font-medium">
+          Reading and typing speed are only loosely connected. The average adult reads around <strong>238 WPM</strong> silently but types only <strong>40–60 WPM</strong>, because typing is limited by motor skill and muscle memory, not how fast your eyes move across a page. The two skills overlap most directly in tasks like transcription and copy typing, where you're doing both at once.
+        </p>
+      </div>
+
+      <p>
+        Here's a number that trips people up: the average adult reads around <strong>238 words per minute</strong>. The average adult types somewhere between <strong>40 and 60</strong>. That's not a small gap. It's close to a <strong>5x difference</strong>, and it raises an obvious question: if your eyes can move through text that fast, why can't your fingers keep up?
+      </p>
+
+      <p>
+        The honest answer: reading and typing aren't the same skill wearing different clothes. They run on different systems in your brain, they're limited by completely different bottlenecks, and getting faster at one doesn't automatically make you faster at the other. Here's what actually connects them, and where the connection is mostly a myth.
+      </p>
+
+      <!-- Visual Comparative Bar Chart -->
+      <div class="my-8 p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span>📊 Speed Comparison: Reading vs Speech vs Typing</span>
+          </h3>
+          <span class="text-[11px] text-slate-400 font-mono">WPM Scale (0–300)</span>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <!-- Silent Reading (Fiction) -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-300">Silent Reading (Fiction)</span>
+              <span class="text-cyan-400 font-bold font-mono">260 WPM</span>
+            </div>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div class="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full rounded-full" style="width: 86.6%"></div>
+            </div>
+          </div>
+
+          <!-- Silent Reading (Non-Fiction) -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-300">Silent Reading (Non-Fiction Benchmark)</span>
+              <span class="text-cyan-400 font-bold font-mono">238 WPM</span>
+            </div>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div class="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full rounded-full" style="width: 79.3%"></div>
+            </div>
+          </div>
+
+          <!-- Reading Aloud -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-300">Reading Aloud</span>
+              <span class="text-indigo-400 font-bold font-mono">183 WPM</span>
+            </div>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div class="bg-indigo-500 h-full rounded-full" style="width: 61%"></div>
+            </div>
+          </div>
+
+          <!-- Natural Speech -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-300">Natural Speech Pace</span>
+              <span class="text-indigo-400 font-bold font-mono">140 WPM</span>
+            </div>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div class="bg-indigo-500/80 h-full rounded-full" style="width: 46.6%"></div>
+            </div>
+          </div>
+
+          <!-- Skilled Touch Typist -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-300">Skilled Touch Typist (Trained)</span>
+              <span class="text-emerald-400 font-bold font-mono">75 WPM</span>
+            </div>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div class="bg-emerald-500 h-full rounded-full" style="width: 25%"></div>
+            </div>
+          </div>
+
+          <!-- Average Adult Typist -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-300">Average Adult Typist</span>
+              <span class="text-amber-400 font-bold font-mono">50 WPM</span>
+            </div>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div class="bg-amber-500 h-full rounded-full" style="width: 16.6%"></div>
+            </div>
+          </div>
+
+          <!-- Beginner Typist -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-300">Beginner / Hunt & Peck</span>
+              <span class="text-rose-400 font-bold font-mono">25 WPM</span>
+            </div>
+            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div class="bg-rose-500 h-full rounded-full" style="width: 8.3%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>The Numbers Side by Side</h2>
+      <p>Before getting into why the gap exists, it helps to see it laid out plainly:</p>
+
+      <div class="overflow-x-auto my-6">
+        <table class="w-full text-left text-sm border-collapse border border-slate-800">
+          <thead>
+            <tr class="bg-slate-900 text-cyan-400">
+              <th class="p-3 border border-slate-800">Activity</th>
+              <th class="p-3 border border-slate-800 font-mono">Typical Speed (WPM)</th>
+              <th class="p-3 border border-slate-800">Primary Bottleneck / Source of Limit</th>
+            </tr>
+          </thead>
+          <tbody class="text-slate-300 divide-y divide-slate-800/60">
+            <tr class="bg-slate-950">
+              <td class="p-3 font-semibold text-white">Silent reading (non-fiction)</td>
+              <td class="p-3 font-mono text-cyan-300 font-bold">238 WPM</td>
+              <td class="p-3 text-xs text-slate-400">Eye saccades, foveal span & lexical word recognition</td>
+            </tr>
+            <tr class="bg-slate-900/40">
+              <td class="p-3 font-semibold text-white">Silent reading (fiction)</td>
+              <td class="p-3 font-mono text-cyan-300 font-bold">260 WPM</td>
+              <td class="p-3 text-xs text-slate-400">Narrative context recognition & predictive lexical processing</td>
+            </tr>
+            <tr class="bg-slate-950">
+              <td class="p-3 font-semibold text-white">Reading aloud</td>
+              <td class="p-3 font-mono text-indigo-300 font-bold">183 WPM</td>
+              <td class="p-3 text-xs text-slate-400">Vocal cord articulation & speech production pace</td>
+            </tr>
+            <tr class="bg-slate-900/40">
+              <td class="p-3 font-semibold text-white">Natural speech</td>
+              <td class="p-3 font-mono text-indigo-300 font-bold">130–150 WPM</td>
+              <td class="p-3 text-xs text-slate-400">Conversational pacing & vocal articulation</td>
+            </tr>
+            <tr class="bg-slate-950">
+              <td class="p-3 font-semibold text-white">Skilled touch typist</td>
+              <td class="p-3 font-mono text-emerald-300 font-bold">60–80 WPM</td>
+              <td class="p-3 text-xs text-slate-400">Finger travel distance, switch actuation & muscle memory</td>
+            </tr>
+            <tr class="bg-slate-900/40">
+              <td class="p-3 font-semibold text-white">Average adult typist</td>
+              <td class="p-3 font-mono text-amber-300 font-bold">40–60 WPM</td>
+              <td class="p-3 text-xs text-slate-400">Motor skill, hand-eye coordination & visual checking</td>
+            </tr>
+            <tr class="bg-slate-950">
+              <td class="p-3 font-semibold text-white">Beginner / hunt-and-peck typist</td>
+              <td class="p-3 font-mono text-rose-300 font-bold">20–30 WPM</td>
+              <td class="p-3 text-xs text-slate-400">Visual search latency for every individual key</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        These numbers come from a large body of research, most notably a landmark 2019 meta-analysis covering nearly 200 studies and over 18,000 participants, which is where the widely cited <strong>238 WPM silent reading figure</strong> originates. It's worth noting this number is actually lower than older, more optimistic estimates you might have seen elsewhere. Earlier research often blurred skimming with genuine reading comprehension, which inflated the historical averages.
+      </p>
+
+      <p>
+        <strong>In short:</strong> reading is the fastest of these activities by a wide margin, typing is the slowest, and speech sits in the middle. The gap between reading and typing isn't a small quirk—it's roughly 4x to 5x. If you want to see how your own typing number stacks up against people your age or in your line of work rather than against a reading benchmark, <a href="/blog/good-typing-speed-wpm-benchmarks/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">our breakdown of good typing speed by age and job</a> is a more useful comparison.
+      </p>
+
+      <h2>Why Reading and Typing Aren't the Same Skill</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-cyan-500/30 space-y-2">
+          <div class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span>👁️ The Reading System (Input)</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Reading speed is bottlenecked by how fast your eyes can jump (saccades) and how fast your visual cortex recognizes words. Skilled readers process whole word shapes and multi-word chunks simultaneously.
+          </p>
+          <div class="text-[11px] text-slate-400 bg-slate-950 p-2.5 rounded-lg font-mono">
+            Limit: Cognitive & Visual Processing (~240+ WPM)
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/90 border border-emerald-500/30 space-y-2">
+          <div class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span>⌨️ The Typing System (Output)</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Typing speed is bottlenecked by motor output: tendons contracting, fingers traveling 2–4mm across key switches, and executing precise physical sequences through tactile muscle memory.
+          </p>
+          <div class="text-[11px] text-slate-400 bg-slate-950 p-2.5 rounded-lg font-mono">
+            Limit: Mechanical & Muscular Execution (~50–80 WPM)
+          </div>
+        </div>
+      </div>
+
+      <p>
+        That's the core reason the numbers don't scale together. You could double your reading speed through practice and see zero change in your typing speed, because you haven't touched the actual mechanical bottleneck. The reverse is also true: getting faster at typing doesn't make you read any faster, because typing practice trains fingers, not eyes.
+      </p>
+
+      <p>
+        <strong>In short:</strong> reading speed is limited by visual processing and word recognition. Typing speed is limited by motor skill and muscle memory. They're different systems, so progress in one rarely transfers to the other.
+      </p>
+
+      <h2>Does Reading Faster Make You a Better Typist?</h2>
+      <p>
+        Not directly, but there's a real, smaller connection worth mentioning. Strong readers tend to have larger vocabularies and better internalized spelling, which means less cognitive hesitation over word choice and fewer stops to think about how an unusual word is spelled. That shaves off small amounts of friction during typing, particularly when composing original text rather than copying it.
+      </p>
+      <p>
+        This is a modest effect, though, not a major one. A fast reader who never learned proper finger placement will still be capped by hunt-and-peck limitations, typically somewhere around <strong>30–40 WPM</strong> no matter how quickly they process text on the screen. Meanwhile, a trained touch typist with an average reading speed can still hit <strong>70–80 WPM</strong>, because their bottleneck was never reading comprehension in the first place.
+      </p>
+      <p>
+        The clearest evidence that these are separate skills: plenty of professional writers and editors, who read for a living and read fast, type at fairly ordinary speeds. And plenty of transcriptionists and data entry professionals who read at average speeds type extremely fast, because their job has forced heavy repetition on the motor skill side.
+      </p>
+
+      <h2>Where the Two Actually Connect: Transcription and Copy Typing</h2>
+      <p>
+        The clearest real-world overlap between reading speed and typing speed shows up in tasks that require both at once, like transcription, copy typing, and live note-taking.
+      </p>
+      <p>
+        In these tasks, your eyes (or ears, for audio transcription) have to take in information, and your fingers have to output it, continuously and in sync. Here, reading speed sets a theoretical ceiling: if you're copying from a printed page and your eyes only feed you information at 200 WPM, that's the absolute upper bound on your output, regardless of how fast your fingers could theoretically move.
+      </p>
+      <p>
+        In practice, this ceiling rarely matters, because almost nobody types anywhere close to 200 WPM. The average professional transcriptionist tops out around <strong>75–100 WPM</strong>, well under even a modest reading speed. The real constraint in transcription work is almost always the typing side, not the reading side; audio playback speed and finger speed are the practical limits, not how fast someone can silently read a page.
+      </p>
+      <p>
+        Where reading speed does matter more directly: proofreading your own typed work, or typing from unfamiliar or complex technical material where comprehension slows down word recognition. A slower, more careful reading pace in those situations isn't a flaw—it's often exactly what accuracy requires.
+      </p>
+
+      <h2>Can You Train Both at the Same Time?</h2>
+      <p>
+        Yes, though it's worth training them somewhat separately, since they respond to completely different kinds of practice:
+      </p>
+      <ul>
+        <li><strong>Reading speed</strong> improves through consistent reading of varied material, and genuine gains usually come from better word recognition and fewer regressions (the habit of your eyes jumping backward to re-read text), not from speed-reading gimmicks that trade comprehension for pace.</li>
+        <li><strong>Typing speed</strong> improves through structured, repetitive drills that build muscle memory: proper finger placement, home row discipline, and consistent daily practice. <a href="/blog/improve-typing-speed-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">A complete step-by-step plan for building typing speed</a> covers exactly how to structure that practice if you want to work on the motor skill side specifically.</li>
+      </ul>
+      <p>
+        If you do want a task that trains something close to both at once, timed copy-typing drills come closest, since they force your eyes and fingers to work together continuously. Just don't expect gains in one to show up automatically in the other.
+      </p>
+
+      <!-- Embedded Callout Box -->
+      <div class="my-8 p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-cyan-950/40 to-slate-900 border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="space-y-1 text-center sm:text-left">
+          <strong class="text-white font-bold text-base block">Ready to benchmark your fingers?</strong>
+          <p class="text-xs text-slate-400">
+            Compare your live typing WPM, net accuracy, and keystroke rhythm on TypeBlast.
+          </p>
+        </div>
+        <a href="/typing-test/" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs uppercase tracking-wider whitespace-nowrap shadow-md shadow-cyan-500/20 transition-all cursor-pointer">
+          Take Free Typing Test →
+        </a>
+      </div>
+
+      <h2>The Bottom Line</h2>
+      <p>
+        Reading speed and typing speed live in different parts of your skillset. One is about how fast your brain recognizes words on a page. The other is about how fast your fingers can physically move. They meet in the middle during tasks like transcription, but even there, typing is almost always the slower half of the equation.
+      </p>
+      <p>
+        If you're curious where your own typing speed lands, <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">test it here on TypeBlast</a> and compare it against realistic benchmarks for your age and profession, rather than against how fast you read.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="space-y-4 my-6">
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+          <strong class="text-sm font-bold text-white block">Is it normal that I read much faster than I type?</strong>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Yes, this is completely normal and true for nearly everyone. The average adult reads around 238 WPM but types only 40–60 WPM, since typing is limited by motor skill and muscle memory rather than reading comprehension. A large gap between your reading speed and typing speed doesn't indicate a problem with either skill.
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+          <strong class="text-sm font-bold text-white block">Will improving my reading speed make me type faster?</strong>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Not directly. Reading speed and typing speed are controlled by different systems in the brain: visual word recognition for reading, and motor skill and muscle memory for typing. Improving one generally does not transfer meaningfully to the other, though a strong vocabulary can slightly reduce hesitation during original composition.
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+          <strong class="text-sm font-bold text-white block">What job requires both fast reading and fast typing?</strong>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Transcription work requires both skills simultaneously, since transcriptionists take in spoken or written information continuously while typing it out in real time. Even in this field, typing speed is usually the tighter constraint, with most professional transcriptionists working in the 75–100 WPM range, well below average silent reading speed.
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+          <strong class="text-sm font-bold text-white block">Can speed reading help with typing speed tests?</strong>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Speed reading has little practical effect on typing speed tests, since these tests measure how quickly and accurately you can reproduce text you can already see clearly, not how fast you can comprehend it. Building typing speed comes from touch typing technique and consistent practice, not from reading faster.
+          </p>
+        </div>
+      </div>
     `,
   },
 ];

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Search,
   Clock,
@@ -24,13 +24,89 @@ import { SeoHead } from "../SEO/SeoHead";
 interface BlogHubPageProps {
   onNavigatePath: (path: string) => void;
   onSelectCategory?: (category: BlogCategory) => void;
+  initialCategory?: string;
 }
+
+export const isPostInCategory = (post: BlogPost, category: string): boolean => {
+  if (!category || category === "All") return true;
+  if (post.category === category) return true;
+
+  const catLower = category.toLowerCase();
+  if (post.tags.some((t) => t.toLowerCase() === catLower)) return true;
+
+  if (
+    category === "Career & Jobs" &&
+    (post.tags.some((t) => /job|career|salary|work/i.test(t)) ||
+      /job|career|salary|work/i.test(post.title))
+  ) {
+    return true;
+  }
+
+  if (
+    category === "Typing Speed" &&
+    (post.tags.some((t) => /speed|wpm|benchmark/i.test(t)) ||
+      /speed|wpm|benchmark/i.test(post.title))
+  ) {
+    return true;
+  }
+
+  if (
+    category === "Touch Typing" &&
+    (post.tags.some((t) => /touch typing|home row|finger/i.test(t)) ||
+      /touch typing/i.test(post.title))
+  ) {
+    return true;
+  }
+
+  if (
+    category === "Keyboard Skills" &&
+    (post.tags.some((t) => /keyboard|switch|finger/i.test(t)) ||
+      /keyboard|switch/i.test(post.title))
+  ) {
+    return true;
+  }
+
+  if (
+    category === "Typing Practice" &&
+    (post.tags.some((t) => /practice|drill/i.test(t)) ||
+      /practice|drill/i.test(post.title))
+  ) {
+    return true;
+  }
+
+  return false;
+};
 
 export const BlogHubPage: React.FC<BlogHubPageProps> = ({
   onNavigatePath,
+  initialCategory = "All",
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Sync URL search params (e.g. /blog/?category=Career%20%26%20Jobs or ?search=benchmarks)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get("category") || urlParams.get("cat");
+      const searchParam = urlParams.get("search") || urlParams.get("q");
+
+      if (catParam) {
+        // Find matching valid category (case-insensitive)
+        const matched = BLOG_CATEGORIES.find(
+          (c) => c.toLowerCase() === catParam.toLowerCase()
+        );
+        if (matched) {
+          setSelectedCategory(matched);
+        } else {
+          setSelectedCategory(catParam);
+        }
+      }
+      if (searchParam) {
+        setSearchQuery(searchParam);
+      }
+    }
+  }, []);
 
   const breadcrumbs = [{ label: "Blog", path: "/blog/" }];
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
@@ -38,8 +114,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
   // Filter logic
   const filteredPosts = useMemo(() => {
     return BLOG_POSTS.filter((post) => {
-      const matchesCategory =
-        selectedCategory === "All" || post.category === selectedCategory;
+      const matchesCategory = isPostInCategory(post, selectedCategory);
       const query = searchQuery.toLowerCase().trim();
       const matchesSearch =
         !query ||
@@ -202,7 +277,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
           </button>
 
           {BLOG_CATEGORIES.map((cat) => {
-            const count = BLOG_POSTS.filter((p) => p.category === cat).length;
+            const count = BLOG_POSTS.filter((p) => isPostInCategory(p, cat)).length;
             const isSelected = selectedCategory === cat;
             return (
               <button

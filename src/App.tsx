@@ -246,7 +246,7 @@ function MainAppContent() {
         )}
         {currentPath === "/leaderboard/" && <LeaderboardView onNavigatePath={navigateToPath} />}
         {(isBlogHub || isBlogPost) && (
-          <BlogView onNavigatePath={navigateToPath} />
+          <BlogView onNavigatePath={navigateToPath} currentPath={currentPath} />
         )}
         {currentPath === "/lessons/" && <LessonsView />}
         {currentPath === "/certificates/" && <CertificatesView lastStats={lastStats} />}

@@ -159,9 +159,12 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
               <span>🌟 Master Pillar Hub</span>
             </span>
           ) : (
-            <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-bold uppercase tracking-wider text-[10px]">
+            <button
+              onClick={() => onNavigatePath(`/blog/?category=${encodeURIComponent(post.category)}`)}
+              className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-bold uppercase tracking-wider text-[10px] hover:bg-cyan-500/20 hover:border-cyan-500/40 transition-all cursor-pointer"
+            >
               {post.category}
-            </span>
+            </button>
           )}
           <span className="text-slate-600">•</span>
           <span className="text-slate-400 flex items-center gap-1">
@@ -304,12 +307,13 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
         <Tag className="w-3.5 h-3.5 text-slate-500" />
         <span className="text-xs text-slate-400 font-semibold mr-1">Tags:</span>
         {post.tags.map((t, idx) => (
-          <span
+          <button
             key={idx}
-            className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300"
+            onClick={() => onNavigatePath(`/blog/?search=${encodeURIComponent(t)}`)}
+            className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/40 hover:text-cyan-300 text-[11px] font-mono text-slate-300 transition-colors cursor-pointer"
           >
             #{t}
-          </span>
+          </button>
         ))}
       </div>
 
