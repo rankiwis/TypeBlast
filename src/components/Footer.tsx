@@ -209,7 +209,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
               </li>
               <li>
                 <button
-                  onClick={() => handleLink("/privacy-policy/")}
+                  onClick={() => handleLink("/privacy/")}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Privacy Policy

@@ -841,7 +841,14 @@ Provide feedback in strict JSON matching the schema:
   }
 });
 
+// 301 Permanent Redirects
+app.get(["/privacy-policy", "/privacy-policy/"], (_req, res) => {
+  res.redirect(301, "/privacy/");
+});
+
 // Favicon, Sitemap & Robots.txt Direct Serving
+app.use(express.static(path.join(process.cwd(), "public")));
+
 app.get(["/favicon.svg", "/favicon.ico"], (_req, res) => {
   const faviconPath = path.join(process.cwd(), "public", "favicon.svg");
   res.type("image/svg+xml");

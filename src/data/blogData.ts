@@ -82,7 +82,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: AUTHORS.typeBlastTeam,
     publishedDate: "2026-08-19",
     updatedDate: "2026-08-19",
-    featuredImage: "/improve-typing-speed-guide.webp",
+    featuredImage: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=1200&auto=format&fit=crop&q=80",
     imageAlt: "Ergonomic mechanical keyboard setup with high-speed typing telemetry and real-time WPM metrics on display",
     readingTime: "9 min read",
     tags: ["Improve Typing Speed", "Pillar Guide", "Typing Speed", "Touch Typing", "WPM Test", "Typing Practice", "Muscle Memory"],

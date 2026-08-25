@@ -260,10 +260,15 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
       </header>
 
       {/* Featured Banner Image */}
-      <div className="relative rounded-2xl overflow-hidden border border-slate-800 aspect-video max-h-[420px] shadow-xl">
+      <div className="relative rounded-2xl overflow-hidden border border-slate-800 aspect-video max-h-[420px] shadow-xl bg-slate-900">
         <img
           src={post.featuredImage}
           alt={post.imageAlt || post.title}
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src =
+              "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=1200&auto=format&fit=crop&q=80";
+          }}
           className="w-full h-full object-cover"
         />
       </div>

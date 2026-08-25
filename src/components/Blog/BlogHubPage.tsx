@@ -245,10 +245,15 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
               </div>
             </div>
 
-            <div className="lg:col-span-5 relative min-h-[220px] lg:min-h-full overflow-hidden">
+            <div className="lg:col-span-5 relative min-h-[220px] lg:min-h-full overflow-hidden bg-slate-900">
               <img
                 src={featuredPost.featuredImage}
                 alt={featuredPost.imageAlt || featuredPost.title}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src =
+                    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=1200&auto=format&fit=crop&q=80";
+                }}
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent lg:bg-gradient-to-r lg:from-slate-900 lg:via-transparent lg:to-transparent" />
@@ -323,10 +328,15 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
               className="group flex flex-col justify-between bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/40 rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/40"
             >
               <div>
-                <div className="relative aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden bg-slate-900">
                   <img
                     src={post.featuredImage}
                     alt={post.imageAlt || post.title}
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=1200&auto=format&fit=crop&q=80";
+                    }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 flex items-center gap-2">

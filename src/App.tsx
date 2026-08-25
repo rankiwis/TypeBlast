@@ -48,6 +48,12 @@ function normalizePath(path: string): string {
   if (cleaned.length > 1 && !cleaned.endsWith("/")) {
     cleaned += "/";
   }
+  if (cleaned === "/privacy-policy/") {
+    if (typeof window !== "undefined") {
+      window.history.replaceState({}, "", "/privacy/");
+    }
+    return "/privacy/";
+  }
   return cleaned;
 }
 
@@ -132,7 +138,6 @@ function MainAppContent() {
     "/about/",
     "/contact/",
     "/privacy/",
-    "/privacy-policy/",
     "/terms/",
     "/terms-of-service/",
     "/leaderboard/",
@@ -238,7 +243,7 @@ function MainAppContent() {
         {currentPath === "/contact/" && (
           <ContactPage onNavigatePath={navigateToPath} />
         )}
-        {(currentPath === "/privacy/" || currentPath === "/privacy-policy/") && (
+        {currentPath === "/privacy/" && (
           <PrivacyPolicyPage onNavigatePath={navigateToPath} />
         )}
         {(currentPath === "/terms/" || currentPath === "/terms-of-service/") && (
