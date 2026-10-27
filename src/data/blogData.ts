@@ -444,6 +444,20 @@ export const BLOG_POSTS: BlogPost[] = [
             Actuation forces, debounce latency, keycap profiles, and optical switches compared side-by-side for maximum typing speed.
           </p>
         </a>
+
+        <!-- Cluster Card 7 -->
+        <a href="/blog/data-entry-typing-speed/" class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 transition-all group block shadow-lg hover:-translate-y-0.5">
+          <div class="flex items-center justify-between text-xs text-cyan-400 font-mono mb-2">
+            <span>DATA ENTRY STANDARDS</span>
+            <span class="text-slate-500 group-hover:text-cyan-400 transition-colors">8 min read →</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-cyan-300 transition-colors mb-1.5">
+            Data Entry Typing Speed: What Employers Actually Expect
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Master data entry typing speed requirements, KPH-to-WPM conversion formulas, 10-key numeric standards, and assessment scoring rules.
+          </p>
+        </a>
       </div>
 
       <h2 id="faq">10. Frequently Asked Questions</h2>
@@ -953,7 +967,7 @@ export const BLOG_POSTS: BlogPost[] = [
       </div>
 
       <p>
-        A couple of things stand out once you line these up. Programmers consistently need less raw speed than people assume, because the job is mostly thinking, reading, and debugging, not continuous typing. Meanwhile, roles like transcription and competitive data entry ask for speeds that are genuinely rare in the general population, which is why those positions often test typing speed directly during hiring.
+        A couple of things stand out once you line these up. Programmers consistently need less raw speed than people assume, because the job is mostly thinking, reading, and debugging, not continuous typing. Meanwhile, roles like transcription and competitive data entry ask for speeds that are genuinely rare in the general population, which is why those positions often test typing speed directly during hiring. For an in-depth breakdown of hiring minimums, KPH conversions, and test scoring, read our guide on <a href="/blog/data-entry-typing-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">what data entry employers expect</a>.
       </p>
 
       <p>
@@ -1325,6 +1339,344 @@ export const BLOG_POSTS: BlogPost[] = [
           </p>
         </div>
       </div>
+    `,
+  },
+  {
+    id: "post-data-entry-typing-speed",
+    slug: "data-entry-typing-speed",
+    title: "Data Entry Typing Speed: What Employers Actually Expect",
+    metaDescription: "Most data entry jobs want 40 to 50 WPM at 95% accuracy or better. See real employer numbers, KPH conversions, and how to prepare. Test your speed free.",
+    excerpt: "Most data entry postings set the floor between 40 and 50 words per minute, with accuracy of 95% or better. Candidates who want to stand out type 60 or more. Here is what employers actually expect and how to prepare.",
+    category: "Typing Speed",
+    author: AUTHORS.elena,
+    publishedDate: "2026-10-28",
+    updatedDate: "2026-10-28",
+    featuredImage: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&auto=format&fit=crop&q=80",
+    imageAlt: "Data entry typing speed test, numeric keypad and performance benchmarks chart",
+    readingTime: "8 min read",
+    tags: ["Data Entry", "Typing Speed", "WPM by Job", "KPH Conversion", "10-Key", "Typing Accuracy", "Job Requirements"],
+    featured: false,
+    content: `
+      <!-- Featured Snippet / Quotable Answer Block -->
+      <div class="my-6 p-5 rounded-2xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-100 shadow-lg">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2">
+          <span>⚡ Key Takeaway / Quick Answer</span>
+        </div>
+        <p class="text-sm text-slate-200 leading-relaxed font-medium">
+          A good data entry typing speed sits between 50 and 65 WPM. Most employers set the minimum near 40 to 50 WPM, and strong specialists type 60 to 80 WPM. Accuracy matters just as much: aim for 97% or better, because every error creates rework for the person who checks the file.
+        </p>
+      </div>
+
+      <p class="text-xs text-slate-400 italic mb-4">
+        <em>Last updated October 28, 2026</em>
+      </p>
+
+      <p>
+        Most data entry postings set the floor between 40 and 50 words per minute, with accuracy of 95% or better. Candidates who want to stand out type 60 or more. That range is the short answer on data entry typing speed, and you will see it repeated across job boards and testing sites.
+      </p>
+
+      <p>
+        Here is the catch. Sources quote different numbers, and some employers count keystrokes per hour instead of words per minute. A 40 WPM minimum on one posting can mean the same thing as 12,000 KPH on another. This guide sorts out the conflicting figures, shows how employers score your test, and tells you what to practice before the real one.
+      </p>
+
+      <h2>What Is a Good Data Entry Typing Speed?</h2>
+
+      <p>
+        A good data entry typing speed sits between 50 and 65 WPM. Most employers set the minimum near 40 to 50 WPM, and strong specialists type 60 to 80 WPM. Accuracy matters just as much: aim for 97% or better, because every error creates rework for the person who checks the file.
+      </p>
+
+      <p>
+        Different outlets draw the lines in slightly different places, but the pattern holds. <a href="https://wonderlic.com/blog/assessments/skills/what-is-a-good-typing-speed-by-profession/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">Wonderlic's October 2025 guide</a> puts the average typist near 40 WPM, calls 45 to 60 good, and treats anything above 70 as advanced. Only about 1% of typists top 100 WPM. <a href="https://www.typequicker.com/learn/what-is-a-good-typing-speed-for-data-entry" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeQuicker's January 2026 guide</a> lists untrained beginners at 25 to 35 WPM and average data entry clerks at 40 to 50.
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Level</th>
+              <th class="p-3.5 sm:p-4">WPM</th>
+              <th class="p-3.5 sm:p-4">KPH</th>
+              <th class="p-3.5 sm:p-4">What it means for your application</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-rose-400">Below the floor</td>
+              <td class="p-3.5 sm:p-4 text-slate-300 font-mono">Under 35</td>
+              <td class="p-3.5 sm:p-4 text-slate-300 font-mono">Under 10,500</td>
+              <td class="p-3.5 sm:p-4">Falls under most posted minimums</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-amber-400">Meets the minimum</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">40 to 50</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">12,000 to 15,000</td>
+              <td class="p-3.5 sm:p-4">Clears most posted requirements</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-emerald-400">Competitive</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">50 to 65</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">15,000 to 19,500</td>
+              <td class="p-3.5 sm:p-4">Matches what hiring teams prefer</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-purple-400">Strong</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">65 to 80+</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">19,500 to 24,000+</td>
+              <td class="p-3.5 sm:p-4">Fits senior, specialized, and transcription-heavy roles</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        These ranges combine figures from Wonderlic, TypeQuicker, and Data Entry Institute. Treat them as a guide, since each employer sets its own bar. Want to see how data entry stacks up against other jobs? TypeBlast's <a href="/blog/good-typing-speed-wpm-benchmarks/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">WPM benchmarks by age and job</a> lay the numbers side by side.
+      </p>
+
+      <h2>Why Employers Quote Different Numbers</h2>
+
+      <p>
+        Read three job posts and you may see 40 WPM, 50 WPM, and 70 WPM. Nobody is wrong. Each number answers a different question, and three of them hide inside every hiring process:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>The posted minimum.</strong> This line gets your résumé through. <a href="https://dataentryinstitute.org/the-typing-skills-every-data-entry-professional-needs/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">Data Entry Institute</a> puts it at 40 to 50 WPM, and TypeQuicker reports 40 to 45.</li>
+        <li><strong>The test cutoff.</strong> This is the score you must hit on the assessment. <a href="https://www.typespeedtest.com/blog/typing-speed-for-jobs/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeSpeedTest</a> calls 50 WPM the standard minimum for data entry, and Wonderlic says entry-level roles commonly ask for 60 to 80.</li>
+        <li><strong>The productivity target.</strong> This is the pace your manager expects once you start. TypeSpeedTest says many positions look for 60 to 70 WPM here.</li>
+      </ul>
+
+      <p>
+        The gap between 40 and 80 WPM matters more than it looks. Wonderlic runs the math: an 80 WPM typist produces 4,800 words an hour, while a 40 WPM typist produces 2,400. That doubled output helps explain why productivity targets sit well above posted minimums.
+      </p>
+
+      <p>
+        Your move: plan for the test cutoff, not the posted minimum. A candidate at exactly 40 WPM can pass the résumé screen and still miss a 50 or 60 WPM test.
+      </p>
+
+      <h2>WPM vs KPH: How to Convert Employer Numbers</h2>
+
+      <p>
+        Keystrokes per hour (KPH) equals WPM multiplied by 300, because one word counts as five characters and an hour holds 60 minutes. A 10,000 KPH requirement equals about 33 WPM. A 12,000 KPH requirement equals 40 WPM, and 18,000 KPH equals 60 WPM.
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg max-w-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">KPH in the posting</th>
+              <th class="p-3.5 sm:p-4">WPM equivalent</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono">8,000</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">27</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono">10,000</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">33</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono">12,000</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">40</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono">15,000</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">50</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono">18,000</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">60</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono">21,000</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">70</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono">24,000</td>
+              <td class="p-3.5 sm:p-4 text-cyan-400 font-mono font-bold">80</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Employers favor KPH for dedicated data entry work because the job involves short fragments such as codes, IDs, and dollar amounts instead of flowing sentences, according to TypeQuicker. Those inputs include tabs, enters, and symbols that a plain WPM test captures poorly. The conversion gives you a close estimate, not an exact match.
+      </p>
+
+      <p>
+        Expectations for text entry look higher today. A 2014 post from <a href="https://www.dataentryoutsourced.com/blog/what-is-a-good-data-entry-speed/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">Data Entry Outsourced</a> put text data entry near 7,000 KPH, while the 40 WPM floor common now equals 12,000 KPH. The sources use different methods, so read the gap as a direction, not a precise measure.
+      </p>
+
+      <h2>Accuracy Counts as Much as Speed</h2>
+
+      <p>
+        Most data entry employers expect at least 95% accuracy, and competitive roles often ask for 98% to 99%. Tests usually score net speed, which subtracts errors from your raw WPM. A faster typist with sloppy accuracy can lose to a slower, cleaner one.
+      </p>
+
+      <p>
+        Here is how that plays out on a five-minute test with a 95% accuracy cutoff:
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg max-w-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Measure</th>
+              <th class="p-3.5 sm:p-4">Typist A</th>
+              <th class="p-3.5 sm:p-4">Typist B</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Words typed</td>
+              <td class="p-3.5 sm:p-4 font-mono">300</td>
+              <td class="p-3.5 sm:p-4 font-mono">270</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Wrong words</td>
+              <td class="p-3.5 sm:p-4 text-rose-400 font-mono font-bold">20</td>
+              <td class="p-3.5 sm:p-4 text-emerald-400 font-mono font-bold">3</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Net speed</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold">56 WPM</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold">53.4 WPM</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Accuracy</td>
+              <td class="p-3.5 sm:p-4 text-rose-400 font-mono font-bold">93.3%</td>
+              <td class="p-3.5 sm:p-4 text-emerald-400 font-mono font-bold">98.9%</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Result</td>
+              <td class="p-3.5 sm:p-4 text-rose-400 font-semibold">Fails the cutoff</td>
+              <td class="p-3.5 sm:p-4 text-emerald-400 font-semibold">Passes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Typist A types faster and posts the higher net score, yet the employer rejects the result. Rules for scoring also vary by platform. Wonderlic notes that some tests deduct two words for each misspelling, and others report speed and accuracy as separate scores.
+      </p>
+
+      <p>
+        The stakes explain the strict cutoffs. Data Entry Institute points to a transposed digit in a financial database or a wrong medication dose as the kind of error that spreads through a whole system. Check your own error rate with TypeBlast's <a href="/typing-accuracy-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing accuracy test</a>, which measures your accuracy percentage and points out problem keys.
+      </p>
+
+      <h2>Numeric Data Entry and 10-Key Speed</h2>
+
+      <p>
+        Numeric data entry uses the 10-key pad, and employers measure it in KPH. Entry-level roles expect about 8,000 to 10,000 KPH, proficient typists reach 10,000 to 12,000, and experts pass 12,000. Wonderlic cites a baseline near 165 keystrokes per minute, which lines up with roughly 10,000 KPH.
+      </p>
+
+      <p>
+        Invoices, insurance claims, inventory counts, and financial records all lean on the number pad. The standard technique rests the index, middle, and ring fingers of your right hand on the 4, 5, and 6 keys, according to TypeQuicker. The hand position and rhythm differ from letter typing, so give the number pad its own practice time.
+      </p>
+
+      <h2>How Employers Test Your Typing</h2>
+
+      <p>
+        Expect one of three formats, based on TypeQuicker's breakdown:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Prose tests</strong> run one to five minutes and count the words you type correctly. General office roles use them most.</li>
+        <li><strong>KPH tests</strong> use names, addresses, numbers, and codes, then project your pace to a full hour. Dedicated data entry roles favor them.</li>
+        <li><strong>10-key tests</strong> cover numbers only and report KPH. Roles in accounting, finance, and inventory use them.</li>
+      </ul>
+
+      <p>
+        Your practice score and your test score can differ. Wonderlic explains that word-list tests without punctuation produce higher scores than sentence tests, that some platforms disable the backspace key, and that others force you to fix each mistake before you continue. Even the font changes results. TypeSpeedTest adds that an unfamiliar keyboard can cost you 5 to 10 WPM.
+      </p>
+
+      <p>
+        Copy work also differs from composing. In a <a href="https://news.vanderbilt.edu/2016/10/18/todays-self-taught-typists-almost-as-fast-as-touch-typistsas-long-as-they-can-see-the-keyboard/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">Vanderbilt University study</a> of 48 typists, standard touch typists averaged 80 WPM and nonstandard typists averaged 72. In a separate, unpublished test, a skilled typist who reached 78 WPM on a speed test slowed to 45 WPM when composing messages. Data entry looks like copying, so practice that way.
+      </p>
+
+      <p>
+        The same study found that typists without standard technique leaned on seeing the keyboard, and their speed and accuracy dropped when researchers hid it. Data entry keeps your eyes on the source document and the screen, so a habit of watching your fingers can cost you. Eyes on the source page also tie into reading. The two skills differ, yet they connect more than most people expect, as TypeBlast's look at <a href="/blog/typing-speed-vs-reading-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing speed vs reading speed</a> explains.
+      </p>
+
+      <h2>Does Typing Speed Still Matter as Automation Grows?</h2>
+
+      <p>
+        Yes, but the field is shrinking. The U.S. Bureau of Labor Statistics <a href="https://www.bls.gov/opub/mlr/2023/article/occupational-projections-overview-2021-31.htm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">projected</a> that data entry keyer jobs would fall about 25% between 2021 and 2031, from roughly 156,000 to 117,000. BLS puts <a href="https://www.bls.gov/oes/2023/may/oes439021.htm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 font-semibold underline hover:text-cyan-300">May 2023 median pay</a> for the role at $18.17 an hour, or $37,790 a year. The middle 80% of workers earned between about $28,250 and $55,330.
+      </p>
+
+      <p>
+        Fewer seats likely means employers can screen harder, and speed alone will not set you apart. Data Entry Institute lists accuracy, 10-key skill, keyboard shortcuts, and steady focus across a full shift as the traits that separate professionals from casual typists. Speed still opens the door, and it pays beyond this one job. TypeBlast's piece on <a href="/blog/how-typing-speed-impacts-tech-careers/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">how typing speed affects tech, legal, and remote careers</a> covers that wider picture.
+      </p>
+
+      <h2>How to Build Data Entry Typing Speed Before the Test</h2>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Measure your baseline.</strong> Take the <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a> and the accuracy test. Write down your WPM and your accuracy.</li>
+        <li><strong>Fix technique first.</strong> Touch typing raises your speed ceiling and keeps your eyes off the keys. TypeBlast's <a href="/touch-typing/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">touch typing course</a> and <a href="/blog/home-row-finger-placement-mastery/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">home row finger placement guide</a> walk you through the setup.</li>
+        <li><strong>Put accuracy ahead of speed.</strong> Wonderlic advises holding 95% accuracy before you push your WPM higher.</li>
+        <li><strong>Practice with data-shaped content.</strong> Copy IDs, addresses, dollar amounts, and short codes instead of paragraphs. TypeQuicker recommends realistic content for the same reason.</li>
+        <li><strong>Train the number pad separately.</strong> Give 10-key work its own sessions if your target jobs involve figures.</li>
+        <li><strong>Practice daily.</strong> Wonderlic suggests at least 10 minutes a session, and Data Entry Institute says 15 to 20 minutes a day brings noticeable gains within a few weeks.</li>
+        <li><strong>Rehearse test conditions.</strong> Run timed tests of one to five minutes. Try one or two on an unfamiliar keyboard, since a new one can cost you 5 to 10 WPM.</li>
+      </ol>
+
+      <p>
+        For a full drill plan, TypeBlast's <a href="/blog/improve-typing-speed-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">complete guide to improving your typing speed</a> covers technique, ergonomics, hardware, and structured practice.
+      </p>
+
+      <h2>Common Questions About Typing Speed for Data Entry</h2>
+
+      <h3>Is 40 WPM good enough for data entry?</h3>
+      <p>
+        Forty WPM meets the stated floor on many postings, which range from 40 to 50 WPM, and it equals 12,000 KPH. It leaves little margin. Competitive candidates type 50 to 65 WPM, and several sources report entry-level tests asking for 60 or more. Aim higher if you can.
+      </p>
+
+      <h3>How many keystrokes per hour do data entry jobs require?</h3>
+      <p>
+        Typical postings ask for 8,000 to 10,000 KPH at the entry level, which is about 27 to 33 WPM. Proficient 10-key typists reach 10,000 to 12,000 KPH. Text-focused roles quoted in WPM translate to 12,000 KPH at 40 WPM and 15,000 KPH at 50 WPM.
+      </p>
+
+      <h3>Is 60 WPM good for data entry?</h3>
+      <p>
+        Yes. Sixty WPM sits inside the competitive range of 50 to 65 and matches the low end of the 60 to 80 WPM that Wonderlic reports for entry-level data entry. It equals 18,000 KPH. Keep accuracy at 97% or higher, since a clean 60 beats a sloppy 75.
+      </p>
+
+      <h3>Can I get a data entry job below 40 WPM?</h3>
+      <p>
+        Some listings accept less. A 10,000 KPH minimum equals about 33 WPM, so KPH-based roles can fall below the 40 WPM line. Most WPM-based postings start at 40, and untrained typists often land at 25 to 35 WPM. Build speed before you apply, and check which unit the listing uses.
+      </p>
+
+      <h2>Check Your Number Today</h2>
+
+      <p>
+        You now know the numbers employers use. The next step is finding yours. Take the <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">free TypeBlast typing test</a>, choose a length from 15 seconds to 3 minutes, and get instant results. Then run the accuracy test and compare both scores with the ranges above. Retest after a week of daily practice to see what moved.
+      </p>
+
+      <!-- Embedded Callout Box -->
+      <div class="my-8 p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-cyan-950/40 to-slate-900 border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="space-y-1 text-center sm:text-left">
+          <strong class="text-white font-bold text-base block">Ready to benchmark your data entry typing speed?</strong>
+          <p class="text-xs text-slate-400">
+            Compare your live typing WPM, net accuracy, error frequency, and KPH pace on TypeBlast.
+          </p>
+        </div>
+        <a href="/typing-test/" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs uppercase tracking-wider whitespace-nowrap shadow-md shadow-cyan-500/20 transition-all cursor-pointer">
+          Take Free Typing Test →
+        </a>
+      </div>
+
+      <h2>Sources</h2>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4 text-xs">
+        <li><a href="https://wonderlic.com/blog/assessments/skills/what-is-a-good-typing-speed-by-profession/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Wonderlic: What's a Good Typing Speed? Average WPM by Profession</a> (October 2025)</li>
+        <li><a href="https://www.typequicker.com/learn/what-is-a-good-typing-speed-for-data-entry" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">TypeQuicker: What Is a Good Typing Speed for Data Entry?</a> (January 2026)</li>
+        <li><a href="https://www.typespeedtest.com/blog/typing-speed-for-jobs/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">TypeSpeedTest: Typing Speed for Jobs, WPM by Role</a> (March 2026)</li>
+        <li><a href="https://dataentryinstitute.org/the-typing-skills-every-data-entry-professional-needs/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Data Entry Institute: The Typing Skills Every Data Entry Professional Needs</a> (January 2026)</li>
+        <li><a href="https://www.dataentryoutsourced.com/blog/what-is-a-good-data-entry-speed/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Data Entry Outsourced: What Is a Good Data Entry Speed?</a> (2014)</li>
+        <li><a href="https://news.vanderbilt.edu/2016/10/18/todays-self-taught-typists-almost-as-fast-as-touch-typistsas-long-as-they-can-see-the-keyboard/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Vanderbilt University: Self-taught typists almost as fast as touch typists</a> (2016)</li>
+        <li><a href="https://www.bls.gov/opub/mlr/2023/article/occupational-projections-overview-2021-31.htm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">U.S. Bureau of Labor Statistics: Occupational projections overview, 2021 to 31</a></li>
+        <li><a href="https://www.bls.gov/oes/2023/may/oes439021.htm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">U.S. Bureau of Labor Statistics: Data Entry Keyers, May 2023 OEWS</a></li>
+      </ul>
     `,
   },
 ];

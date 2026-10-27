@@ -138,6 +138,7 @@ app.get("/sitemap.xml", (_req, res) => {
     { path: "/blog/how-typing-speed-impacts-tech-careers/", priority: "0.8", changefreq: "weekly" },
     { path: "/blog/gamified-typing-for-kids-and-students/", priority: "0.8", changefreq: "weekly" },
     { path: "/blog/mechanical-keyboard-switches-wpm-guide/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/data-entry-typing-speed/", priority: "0.8", changefreq: "weekly" },
     { path: "/typing-speed-test/", priority: "0.8", changefreq: "weekly" },
     { path: "/wpm-test/", priority: "0.8", changefreq: "weekly" },
     { path: "/typing-accuracy-test/", priority: "0.8", changefreq: "weekly" },
