@@ -36,16 +36,17 @@ export const isPostInCategory = (post: BlogPost, category: string): boolean => {
 
   if (
     category === "Career & Jobs" &&
-    (post.tags.some((t) => /job|career|salary|work/i.test(t)) ||
-      /job|career|salary|work/i.test(post.title))
+    (post.tags.some((t) => /job|career|salary|work|data entry|employer/i.test(t)) ||
+      /job|career|salary|work|data entry|employer/i.test(post.title) ||
+      post.slug === "data-entry-typing-speed")
   ) {
     return true;
   }
 
   if (
     category === "Typing Speed" &&
-    (post.tags.some((t) => /speed|wpm|benchmark/i.test(t)) ||
-      /speed|wpm|benchmark/i.test(post.title))
+    (post.tags.some((t) => /speed|wpm|benchmark|data entry/i.test(t)) ||
+      /speed|wpm|benchmark|data entry/i.test(post.title))
   ) {
     return true;
   }
@@ -111,7 +112,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
   const breadcrumbs = [{ label: "Blog", path: "/blog/" }];
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
 
-  // Filter logic
+  // Filter & sort logic (newest publishedDate first)
   const filteredPosts = useMemo(() => {
     return BLOG_POSTS.filter((post) => {
       const matchesCategory = isPostInCategory(post, selectedCategory);
@@ -124,7 +125,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
         post.tags.some((t) => t.toLowerCase().includes(query));
 
       return matchesCategory && matchesSearch;
-    });
+    }).sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime());
   }, [selectedCategory, searchQuery]);
 
   const featuredPost = useMemo(() => {
@@ -343,6 +344,12 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
                     <span className="px-2.5 py-1 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-800 text-cyan-400 text-[10px] font-bold uppercase tracking-wider">
                       {post.category}
                     </span>
+                    {(post.slug === "data-entry-typing-speed" || new Date(post.publishedDate).getTime() >= new Date("2026-10-01").getTime()) && (
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md shadow-emerald-500/30">
+                        <Sparkles className="w-2.5 h-2.5" />
+                        New
+                      </span>
+                    )}
                   </div>
                 </div>
 
