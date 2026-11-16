@@ -1,8 +1,7 @@
-import fs from "fs";
-import path from "path";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { sanitizeText } from "./leaderboardStore";
+import { sanitizeText } from "./leaderboardStore.js";
+import { kv } from "./kv.js";
 
 export interface UserTestResult {
   id: string;
@@ -88,91 +87,63 @@ export interface PasswordResetToken {
   used: boolean;
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
-const SESSIONS_FILE = path.join(DATA_DIR, "sessions.json");
-const RESETS_FILE = path.join(DATA_DIR, "password_resets.json");
-
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-// In-memory data structures synced with disk
-let users: Record<string, UserAccount> = {};
-let sessions: Record<string, SessionData> = {}; // token -> SessionData
-let passwordResets: Record<string, PasswordResetToken> = {}; // token -> PasswordResetToken
+// Storage layout (see server/kv.ts):
+//   hash  users          userId -> UserAccount
+//   hash  user_email     lowercase email -> userId
+//   hash  user_name      lowercase username -> userId
+//   key   session:<tok>  SessionData (expires with the session)
+//   set   user_sessions:<userId>  session tokens, so a password reset can sign out everywhere
+//   key   reset:<tok>    PasswordResetToken (expires after 1 hour)
+//   key   reset_user:<userId>  latest reset token, so older links stop working
 
 // Session TTL: 30 days in milliseconds
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 // Reset Token TTL: 1 hour in milliseconds
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 
-// Load initial data
-try {
-  if (fs.existsSync(USERS_FILE)) {
-    const raw = fs.readFileSync(USERS_FILE, "utf-8");
-    users = JSON.parse(raw);
-  }
-} catch (e) {
-  console.error("Error loading users database:", e);
-  users = {};
+async function getUserById(userId: string): Promise<UserAccount | null> {
+  if (!userId) return null;
+  return kv().hget<UserAccount>("users", userId);
 }
 
-try {
-  if (fs.existsSync(SESSIONS_FILE)) {
-    const raw = fs.readFileSync(SESSIONS_FILE, "utf-8");
-    const parsed = JSON.parse(raw);
-    const now = Date.now();
-    for (const [token, val] of Object.entries(parsed)) {
-      if (typeof val === "string") {
-        sessions[token] = {
-          userId: val,
-          createdAt: now,
-          expiresAt: now + SESSION_TTL_MS,
-        };
-      } else if (val && typeof val === "object" && (val as any).userId) {
-        sessions[token] = val as SessionData;
-      }
-    }
-  }
-} catch (e) {
-  console.error("Error loading sessions database:", e);
-  sessions = {};
+async function saveUser(user: UserAccount): Promise<void> {
+  await kv().hset("users", user.id, user);
 }
 
-try {
-  if (fs.existsSync(RESETS_FILE)) {
-    const raw = fs.readFileSync(RESETS_FILE, "utf-8");
-    passwordResets = JSON.parse(raw);
-  }
-} catch (e) {
-  console.error("Error loading password resets database:", e);
-  passwordResets = {};
+async function findUserByEmailOrUsername(query: string): Promise<UserAccount | null> {
+  const q = query.trim().toLowerCase();
+  if (!q) return null;
+  const userId =
+    (await kv().hget<string>("user_email", q)) || (await kv().hget<string>("user_name", q));
+  return userId ? getUserById(userId) : null;
 }
 
-function saveUsers() {
-  try {
-    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf-8");
-  } catch (e) {
-    console.error("Failed to save users database:", e);
-  }
+async function createSession(userId: string): Promise<string> {
+  const token = generateToken();
+  const nowMs = Date.now();
+  const session: SessionData = { userId, createdAt: nowMs, expiresAt: nowMs + SESSION_TTL_MS };
+  await kv().set(`session:${token}`, session, SESSION_TTL_MS);
+  await kv().sadd(`user_sessions:${userId}`, token);
+  return token;
 }
 
-function saveSessions() {
-  try {
-    fs.writeFileSync(SESSIONS_FILE, JSON.stringify(sessions, null, 2), "utf-8");
-  } catch (e) {
-    console.error("Failed to save sessions database:", e);
+async function getSession(token: string): Promise<SessionData | null> {
+  if (!token || typeof token !== "string" || !/^[a-f0-9]{64}$/.test(token)) return null;
+  const session = await kv().get<SessionData>(`session:${token}`);
+  if (!session) return null;
+  if (session.expiresAt && session.expiresAt < Date.now()) {
+    await kv().del(`session:${token}`);
+    return null;
   }
+  return session;
 }
 
-function savePasswordResets() {
-  try {
-    fs.writeFileSync(RESETS_FILE, JSON.stringify(passwordResets, null, 2), "utf-8");
-  } catch (e) {
-    console.error("Failed to save password resets database:", e);
-  }
+// Resolve the full (unsanitized) user behind a session token, or throw.
+async function requireUserForToken(token: string): Promise<UserAccount> {
+  const session = await getSession(token);
+  const user = session ? await getUserById(session.userId) : null;
+  if (!user) throw new Error("Unauthorized");
+  return user;
 }
 
 // Password hashing using PBKDF2 with 100,000 iterations for defense against brute force
@@ -275,7 +246,11 @@ export function getDefaultAchievements(): Achievement[] {
 }
 
 // User registration with rigorous format validation & sanitization
-export function createUser(username: string, email: string, password: string): { user: UserAccount; token: string } {
+export async function createUser(
+  username: string,
+  email: string,
+  password: string
+): Promise<{ user: UserAccount; token: string }> {
   if (typeof username !== "string" || typeof email !== "string" || typeof password !== "string") {
     throw new Error("Invalid request payload.");
   }
@@ -306,18 +281,25 @@ export function createUser(username: string, email: string, password: string): {
   const normalizedUsername = rawUsername.toLowerCase();
 
   // Check if account with email or username already exists
-  const existingUser = Object.values(users).find(
-    (u) => u.email.toLowerCase() === normalizedEmail || u.username.toLowerCase() === normalizedUsername
-  );
-  if (existingUser) {
-    if (existingUser.email.toLowerCase() === normalizedEmail) {
-      throw new Error("An account with this email address already exists.");
-    }
+  if (await kv().hget<string>("user_email", normalizedEmail)) {
+    throw new Error("An account with this email address already exists.");
+  }
+  if (await kv().hget<string>("user_name", normalizedUsername)) {
+    throw new Error("This username is already taken.");
+  }
+
+  const userId = "usr_" + crypto.randomBytes(8).toString("hex");
+
+  // Claim email and username atomically so two simultaneous signups can't both win
+  if (!(await kv().hsetnx("user_email", normalizedEmail, userId))) {
+    throw new Error("An account with this email address already exists.");
+  }
+  if (!(await kv().hsetnx("user_name", normalizedUsername, userId))) {
+    await kv().hdel("user_email", normalizedEmail);
     throw new Error("This username is already taken.");
   }
 
   const { hash, salt } = hashPassword(password);
-  const userId = "usr_" + crypto.randomBytes(8).toString("hex");
   const now = new Date().toISOString();
 
   const newUser: UserAccount = {
@@ -345,30 +327,21 @@ export function createUser(username: string, email: string, password: string): {
     achievements: getDefaultAchievements(),
   };
 
-  users[userId] = newUser;
-  saveUsers();
-
-  const token = generateToken();
-  const nowMs = Date.now();
-  sessions[token] = {
-    userId,
-    createdAt: nowMs,
-    expiresAt: nowMs + SESSION_TTL_MS,
-  };
-  saveSessions();
+  await saveUser(newUser);
+  const token = await createSession(userId);
 
   return { user: sanitizeUser(newUser), token };
 }
 
-export function loginUser(emailOrUsername: string, password: string): { user: UserAccount; token: string } {
+export async function loginUser(
+  emailOrUsername: string,
+  password: string
+): Promise<{ user: UserAccount; token: string }> {
   if (typeof emailOrUsername !== "string" || typeof password !== "string") {
     throw new Error("Invalid credentials payload.");
   }
 
-  const query = emailOrUsername.trim().toLowerCase();
-  const foundUser = Object.values(users).find(
-    (u) => u.email.toLowerCase() === query || u.username.toLowerCase() === query
-  );
+  const foundUser = await findUserByEmailOrUsername(emailOrUsername);
 
   if (!foundUser) {
     throw new Error("Invalid username/email or password.");
@@ -379,43 +352,24 @@ export function loginUser(emailOrUsername: string, password: string): { user: Us
     throw new Error("Invalid username/email or password.");
   }
 
-  const token = generateToken();
-  const nowMs = Date.now();
-  sessions[token] = {
-    userId: foundUser.id,
-    createdAt: nowMs,
-    expiresAt: nowMs + SESSION_TTL_MS,
-  };
-  saveSessions();
+  const token = await createSession(foundUser.id);
 
   return { user: sanitizeUser(foundUser), token };
 }
 
 // Session resolution with expiration check and auto-pruning
-export function getUserByToken(token: string): UserAccount | null {
-  if (!token || typeof token !== "string") return null;
-
-  const session = sessions[token];
+export async function getUserByToken(token: string): Promise<UserAccount | null> {
+  const session = await getSession(token);
   if (!session) return null;
-
-  // Check session expiration
-  const now = Date.now();
-  if (session.expiresAt && session.expiresAt < now) {
-    delete sessions[token];
-    saveSessions();
-    return null;
-  }
-
-  const userId = session.userId;
-  if (!userId || !users[userId]) return null;
-  return sanitizeUser(users[userId]);
+  const user = await getUserById(session.userId);
+  return user ? sanitizeUser(user) : null;
 }
 
-export function logoutToken(token: string) {
-  if (token && sessions[token]) {
-    delete sessions[token];
-    saveSessions();
-  }
+export async function logoutToken(token: string): Promise<void> {
+  const session = await getSession(token);
+  if (!session) return;
+  await kv().del(`session:${token}`);
+  await kv().srem(`user_sessions:${session.userId}`, token);
 }
 
 // Never expose password hash or salt
@@ -426,8 +380,8 @@ export function sanitizeUser(user: UserAccount): UserAccount {
   return clone;
 }
 
-export function getPublicProfile(userId: string): PublicProfile | null {
-  const user = users[userId];
+export async function getPublicProfile(userId: string): Promise<PublicProfile | null> {
+  const user = typeof userId === "string" ? await getUserById(userId) : null;
   if (!user) return null;
   return {
     id: user.id,
@@ -442,18 +396,8 @@ export function getPublicProfile(userId: string): PublicProfile | null {
   };
 }
 
-export function addTestResultToUser(token: string, testResult: Omit<UserTestResult, "id" | "timestamp">) {
-  const session = sessions[token];
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
-
-  const userId = session.userId;
-  if (!userId || !users[userId]) {
-    throw new Error("Unauthorized");
-  }
-
-  const user = users[userId];
+export async function addTestResultToUser(token: string, testResult: Omit<UserTestResult, "id" | "timestamp">) {
+  const user = await requireUserForToken(token);
   const now = new Date();
   const nowIso = now.toISOString();
 
@@ -501,7 +445,7 @@ export function addTestResultToUser(token: string, testResult: Omit<UserTestResu
   // Check achievement unlocks
   checkAchievements(user, resultEntry);
 
-  saveUsers();
+  await saveUser(user);
   return sanitizeUser(user);
 }
 
@@ -529,18 +473,8 @@ function checkAchievements(user: UserAccount, latestTest: UserTestResult) {
   });
 }
 
-export function addGameScoreToUser(token: string, scoreData: Omit<UserGameScore, "timestamp">) {
-  const session = sessions[token];
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
-
-  const userId = session.userId;
-  if (!userId || !users[userId]) {
-    throw new Error("Unauthorized");
-  }
-
-  const user = users[userId];
+export async function addGameScoreToUser(token: string, scoreData: Omit<UserGameScore, "timestamp">) {
+  const user = await requireUserForToken(token);
   const nowIso = new Date().toISOString();
 
   // Validate game score bounds
@@ -562,25 +496,15 @@ export function addGameScoreToUser(token: string, scoreData: Omit<UserGameScore,
   user.gameScores.unshift(gameEntry);
   user.xp += Math.min(1000, Math.round(clampedScore / 10));
 
-  saveUsers();
+  await saveUser(user);
   return sanitizeUser(user);
 }
 
-export function updateUserProfile(
+export async function updateUserProfile(
   token: string,
   profileData: { displayName?: string; bio?: string; keyboardLayout?: string; soundPreference?: string }
 ) {
-  const session = sessions[token];
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
-
-  const userId = session.userId;
-  if (!userId || !users[userId]) {
-    throw new Error("Unauthorized");
-  }
-
-  const user = users[userId];
+  const user = await requireUserForToken(token);
   if (profileData.displayName !== undefined) {
     user.displayName = sanitizeText(profileData.displayName, 24) || user.username;
   }
@@ -600,7 +524,7 @@ export function updateUserProfile(
     }
   }
 
-  saveUsers();
+  await saveUser(user);
   return sanitizeUser(user);
 }
 
@@ -766,29 +690,25 @@ export async function createPasswordResetRequest(
     return { success: true };
   }
 
-  const query = emailOrUsername.trim().toLowerCase();
-  const user = Object.values(users).find(
-    (u) => u.email.toLowerCase() === query || u.username.toLowerCase() === query
-  );
+  const user = await findUserByEmailOrUsername(emailOrUsername);
 
   // If user does not exist, return generic success without leaking existence
   if (!user) {
     return { success: true };
   }
 
-  // Invalidate any existing unused reset tokens for this user
+  // Invalidate any earlier reset link for this user
   const now = Date.now();
-  for (const t of Object.values(passwordResets)) {
-    if (t.userId === user.id && !t.used) {
-      t.used = true;
-    }
+  const previousToken = await kv().get<string>(`reset_user:${user.id}`);
+  if (previousToken) {
+    await kv().del(`reset:${previousToken}`);
   }
 
   // Generate cryptographically secure random token (32 bytes hex)
   const token = crypto.randomBytes(32).toString("hex");
   const expiresAt = now + RESET_TOKEN_TTL_MS;
 
-  passwordResets[token] = {
+  const resetRecord: PasswordResetToken = {
     token,
     userId: user.id,
     email: user.email,
@@ -796,7 +716,8 @@ export async function createPasswordResetRequest(
     expiresAt,
     used: false,
   };
-  savePasswordResets();
+  await kv().set(`reset:${token}`, resetRecord, RESET_TOKEN_TTL_MS);
+  await kv().set(`reset_user:${user.id}`, token, RESET_TOKEN_TTL_MS);
 
   const cleanBaseUrl = baseUrl.replace(/\/+$/, "");
   const resetUrl = `${cleanBaseUrl}/reset-password/?token=${token}`;
@@ -815,11 +736,16 @@ export async function createPasswordResetRequest(
 }
 
 // Validate a reset token (returns status and masked email if valid)
-export function validatePasswordResetToken(token: string): {
+async function getResetRecord(token: string): Promise<PasswordResetToken | null> {
+  if (!/^[a-f0-9]{64}$/.test(token)) return null;
+  return kv().get<PasswordResetToken>(`reset:${token}`);
+}
+
+export async function validatePasswordResetToken(token: string): Promise<{
   valid: boolean;
   error?: string;
   email?: string;
-} {
+}> {
   if (!token || typeof token !== "string") {
     return {
       valid: false,
@@ -827,7 +753,7 @@ export function validatePasswordResetToken(token: string): {
     };
   }
 
-  const resetRecord = passwordResets[token];
+  const resetRecord = await getResetRecord(token);
   if (!resetRecord) {
     return {
       valid: false,
@@ -850,7 +776,7 @@ export function validatePasswordResetToken(token: string): {
     };
   }
 
-  const user = users[resetRecord.userId];
+  const user = await getUserById(resetRecord.userId);
   if (!user) {
     return {
       valid: false,
@@ -872,15 +798,15 @@ export function validatePasswordResetToken(token: string): {
 }
 
 // Reset password with valid token and invalidate token + existing sessions
-export function resetPasswordWithToken(
+export async function resetPasswordWithToken(
   token: string,
   newPassword: string
-): { success: boolean; message: string } {
+): Promise<{ success: boolean; message: string }> {
   if (!token || typeof token !== "string") {
     throw new Error("Invalid password reset token.");
   }
 
-  const resetRecord = passwordResets[token];
+  const resetRecord = await getResetRecord(token);
   if (!resetRecord || resetRecord.used) {
     throw new Error("This password reset link is invalid or has already been used.");
   }
@@ -902,7 +828,7 @@ export function resetPasswordWithToken(
     throw new Error("Password cannot exceed 128 characters.");
   }
 
-  const user = users[resetRecord.userId];
+  const user = await getUserById(resetRecord.userId);
   if (!user) {
     throw new Error("Account not found.");
   }
@@ -911,19 +837,19 @@ export function resetPasswordWithToken(
   const { hash, salt } = hashPassword(newPassword);
   user.passwordHash = hash;
   user.salt = salt;
-  saveUsers();
+  await saveUser(user);
 
-  // Invalidate token immediately
+  // Invalidate token immediately (kept until expiry so the link shows "already used")
   resetRecord.used = true;
-  savePasswordResets();
+  await kv().set(`reset:${token}`, resetRecord, Math.max(1000, resetRecord.expiresAt - now));
+  await kv().del(`reset_user:${user.id}`);
 
   // Invalidate any active sessions for this user for security
-  for (const [sToken, sData] of Object.entries(sessions)) {
-    if (sData.userId === user.id) {
-      delete sessions[sToken];
-    }
+  const userSessions = await kv().smembers(`user_sessions:${user.id}`);
+  for (const sToken of userSessions) {
+    await kv().del(`session:${sToken}`);
   }
-  saveSessions();
+  await kv().del(`user_sessions:${user.id}`);
 
   return {
     success: true,

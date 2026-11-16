@@ -1,7 +1,6 @@
-import fs from "fs";
-import path from "path";
 import crypto from "crypto";
-import { validateAndSanitizeSubmission, addLeaderboardRecord } from "./leaderboardStore";
+import { kv } from "./kv.js";
+import { validateAndSanitizeSubmission, addLeaderboardRecord } from "./leaderboardStore.js";
 
 export interface DailyChallengeDef {
   dateKey: string; // e.g. "2026-08-13"
@@ -31,40 +30,20 @@ export interface DailySubmissionRecord {
   verified: boolean;
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const DAILY_SUBMISSIONS_FILE = path.join(DATA_DIR, "daily_submissions.json");
+// Storage: one hash per day, "daily:<YYYY-MM-DD>" (submissionId -> record), see server/kv.ts.
+// Reads are cached briefly per server instance to keep database traffic low.
+const READ_CACHE_MS = 15 * 1000;
+const submissionsCache = new Map<string, { at: number; records: DailySubmissionRecord[] }>();
 
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-let submissions: DailySubmissionRecord[] = [];
-
-// Load existing submissions from file
-function loadSubmissions() {
-  try {
-    if (fs.existsSync(DAILY_SUBMISSIONS_FILE)) {
-      const data = fs.readFileSync(DAILY_SUBMISSIONS_FILE, "utf-8");
-      submissions = JSON.parse(data);
-    } else {
-      submissions = [];
-      saveSubmissions();
-    }
-  } catch (err) {
-    console.error("Error reading daily_submissions.json:", err);
-    submissions = [];
+async function loadSubmissionsForDate(dateKey: string): Promise<DailySubmissionRecord[]> {
+  const cached = submissionsCache.get(dateKey);
+  if (cached && Date.now() - cached.at < READ_CACHE_MS) {
+    return cached.records;
   }
+  const records = Object.values(await kv().hgetall<DailySubmissionRecord>(`daily:${dateKey}`));
+  submissionsCache.set(dateKey, { at: Date.now(), records });
+  return records;
 }
-
-function saveSubmissions() {
-  try {
-    fs.writeFileSync(DAILY_SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2), "utf-8");
-  } catch (err) {
-    console.error("Error writing daily_submissions.json:", err);
-  }
-}
-
-loadSubmissions();
 
 // Master list of curated challenge prompts for daily rotation
 const MASTER_CHALLENGE_POOL = [
@@ -218,11 +197,9 @@ function getSeedSubmissionsForDate(dateKey: string): DailySubmissionRecord[] {
 }
 
 // Query leaderboard for a specific daily challenge date
-export function getDailyChallengeLeaderboard(dateKey: string, page: number = 1, limit: number = 15) {
-  loadSubmissions();
-
-  // Filter submissions for this date
-  const realEntries = submissions.filter((s) => s.dateKey === dateKey);
+export async function getDailyChallengeLeaderboard(dateKey: string, page: number = 1, limit: number = 15) {
+  // Submissions for this date
+  const realEntries = await loadSubmissionsForDate(dateKey);
 
   // Combine real entries with seed entries for a rich leaderboard experience
   const seedEntries = getSeedSubmissionsForDate(dateKey);
@@ -279,11 +256,11 @@ export function getDailyChallengeLeaderboard(dateKey: string, page: number = 1, 
   };
 }
 
-// User submission rate-limit cache (key: userId or username + dateKey -> timestamp)
-const recentSubmissionsMap = new Map<string, number>();
+// Cooldown between attempts per user and date (stored in KV so it holds across server instances)
+const SUBMIT_COOLDOWN_MS = 10 * 1000;
 
 // Submit daily challenge score with server validation & anti-abuse protection
-export function submitDailyChallengeScore(data: {
+export async function submitDailyChallengeScore(data: {
   dateKey: string;
   wpm: number;
   rawWpm?: number;
@@ -296,7 +273,6 @@ export function submitDailyChallengeScore(data: {
   username: string;
   userId?: string;
 }) {
-  loadSubmissions();
 
   // Validate dateKey format (YYYY-MM-DD)
   if (!data.dateKey || !/^\d{4}-\d{2}-\d{2}$/.test(data.dateKey)) {
@@ -319,9 +295,7 @@ export function submitDailyChallengeScore(data: {
 
   // Anti-abuse 1: Enforce cooldown between submissions per user
   const userKey = `${data.userId || data.username || "guest"}_${data.dateKey}`;
-  const now = Date.now();
-  const lastSubmit = recentSubmissionsMap.get(userKey);
-  if (lastSubmit && now - lastSubmit < 10000) { // 10 seconds cooldown
+  if (await kv().get<number>(`daily_cooldown:${userKey}`)) {
     return {
       isValid: false,
       error: "Please wait 10 seconds before submitting another daily challenge attempt.",
@@ -375,21 +349,21 @@ export function submitDailyChallengeScore(data: {
     verified: true,
   };
 
-  // Add to submissions array
-  submissions.push(submissionRecord);
-  saveSubmissions();
+  // Save submission
+  await kv().hset(`daily:${data.dateKey}`, submissionRecord.id, submissionRecord);
+  submissionsCache.delete(data.dateKey);
 
-  // Record submission timestamp in cooldown map
-  recentSubmissionsMap.set(userKey, now);
+  // Start cooldown for this user
+  await kv().set(`daily_cooldown:${userKey}`, Date.now(), SUBMIT_COOLDOWN_MS);
 
   // Also publish to global verified leaderboard
-  addLeaderboardRecord({
+  await addLeaderboardRecord({
     ...validation.record,
     category: "daily_challenge",
   });
 
   // Calculate user's rank for today's challenge
-  const leaderboard = getDailyChallengeLeaderboard(data.dateKey, 1, 100);
+  const leaderboard = await getDailyChallengeLeaderboard(data.dateKey, 1, 100);
   const userRankEntry = leaderboard.entries.find(
     (e) => (e.username || e.displayName).toLowerCase() === data.username.toLowerCase()
   );
@@ -403,7 +377,7 @@ export function submitDailyChallengeScore(data: {
 }
 
 // Scalable history query: get past N days of challenges
-export function getDailyChallengeHistory(daysCount: number = 14) {
+export async function getDailyChallengeHistory(daysCount: number = 14) {
   const history = [];
   const today = new Date();
 
@@ -413,7 +387,7 @@ export function getDailyChallengeHistory(daysCount: number = 14) {
     const challenge = getDailyChallenge(dateKey);
 
     // Get top record for date
-    const lb = getDailyChallengeLeaderboard(dateKey, 1, 1);
+    const lb = await getDailyChallengeLeaderboard(dateKey, 1, 1);
     const topEntry = lb.entries.length > 0 ? lb.entries[0] : null;
 
     history.push({
@@ -433,11 +407,11 @@ export function getDailyChallengeHistory(daysCount: number = 14) {
 }
 
 // Get user's personal daily challenge stats & best result for date
-export function getUserDailyChallengeResult(dateKey: string, usernameOrId: string) {
-  loadSubmissions();
+export async function getUserDailyChallengeResult(dateKey: string, usernameOrId: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return null;
+  const submissions = await loadSubmissionsForDate(dateKey);
   const userSubmissions = submissions.filter(
     (s) =>
-      s.dateKey === dateKey &&
       ((s.userId && s.userId === usernameOrId) ||
         s.username.toLowerCase() === usernameOrId.toLowerCase() ||
         s.displayName.toLowerCase() === usernameOrId.toLowerCase())

@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local development data store (see server/kv.ts)
+data/kv.json

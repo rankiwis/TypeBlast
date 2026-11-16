@@ -1,6 +1,5 @@
-import fs from "fs";
-import path from "path";
 import crypto from "crypto";
+import { kv } from "./kv.js";
 
 export interface LeaderboardRecord {
   id: string;
@@ -18,15 +17,11 @@ export interface LeaderboardRecord {
   verified: boolean;
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const LEADERBOARD_FILE = path.join(DATA_DIR, "leaderboard.json");
-
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-let records: LeaderboardRecord[] = [];
+// Storage: hash "leaderboard" (recordId -> LeaderboardRecord), see server/kv.ts.
+// Reads are cached briefly per server instance to keep database traffic low.
+const READ_CACHE_MS = 15 * 1000;
+let cachedRecords: LeaderboardRecord[] | null = null;
+let cachedAt = 0;
 
 // Seed high-quality verified default entries if database is empty
 function getSeedRecords(): LeaderboardRecord[] {
@@ -79,26 +74,32 @@ function getSeedRecords(): LeaderboardRecord[] {
   });
 }
 
-// Load from disk or initialize
-try {
-  if (fs.existsSync(LEADERBOARD_FILE)) {
-    const raw = fs.readFileSync(LEADERBOARD_FILE, "utf-8");
-    records = JSON.parse(raw);
-  } else {
-    records = getSeedRecords();
-    saveRecords();
+async function loadRecords(): Promise<LeaderboardRecord[]> {
+  if (cachedRecords && Date.now() - cachedAt < READ_CACHE_MS) {
+    return cachedRecords;
   }
-} catch (e) {
-  console.error("Error loading leaderboard database:", e);
-  records = getSeedRecords();
+
+  let all = Object.values(await kv().hgetall<LeaderboardRecord>("leaderboard"));
+
+  // Seed default entries the first time the leaderboard is used
+  if (all.length === 0 && !(await kv().get<boolean>("leaderboard_seeded"))) {
+    const seeds = getSeedRecords();
+    for (const rec of seeds) {
+      await kv().hset("leaderboard", rec.id, rec);
+    }
+    await kv().set("leaderboard_seeded", true);
+    all = seeds;
+  }
+
+  // Newest first, matching the original in-memory order
+  all.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  cachedRecords = all;
+  cachedAt = Date.now();
+  return all;
 }
 
-function saveRecords() {
-  try {
-    fs.writeFileSync(LEADERBOARD_FILE, JSON.stringify(records, null, 2), "utf-8");
-  } catch (e) {
-    console.error("Failed to save leaderboard database:", e);
-  }
+function invalidateCache() {
+  cachedRecords = null;
 }
 
 // Badge calculation
@@ -280,8 +281,11 @@ export function validateAndSanitizeSubmission(
 }
 
 // Record submission with anti-duplication
-export function addLeaderboardRecord(submission: Omit<LeaderboardRecord, "id">): LeaderboardRecord {
+export async function addLeaderboardRecord(
+  submission: Omit<LeaderboardRecord, "id">
+): Promise<LeaderboardRecord> {
   const now = new Date(submission.timestamp);
+  const records = await loadRecords();
 
   // Check for duplicate submission (same user or display name within 3 seconds with identical WPM)
   const isDuplicate = records.some((r) => {
@@ -306,24 +310,26 @@ export function addLeaderboardRecord(submission: Omit<LeaderboardRecord, "id">):
     id: "ldr_" + crypto.randomBytes(6).toString("hex"),
   };
 
-  records.unshift(newRecord);
-  saveRecords();
+  await kv().hset("leaderboard", newRecord.id, newRecord);
+  invalidateCache();
 
   return newRecord;
 }
 
 // Sync user display name across existing leaderboard records
-export function updateUserDisplayNameInLeaderboard(userId: string, newDisplayName: string) {
+export async function updateUserDisplayNameInLeaderboard(userId: string, newDisplayName: string) {
+  const records = await loadRecords();
   let updated = false;
-  records.forEach((r) => {
+  for (const r of records) {
     if (r.userId === userId) {
       r.displayName = newDisplayName.trim().substring(0, 24);
+      await kv().hset("leaderboard", r.id, r);
       updated = true;
     }
-  });
+  }
 
   if (updated) {
-    saveRecords();
+    invalidateCache();
   }
 }
 
@@ -356,7 +362,10 @@ export interface LeaderboardQueryResult {
   };
 }
 
-export function queryLeaderboard(options: LeaderboardQueryOptions = {}): LeaderboardQueryResult {
+export async function queryLeaderboard(
+  options: LeaderboardQueryOptions = {}
+): Promise<LeaderboardQueryResult> {
+  const records = await loadRecords();
   const period = options.period || "alltime";
   const page = Math.max(1, Number(options.page) || 1);
   const limit = Math.min(100, Math.max(5, Number(options.limit) || 15));

@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 import {
@@ -16,25 +15,26 @@ import {
   validatePasswordResetToken,
   resetPasswordWithToken,
   sendWelcomeEmail,
-} from "./server/authStore";
+} from "./server/authStore.js";
 import {
   queryLeaderboard,
   validateAndSanitizeSubmission,
   addLeaderboardRecord,
   updateUserDisplayNameInLeaderboard
-} from "./server/leaderboardStore";
+} from "./server/leaderboardStore.js";
 import {
   getDailyChallenge,
   getDailyChallengeLeaderboard,
   submitDailyChallengeScore,
   getDailyChallengeHistory,
   getUserDailyChallengeResult
-} from "./server/dailyChallengeStore";
+} from "./server/dailyChallengeStore.js";
+import { kv } from "./server/kv.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 // Security: Disable X-Powered-By header
 app.disable("x-powered-by");
@@ -52,51 +52,42 @@ app.use((_req, res, next) => {
 app.use(express.json({ limit: "100kb" }));
 
 // In-Memory Sliding Window Rate Limiter
-function createRateLimiter(options: { windowMs: number; max: number; message: string }) {
-  const requests = new Map<string, number[]>();
-
-  // Cleanup routine every 5 minutes
-  setInterval(() => {
-    const now = Date.now();
-    for (const [ip, timestamps] of requests.entries()) {
-      const valid = timestamps.filter((t) => now - t < options.windowMs);
-      if (valid.length === 0) {
-        requests.delete(ip);
-      } else {
-        requests.set(ip, valid);
+// Fixed-window rate limiter backed by the shared KV store, so limits hold across
+// serverless instances. If the store is unreachable, requests are allowed through.
+function createRateLimiter(options: { name: string; windowMs: number; max: number; message: string }) {
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const ip =
+      (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
+      req.socket.remoteAddress ||
+      "unknown";
+    try {
+      const count = await kv().incr(`ratelimit:${options.name}:${ip}`, options.windowMs);
+      if (count > options.max) {
+        return res.status(429).json({ error: options.message });
       }
+    } catch (error) {
+      console.error("Rate limiter unavailable, allowing request:", error);
     }
-  }, 5 * 60 * 1000).unref();
-
-  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "unknown";
-    const now = Date.now();
-    const timestamps = requests.get(ip) || [];
-    const validTimestamps = timestamps.filter((t) => now - t < options.windowMs);
-
-    if (validTimestamps.length >= options.max) {
-      return res.status(429).json({ error: options.message });
-    }
-
-    validTimestamps.push(now);
-    requests.set(ip, validTimestamps);
     next();
   };
 }
 
 const authRateLimiter = createRateLimiter({
+  name: "auth",
   windowMs: 60 * 1000,
   max: 15,
   message: "Too many authentication attempts. Please wait a minute before trying again.",
 });
 
 const submissionRateLimiter = createRateLimiter({
+  name: "submission",
   windowMs: 60 * 1000,
   max: 20,
   message: "Submission rate limit exceeded. Please wait a moment before submitting another score.",
 });
 
 const aiCoachRateLimiter = createRateLimiter({
+  name: "aiCoach",
   windowMs: 60 * 1000,
   max: 10,
   message: "AI coach rate limit reached. Please wait a moment before requesting another analysis.",
@@ -254,7 +245,7 @@ app.post("/api/auth/signup", authRateLimiter, async (req, res) => {
     }
     
     // Create user in store (validates formats, hashes password, saves record)
-    const result = createUser(username, email, password);
+    const result = await createUser(username, email, password);
 
     const loginUrl = `${getPublicBaseUrl(req)}/login/`;
 
@@ -273,30 +264,39 @@ app.post("/api/auth/signup", authRateLimiter, async (req, res) => {
   }
 });
 
-app.post("/api/auth/login", authRateLimiter, (req, res) => {
+app.post("/api/auth/login", authRateLimiter, async (req, res) => {
   try {
     const { emailOrUsername, password } = req.body;
     if (!emailOrUsername || !password) {
       return res.status(400).json({ error: "Email/username and password are required." });
     }
-    const result = loginUser(emailOrUsername, password);
+    const result = await loginUser(emailOrUsername, password);
     res.json({ status: "success", user: result.user, token: result.token });
   } catch (error: any) {
     res.status(401).json({ error: error.message || "Invalid credentials." });
   }
 });
 
-app.get("/api/auth/me", (req, res) => {
-  const token = getAuthToken(req);
-  if (!token) return res.status(401).json({ error: "Not authenticated" });
-  const user = getUserByToken(token);
-  if (!user) return res.status(401).json({ error: "Session expired or invalid" });
-  res.json({ status: "success", user });
+app.get("/api/auth/me", async (req, res) => {
+  try {
+    const token = getAuthToken(req);
+    if (!token) return res.status(401).json({ error: "Not authenticated" });
+    const user = await getUserByToken(token);
+    if (!user) return res.status(401).json({ error: "Session expired or invalid" });
+    res.json({ status: "success", user });
+  } catch (error) {
+    console.error("Session lookup failed:", error);
+    res.status(503).json({ error: "Account service is temporarily unavailable." });
+  }
 });
 
-app.post("/api/auth/logout", (req, res) => {
-  const token = getAuthToken(req);
-  if (token) logoutToken(token);
+app.post("/api/auth/logout", async (req, res) => {
+  try {
+    const token = getAuthToken(req);
+    if (token) await logoutToken(token);
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
   res.json({ status: "success", message: "Logged out" });
 });
 
@@ -329,14 +329,14 @@ app.post("/api/auth/forgot-password", authRateLimiter, async (req, res) => {
 });
 
 // Verify Reset Token Endpoint
-app.get("/api/auth/verify-reset-token", (req, res) => {
+app.get("/api/auth/verify-reset-token", async (req, res) => {
   try {
     const token = req.query.token ? String(req.query.token) : "";
     if (!token) {
       return res.status(400).json({ valid: false, error: "Password reset token is required." });
     }
 
-    const verification = validatePasswordResetToken(token);
+    const verification = await validatePasswordResetToken(token);
     if (!verification.valid) {
       return res.status(400).json({ valid: false, error: verification.error });
     }
@@ -348,7 +348,7 @@ app.get("/api/auth/verify-reset-token", (req, res) => {
 });
 
 // Reset Password Execution Endpoint
-app.post("/api/auth/reset-password", authRateLimiter, (req, res) => {
+app.post("/api/auth/reset-password", authRateLimiter, async (req, res) => {
   try {
     const { token, password } = req.body;
     if (!token || typeof token !== "string") {
@@ -361,7 +361,7 @@ app.post("/api/auth/reset-password", authRateLimiter, (req, res) => {
       return res.status(400).json({ error: "Password must be at least 6 characters long." });
     }
 
-    const result = resetPasswordWithToken(token, password);
+    const result = await resetPasswordWithToken(token, password);
     res.json({ status: "success", message: result.message });
   } catch (error: any) {
     res.status(400).json({ error: error.message || "Failed to reset password." });
@@ -369,10 +369,10 @@ app.post("/api/auth/reset-password", authRateLimiter, (req, res) => {
 });
 
 // Leaderboard Query Endpoint (Today, Week, Month, All Time)
-app.get("/api/leaderboard", (req, res) => {
+app.get("/api/leaderboard", async (req, res) => {
   try {
     const token = getAuthToken(req);
-    const user = token ? getUserByToken(token) : null;
+    const user = token ? await getUserByToken(token) : null;
     const period = (req.query.period as any) || "alltime";
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 15;
@@ -385,7 +385,7 @@ app.get("/api/leaderboard", (req, res) => {
       ? user.username
       : undefined;
 
-    const result = queryLeaderboard({ period, page, limit, duration, category, search, userLookup });
+    const result = await queryLeaderboard({ period, page, limit, duration, category, search, userLookup });
     res.json({ status: "success", ...result });
   } catch (error: any) {
     res.status(500).json({ error: error.message || "Failed to fetch leaderboard" });
@@ -393,10 +393,10 @@ app.get("/api/leaderboard", (req, res) => {
 });
 
 // Secure Leaderboard Submission Endpoint
-app.post("/api/leaderboard/submit", submissionRateLimiter, (req, res) => {
+app.post("/api/leaderboard/submit", submissionRateLimiter, async (req, res) => {
   try {
     const token = getAuthToken(req);
-    const user = token ? getUserByToken(token) : null;
+    const user = token ? await getUserByToken(token) : null;
 
     const { wpm, rawWpm, accuracy, cpm, totalChars, correctChars, errorCount, duration, category, displayName } = req.body;
 
@@ -421,12 +421,12 @@ app.post("/api/leaderboard/submit", submissionRateLimiter, (req, res) => {
     }
 
     // Add to global leaderboard store
-    const record = addLeaderboardRecord(validation.record);
+    const record = await addLeaderboardRecord(validation.record);
 
     // If user is logged in, also record in user test history
     let updatedUser = null;
     if (token && user) {
-      updatedUser = addTestResultToUser(token, {
+      updatedUser = await addTestResultToUser(token, {
         wpm: validation.record.wpm,
         rawWpm: validation.record.rawWpm,
         accuracy: validation.record.accuracy,
@@ -446,10 +446,10 @@ app.post("/api/leaderboard/submit", submissionRateLimiter, (req, res) => {
 });
 
 // Game Score Submission Endpoint (with strict server-side validation)
-app.post("/api/games/submit", submissionRateLimiter, (req, res) => {
+app.post("/api/games/submit", submissionRateLimiter, async (req, res) => {
   try {
     const token = getAuthToken(req);
-    const user = token ? getUserByToken(token) : null;
+    const user = token ? await getUserByToken(token) : null;
 
     const { gameType, wpm, rawWpm, accuracy, duration, wordsTyped, totalChars, correctChars, errorCount, displayName } = req.body;
 
@@ -483,12 +483,12 @@ app.post("/api/games/submit", submissionRateLimiter, (req, res) => {
     }
 
     // Save record into verified database
-    const record = addLeaderboardRecord(validation.record);
+    const record = await addLeaderboardRecord(validation.record);
 
     // Update user history if logged in
     let updatedUser = null;
     if (token && user) {
-      updatedUser = addTestResultToUser(token, {
+      updatedUser = await addTestResultToUser(token, {
         wpm: validation.record.wpm,
         rawWpm: validation.record.rawWpm,
         accuracy: validation.record.accuracy,
@@ -513,21 +513,21 @@ app.post("/api/games/submit", submissionRateLimiter, (req, res) => {
 });
 
 // Daily Challenge Endpoints
-app.get("/api/daily-challenge/today", (req, res) => {
+app.get("/api/daily-challenge/today", async (req, res) => {
   try {
     const token = getAuthToken(req);
-    const user = token ? getUserByToken(token) : null;
+    const user = token ? await getUserByToken(token) : null;
 
     const todayKey = new Date().toISOString().split("T")[0];
     const challenge = getDailyChallenge(todayKey);
-    const leaderboard = getDailyChallengeLeaderboard(todayKey, 1, 25);
-    const history = getDailyChallengeHistory(14);
+    const leaderboard = await getDailyChallengeLeaderboard(todayKey, 1, 25);
+    const history = await getDailyChallengeHistory(14);
 
     let userResult = null;
     if (user) {
       userResult =
-        getUserDailyChallengeResult(todayKey, user.username) ||
-        getUserDailyChallengeResult(todayKey, user.displayName);
+        await getUserDailyChallengeResult(todayKey, user.username) ||
+        await getUserDailyChallengeResult(todayKey, user.displayName);
     }
 
     res.json({
@@ -543,20 +543,23 @@ app.get("/api/daily-challenge/today", (req, res) => {
   }
 });
 
-app.get("/api/daily-challenge/challenge", (req, res) => {
+app.get("/api/daily-challenge/challenge", async (req, res) => {
   try {
     const token = getAuthToken(req);
-    const user = token ? getUserByToken(token) : null;
+    const user = token ? await getUserByToken(token) : null;
     const dateKey = (req.query.date as string) || new Date().toISOString().split("T")[0];
+    if (typeof dateKey !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) {
+      return res.status(400).json({ error: "Invalid date. Use YYYY-MM-DD." });
+    }
 
     const challenge = getDailyChallenge(dateKey);
-    const leaderboard = getDailyChallengeLeaderboard(dateKey, 1, 25);
+    const leaderboard = await getDailyChallengeLeaderboard(dateKey, 1, 25);
 
     let userResult = null;
     if (user) {
       userResult =
-        getUserDailyChallengeResult(dateKey, user.username) ||
-        getUserDailyChallengeResult(dateKey, user.displayName);
+        await getUserDailyChallengeResult(dateKey, user.username) ||
+        await getUserDailyChallengeResult(dateKey, user.displayName);
     }
 
     res.json({
@@ -571,10 +574,10 @@ app.get("/api/daily-challenge/challenge", (req, res) => {
   }
 });
 
-app.post("/api/daily-challenge/submit", submissionRateLimiter, (req, res) => {
+app.post("/api/daily-challenge/submit", submissionRateLimiter, async (req, res) => {
   try {
     const token = getAuthToken(req);
-    const user = token ? getUserByToken(token) : null;
+    const user = token ? await getUserByToken(token) : null;
 
     const {
       dateKey,
@@ -598,7 +601,7 @@ app.post("/api/daily-challenge/submit", submissionRateLimiter, (req, res) => {
       ? displayName.toLowerCase().replace(/\s+/g, "_")
       : "guest";
 
-    const result = submitDailyChallengeScore({
+    const result = await submitDailyChallengeScore({
       dateKey: targetDateKey,
       wpm: Number(wpm) || 0,
       rawWpm: Number(rawWpm) || Number(wpm) || 0,
@@ -618,7 +621,7 @@ app.post("/api/daily-challenge/submit", submissionRateLimiter, (req, res) => {
 
     // Record in user account history if logged in
     if (token && user) {
-      addGameScoreToUser(token, {
+      await addGameScoreToUser(token, {
         gameId: "daily-challenge",
         gameName: "Daily Challenge",
         score: result.record?.score || 0,
@@ -627,7 +630,7 @@ app.post("/api/daily-challenge/submit", submissionRateLimiter, (req, res) => {
       });
     }
 
-    const updatedLeaderboard = getDailyChallengeLeaderboard(targetDateKey, 1, 25);
+    const updatedLeaderboard = await getDailyChallengeLeaderboard(targetDateKey, 1, 25);
 
     res.json({
       status: "success",
@@ -642,12 +645,12 @@ app.post("/api/daily-challenge/submit", submissionRateLimiter, (req, res) => {
 });
 
 // Test Results Recording Endpoint
-app.post("/api/user/test-results", submissionRateLimiter, (req, res) => {
+app.post("/api/user/test-results", submissionRateLimiter, async (req, res) => {
   const token = getAuthToken(req);
   if (!token) return res.status(401).json({ error: "Authentication token required." });
 
   try {
-    const user = getUserByToken(token);
+    const user = await getUserByToken(token);
     if (!user) return res.status(401).json({ error: "User session invalid." });
 
     const { wpm, rawWpm, accuracy, cpm, totalChars, correctChars, errorCount, duration, category } = req.body;
@@ -676,10 +679,10 @@ app.post("/api/user/test-results", submissionRateLimiter, (req, res) => {
     }
 
     // Record to global verified leaderboard
-    addLeaderboardRecord(validation.record);
+    await addLeaderboardRecord(validation.record);
 
     // Save to user account history
-    const updatedUser = addTestResultToUser(token, {
+    const updatedUser = await addTestResultToUser(token, {
       wpm: validation.record.wpm,
       rawWpm: validation.record.rawWpm,
       accuracy: validation.record.accuracy,
@@ -698,7 +701,7 @@ app.post("/api/user/test-results", submissionRateLimiter, (req, res) => {
 });
 
 // Game Scores Endpoint with strict payload validation
-app.post("/api/user/game-scores", submissionRateLimiter, (req, res) => {
+app.post("/api/user/game-scores", submissionRateLimiter, async (req, res) => {
   const token = getAuthToken(req);
   if (!token) return res.status(401).json({ error: "Authentication token required." });
 
@@ -710,7 +713,7 @@ app.post("/api/user/game-scores", submissionRateLimiter, (req, res) => {
       return res.status(400).json({ error: "Invalid game identifier." });
     }
 
-    const updatedUser = addGameScoreToUser(token, {
+    const updatedUser = await addGameScoreToUser(token, {
       gameId: cleanGameId,
       gameName: String(gameName || "Typing Game"),
       score: Math.min(10000, Math.max(0, Number(score) || 0)),
@@ -724,19 +727,19 @@ app.post("/api/user/game-scores", submissionRateLimiter, (req, res) => {
 });
 
 // Profile Update Endpoint
-app.put("/api/user/profile", (req, res) => {
+app.put("/api/user/profile", async (req, res) => {
   const token = getAuthToken(req);
   if (!token) return res.status(401).json({ error: "Authentication token required." });
 
   try {
-    const user = getUserByToken(token);
+    const user = await getUserByToken(token);
     if (!user) return res.status(401).json({ error: "Invalid session." });
 
     const { displayName, bio, keyboardLayout, soundPreference } = req.body;
-    const updatedUser = updateUserProfile(token, { displayName, bio, keyboardLayout, soundPreference });
+    const updatedUser = await updateUserProfile(token, { displayName, bio, keyboardLayout, soundPreference });
 
     if (displayName) {
-      updateUserDisplayNameInLeaderboard(user.id, displayName);
+      await updateUserDisplayNameInLeaderboard(user.id, displayName);
     }
 
     res.json({ status: "success", user: updatedUser });
@@ -746,10 +749,15 @@ app.put("/api/user/profile", (req, res) => {
 });
 
 // Public Safe Profile Endpoint (Does NOT expose email or password hash)
-app.get("/api/user/public-profile/:id", (req, res) => {
-  const profile = getPublicProfile(req.params.id);
-  if (!profile) return res.status(404).json({ error: "User profile not found." });
-  res.json({ status: "success", profile });
+app.get("/api/user/public-profile/:id", async (req, res) => {
+  try {
+    const profile = await getPublicProfile(req.params.id);
+    if (!profile) return res.status(404).json({ error: "User profile not found." });
+    res.json({ status: "success", profile });
+  } catch (error) {
+    console.error("Public profile lookup failed:", error);
+    res.status(503).json({ error: "Profile service is temporarily unavailable." });
+  }
 });
 
 // AI Typing Coach Endpoint
@@ -875,9 +883,11 @@ app.get("/robots.txt", (_req, res) => {
   res.sendFile(robotsPath);
 });
 
-// Setup Vite or Static File Serving
+// Setup Vite or Static File Serving (skipped on Vercel, which serves the built
+// front end itself and runs this app as a serverless function via api/index.ts)
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -896,4 +906,8 @@ async function startServer() {
   });
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
