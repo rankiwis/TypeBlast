@@ -115,6 +115,25 @@ const getAuthToken = (req: express.Request): string | null => {
   return authHeader.substring(7).trim();
 };
 
+// Reset links must only ever reach the account owner by email. Returning them in
+// the API response lets anyone reset any account, so this stays off unless a
+// developer explicitly opts in on a non-production server.
+const isResetPreviewEnabled = (): boolean =>
+  process.env.ENABLE_RESET_PREVIEW === "true" && process.env.NODE_ENV !== "production";
+
+// Base URL for links sent in emails. Never trust the Origin or Host headers here:
+// an attacker could set them so the emailed reset link points to their own site.
+const getPublicBaseUrl = (req: express.Request): string => {
+  const appUrl = process.env.APP_URL;
+  if (appUrl && /^https?:\/\/[^\s]+$/i.test(appUrl)) {
+    return appUrl.replace(/\/+$/, "");
+  }
+  if (process.env.NODE_ENV !== "production" && req.get("host")) {
+    return `${req.protocol}://${req.get("host")}`;
+  }
+  return "https://www.typeblast.com";
+};
+
 // API Routes
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", service: "TypeBlast API" });
@@ -237,14 +256,7 @@ app.post("/api/auth/signup", authRateLimiter, async (req, res) => {
     // Create user in store (validates formats, hashes password, saves record)
     const result = createUser(username, email, password);
 
-    // Compute dynamic login link for this environment
-    const hostHeader = req.get("host") || "";
-    const proto = req.get("x-forwarded-proto") || req.protocol || "http";
-    const origin =
-      req.get("origin") ||
-      (hostHeader ? `${proto}://${hostHeader}` : process.env.APP_URL || "https://www.typeblast.com");
-    const cleanBaseUrl = origin.replace(/\/+$/, "");
-    const loginUrl = `${cleanBaseUrl}/login/`;
+    const loginUrl = `${getPublicBaseUrl(req)}/login/`;
 
     // Dispatch welcome email asynchronously without blocking registration or throwing errors
     sendWelcomeEmail({
@@ -296,20 +308,15 @@ app.post("/api/auth/forgot-password", authRateLimiter, async (req, res) => {
       return res.status(400).json({ error: "Please provide a valid email address." });
     }
 
-    // Determine current base URL
-    const hostHeader = req.get("host") || "";
-    const proto = req.get("x-forwarded-proto") || req.protocol || "http";
-    const origin =
-      req.get("origin") ||
-      (hostHeader ? `${proto}://${hostHeader}` : process.env.APP_URL || "https://www.typeblast.com");
+    const result = await createPasswordResetRequest(email.trim(), getPublicBaseUrl(req));
 
-    const result = await createPasswordResetRequest(email.trim(), origin);
-
-    // Generic response to prevent user enumeration
+    // Generic response to prevent user enumeration and never leak the reset link
     res.json({
       status: "success",
       message: "If an account exists for this email, you will receive a password reset link shortly.",
-      previewResetUrl: result.previewResetUrl, // helpful for preview / dev environment testing
+      ...(isResetPreviewEnabled() && result.previewResetUrl
+        ? { previewResetUrl: result.previewResetUrl }
+        : {}),
     });
   } catch (error: any) {
     console.error("Forgot password error:", error);
