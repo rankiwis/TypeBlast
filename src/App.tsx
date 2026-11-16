@@ -190,28 +190,28 @@ function MainAppContent() {
         {currentPath === "/typing-test/" && (
           <TypingTestPage
             onTestComplete={handleTestComplete}
-            setActiveTab={setActiveTab}
+            setActiveTab={handleNavbarTabSelect}
             onNavigatePath={navigateToPath}
           />
         )}
         {currentPath === "/typing-speed-test/" && (
           <TypingSpeedTestPage
             onTestComplete={handleTestComplete}
-            setActiveTab={setActiveTab}
+            setActiveTab={handleNavbarTabSelect}
             onNavigatePath={navigateToPath}
           />
         )}
         {currentPath === "/wpm-test/" && (
           <WpmTestPage
             onTestComplete={handleTestComplete}
-            setActiveTab={setActiveTab}
+            setActiveTab={handleNavbarTabSelect}
             onNavigatePath={navigateToPath}
           />
         )}
         {currentPath === "/typing-accuracy-test/" && (
           <TypingAccuracyTestPage
             onTestComplete={handleTestComplete}
-            setActiveTab={setActiveTab}
+            setActiveTab={handleNavbarTabSelect}
             onNavigatePath={navigateToPath}
           />
         )}
@@ -224,12 +224,12 @@ function MainAppContent() {
         {currentPath === "/touch-typing/" && (
           <TouchTypingPage
             onTestComplete={handleTestComplete}
-            setActiveTab={setActiveTab}
+            setActiveTab={handleNavbarTabSelect}
             onNavigatePath={navigateToPath}
           />
         )}
         {currentPath === "/daily-typing-challenge/" && (
-          <DailyChallengePage setActiveTab={setActiveTab} onNavigatePath={navigateToPath} />
+          <DailyChallengePage setActiveTab={handleNavbarTabSelect} onNavigatePath={navigateToPath} />
         )}
         {currentPath === "/typing-tips/" && (
           <TypingTipsPage onNavigatePath={navigateToPath} />
@@ -255,7 +255,7 @@ function MainAppContent() {
         )}
         {currentPath === "/lessons/" && <LessonsView />}
         {currentPath === "/certificates/" && <CertificatesView lastStats={lastStats} />}
-        {currentPath === "/aicoach/" && <AICoachView lastStats={lastStats} setActiveTab={setActiveTab} />}
+        {currentPath === "/aicoach/" && <AICoachView lastStats={lastStats} setActiveTab={handleNavbarTabSelect} />}
         {currentPath === "/kids/" && <KidsView />}
         {currentPath === "/teachers/" && <TeachersView />}
         {currentPath === "/pricing/" && <PricingView />}
@@ -266,16 +266,16 @@ function MainAppContent() {
             {activeTab === "test" && (
               <TypingTestView
                 onTestComplete={handleTestComplete}
-                setActiveTab={setActiveTab}
+                setActiveTab={handleNavbarTabSelect}
               />
             )}
             {activeTab === "games" && <GamesHubView />}
             {activeTab === "practice" && <PracticeView />}
             {activeTab === "lessons" && <LessonsView />}
-            {activeTab === "daily" && <DailyChallengeView setActiveTab={setActiveTab} />}
+            {activeTab === "daily" && <DailyChallengeView setActiveTab={handleNavbarTabSelect} />}
             {activeTab === "leaderboard" && <LeaderboardView onNavigatePath={navigateToPath} />}
             {activeTab === "certificates" && <CertificatesView lastStats={lastStats} />}
-            {activeTab === "aicoach" && <AICoachView lastStats={lastStats} setActiveTab={setActiveTab} />}
+            {activeTab === "aicoach" && <AICoachView lastStats={lastStats} setActiveTab={handleNavbarTabSelect} />}
             {activeTab === "kids" && <KidsView />}
             {activeTab === "teachers" && <TeachersView />}
             {activeTab === "blog" && <BlogView />}
