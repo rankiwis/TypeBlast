@@ -6,7 +6,8 @@ export type BlogCategory =
   | "Typing Games"
   | "Career & Jobs"
   | "Kids & Education"
-  | "AI & Search";
+  | "AI & Search"
+  | "Typing Facts";
 
 export interface Author {
   name: string;
@@ -45,6 +46,7 @@ export const BLOG_CATEGORIES: BlogCategory[] = [
   "Career & Jobs",
   "Kids & Education",
   "AI & Search",
+  "Typing Facts",
 ];
 
 export const AUTHORS: Record<string, Author> = {
@@ -2584,6 +2586,820 @@ export const BLOG_POSTS: BlogPost[] = [
         <li><a href="https://www.typequicker.com/learn/what-is-10-key-typing" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">TypeQuicker: What Exactly Is 10-Key Typing?</a> (January 2026)</li>
         <li><a href="https://dataentryinstitute.org/the-typing-skills-every-data-entry-professional-needs/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Data Entry Institute: The typing skills every data entry professional needs</a> (January 2026)</li>
       </ul>
+    `,
+  },
+  {
+    id: "post-typing-speed-records-fastest-typists",
+    slug: "typing-speed-records-fastest-typists",
+    title: "Typing Speed Records: The World's Fastest Typists",
+    metaTitle: "Typing Speed Records: World's Fastest Typists (WPM)",
+    metaDescription: "See the fastest typing speed records, who set them, and which claims hold up. Burst vs sustained WPM, plus what a realistic goal looks like for you.",
+    excerpt: "The fastest typists in the world type faster than most people can read aloud. Separate real typing records from unverified claims and see what a realistic goal looks like for you.",
+    category: "Typing Facts",
+    author: AUTHORS.elena,
+    publishedDate: "2026-11-19",
+    updatedDate: "2026-11-26",
+    featuredImage: "https://images.unsplash.com/photo-1762341103888-8ccf22b482d4?auto=format&fit=crop&w=1600&q=80",
+    imageAlt: "Hands typing fast on a laptop keyboard with a wristwatch visible",
+    imageCredit: "Photo by Zulfugar Karimov on Unsplash (Unsplash License)",
+    readingTime: "7 min read",
+    tags: ["Typing Facts", "Typing Speed", "World Records", "WPM", "Burst Speed", "Sustained Speed"],
+    featured: false,
+    schemaType: "Article",
+    content: `
+      <p>
+        The fastest typists in the world type faster than most people can read aloud. Still, the headline numbers you see online mix real records with claims nobody has checked. This guide separates the two, explains why the numbers differ, and shows what a realistic goal looks like for you.
+      </p>
+
+      <h2>What is the fastest typing speed ever recorded?</h2>
+
+      <p>
+        <strong>The fastest verified sustained typing speed on a standard keyboard is about 150 WPM over 50 minutes. Barbara Blackburn holds that Guinness listing, and her peak reached 212 WPM. Short bursts on typing tests can go higher, and stenotype machines reach 360 WPM at 97.23% accuracy.</strong>
+      </p>
+
+      <p>
+        That one paragraph hides a lot. "Fastest" depends on three things: how long the person typed, which device they used, and whether anyone checked the result. Keep those three questions in mind as you read the records below.
+      </p>
+
+      <h2>Verified records at a glance</h2>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Record</th>
+              <th class="p-3.5 sm:p-4">Speed</th>
+              <th class="p-3.5 sm:p-4">Device</th>
+              <th class="p-3.5 sm:p-4">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Sustained speed (50 minutes)</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">150 WPM</td>
+              <td class="p-3.5 sm:p-4">Standard keyboard</td>
+              <td class="p-3.5 sm:p-4">Guinness listing, 1985</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Sustained speed on Dvorak layout</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">170 WPM</td>
+              <td class="p-3.5 sm:p-4">Dvorak keyboard</td>
+              <td class="p-3.5 sm:p-4">Guinness listing, 1985</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Peak speed, Barbara Blackburn</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">212 WPM</td>
+              <td class="p-3.5 sm:p-4">Standard keyboard</td>
+              <td class="p-3.5 sm:p-4">Self-reported peak, widely quoted</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Typewriter, 1946</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">216 WPM</td>
+              <td class="p-3.5 sm:p-4">IBM electric typewriter</td>
+              <td class="p-3.5 sm:p-4">Stella Pajunas, widely cited</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Burst typing test</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">256 WPM</td>
+              <td class="p-3.5 sm:p-4">Standard keyboard</td>
+              <td class="p-3.5 sm:p-4">Sean Wrona, listed on Wikipedia</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Stenotype</td>
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">360 WPM</td>
+              <td class="p-3.5 sm:p-4">Stenotype machine</td>
+              <td class="p-3.5 sm:p-4">97.23% accuracy, court reporting</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Treat the status column as part of the answer. A Guinness listing and a peak that a typist reported about herself are not the same kind of proof.
+      </p>
+
+      <h2>Barbara Blackburn: the sustained speed benchmark</h2>
+
+      <p>
+        Barbara Blackburn built her name on endurance. Guinness listed her at 150 WPM for 50 minutes in 1985, and 170 WPM when she typed on a Dvorak layout. Her own peak, which she reported, reached 212 WPM.
+      </p>
+
+      <p>
+        Notice what makes that number special. Anyone can sprint for ten seconds. To hold 150 WPM for 50 minutes, her accuracy, rhythm and posture had to stay steady while her hands tired. That is the skill most employers actually pay for.
+      </p>
+
+      <h2>Stella Pajunas and the 1946 typewriter record</h2>
+
+      <p>
+        Stella Pajunas typed 216 WPM on an IBM electric typewriter in 1946. People still quote that figure today. Typewriters punish mistakes more than a keyboard does, because you cannot tap backspace and move on. A clean 216 on that machine shows how much raw control she had.
+      </p>
+
+      <p>
+        Her record also reminds us that fast typing is not a modern habit. Speed contests ran in offices long before laptops.
+      </p>
+
+      <h2>Burst speed: Sean Wrona and online tests</h2>
+
+      <p>
+        A burst is a short, all-out run, usually 15 to 60 seconds. Sean Wrona reached 256 WPM in a burst, according to the list on Wikipedia. Burst results often come from a typing test, where the text is simple, common words and the clock is short.
+      </p>
+
+      <p>
+        Online leaderboards show similar scores from other typists. Some claim even higher marks. Sources disagree on several of them, and no independent body verifies most online results, so TypeBlast does not treat them as records. A short test also lets a typist pick a lucky passage. A 50 minute run does not.
+      </p>
+
+      <h2>Stenotype: the fastest "typing" of all</h2>
+
+      <p>
+        Court reporters use stenotype machines, and they type in chords. Each stroke presses several keys at once and writes a whole syllable or word. That is why stenotype reaches 360 WPM at 97.23% accuracy, a figure quoted for a top court reporter.
+      </p>
+
+      <p>
+        The comparison with a normal keyboard is unfair, so do not use it as a goal. A stenotype machine changes the input method, not just the finger speed. It also takes years of training.
+      </p>
+
+      <h2>Burst speed vs sustained speed</h2>
+
+      <p>
+        Most record debates fall apart because people compare different things.
+      </p>
+
+      <p>
+        <strong>Burst speed</strong> shows peak skill. It matters for typing games, friendly competition and short tests like the 15 second test.
+      </p>
+
+      <p>
+        <strong>Sustained speed</strong> shows real working speed. It matters for jobs, long documents, and the 60 second or longer test. Your sustained speed usually sits below your burst speed, and the gap depends on your stamina and accuracy.
+      </p>
+
+      <p>
+        Our <a href="/blog/good-typing-speed-wpm-benchmarks/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">good typing speed and WPM benchmarks guide</a> shows where average, good and fast typists sit on each scale.
+      </p>
+
+      <h2>Gross WPM, net WPM and why accuracy changes the record</h2>
+
+      <p>
+        Some records quote gross WPM, which counts every word typed. Others use net WPM, which subtracts errors. A typist who hits 200 WPM with 85% accuracy can have a lower net score than one who types 170 WPM at 99%.
+      </p>
+
+      <p>
+        That is why the stenotype figure above comes with an accuracy number. A speed with no accuracy attached tells you very little.
+      </p>
+
+      <h2>How do these records compare with the average typist?</h2>
+
+      <p>
+        The average adult types around 40 WPM. A professional typist usually sits between 65 and 75 WPM. A speed of 100 WPM puts you in the top slice of typists. The record holders are not on the same ladder, and you do not need their numbers to get ahead.
+      </p>
+
+      <p>
+        A realistic ladder looks like this:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>40 WPM:</strong> average. Fine for everyday email and chat.</li>
+        <li><strong>60 to 70 WPM:</strong> strong office speed. Meets most job requirements.</li>
+        <li><strong>80 to 100 WPM:</strong> advanced. Suits transcription, coding and editing work.</li>
+        <li><strong>120+ WPM:</strong> competitive. Takes dedicated practice for most people.</li>
+      </ul>
+
+      <p>
+        Most people reach 60 to 70 WPM within a few months of touch typing practice. The next jump, to 100 WPM, takes longer. Our <a href="/blog/how-to-type-100-wpm-touch-typing-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">guide to typing 100 WPM</a> lays out the habits that get you there.
+      </p>
+
+      <h2>What the fastest typists have in common</h2>
+
+      <p>
+        You can learn from record holders without chasing their numbers. Three habits show up again and again.
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>They keep their eyes on the text, not the keys.</strong> Looking down costs time and breaks rhythm.</li>
+        <li><strong>They type with even rhythm.</strong> A steady beat beats a fast, jerky one.</li>
+        <li><strong>They protect accuracy.</strong> Fixing errors costs more time than typing slowly and cleanly.</li>
+      </ol>
+
+      <p>
+        Each of these comes from solid technique. Our <a href="/blog/typing-techniques-compared/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing techniques comparison</a> explains which method gives the best return and how long each takes.
+      </p>
+
+      <h2>Frequently asked questions</h2>
+
+      <h3>Who is the fastest typist in the world?</h3>
+      <p>
+        Barbara Blackburn holds the best known sustained record: 150 WPM for 50 minutes, with a reported peak of 212 WPM. Sean Wrona holds a higher burst result of 256 WPM. Stenotype users reach 360 WPM, but that is a different machine.
+      </p>
+
+      <h3>What is the world record typing speed on a normal keyboard?</h3>
+      <p>
+        For a sustained run, 150 WPM over 50 minutes is the verified benchmark. Burst scores go higher, around 256 WPM, though different sources report different figures and many online claims stay unverified.
+      </p>
+
+      <h3>Is 200 WPM possible?</h3>
+      <p>
+        Yes, in short bursts. A few typists have reported peaks above 200 WPM. Few typists can hold 200 WPM for a full minute with high accuracy.
+      </p>
+
+      <h3>Is 100 WPM fast?</h3>
+      <p>
+        Yes. Most people never reach it. A 100 WPM typist is well above the 40 WPM average and above most professional requirements.
+      </p>
+
+      <h3>Can anyone reach record speeds?</h3>
+      <p>
+        No. Raw talent, hand size, early practice and years of training all play a part. Most people can still improve a lot with structured practice, and that gain pays off in real work.
+      </p>
+
+      <h2>Find your own speed</h2>
+
+      <p>
+        Records make good motivation, but your own number matters more. Take the free <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a> to see your WPM and accuracy in 60 seconds. Then pick one target, such as 10 WPM above your current score, and work on it for a month.
+      </p>
+    `,
+  },
+  {
+    id: "post-typing-tests-and-certificates-guide",
+    slug: "typing-tests-and-certificates-guide",
+    title: "Typing Tests and Certificates: What They Prove and What Employers Accept",
+    metaTitle: "Typing Tests and Certificates: What Employers Accept",
+    metaDescription: "Learn how typing tests work, what a WPM certificate must show, and what employers and HR teams accept. Take a free test and get a shareable certificate.",
+    excerpt: "A typing certificate records one timed test, showing how fast you type and how few mistakes you make. Learn how typing tests work, what employers accept, and how to earn your own.",
+    category: "Career & Jobs",
+    author: AUTHORS.research,
+    publishedDate: "2026-11-24",
+    updatedDate: "2026-11-26",
+    featuredImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1600&q=80",
+    imageAlt: "Printed pages beside a silver laptop on a desk, ready for a job application",
+    imageCredit: "Photo by Markus Winkler on Unsplash (Unsplash License)",
+    readingTime: "9 min read",
+    tags: ["Career & Jobs", "Typing Certificate", "Typing Tests", "WPM", "Job Applications", "Employer Requirements"],
+    featured: false,
+    schemaType: "Article",
+    content: `
+      <p>
+        A typing certificate is a record of one timed test. It shows how fast you type and how few mistakes you make. Hiring teams use it as a quick filter, and you can earn one in a few minutes.
+      </p>
+
+      <p>
+        This guide explains how typing tests work, what a good certificate must show, and where an online certificate stops being enough. It also shows how to get your own from TypeBlast.
+      </p>
+
+      <h2>What is a typing test certificate?</h2>
+
+      <p>
+        <strong>A typing test certificate proves your speed and accuracy on a timed test. A useful one shows your name, net WPM, accuracy, test length, date and a unique ID that an employer can check. Many employers accept an online certificate for screening, but some jobs require a proctored test.</strong>
+      </p>
+
+      <p>
+        Think of it as a receipt, not a license. It records one result at one moment. Employers read it as a sign that you can meet a speed target, then they often confirm it with their own test.
+      </p>
+
+      <h2>How typing tests work</h2>
+
+      <p>
+        Every typing test follows the same basic steps. The test shows you a passage. You type it as fast and as accurately as you can until the timer ends. The test then counts your characters and errors and turns them into a score.
+      </p>
+
+      <h3>Test length: 15, 30 or 60 seconds, or longer</h3>
+
+      <p>
+        Short tests suit practice. A 15 second test gives a quick burst score. A 60 second test gives a fairer picture of your working speed. Job tests often run one to five minutes, because longer tests show whether you can hold your pace.
+      </p>
+
+      <p>
+        Our <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing test</a> offers 15, 30 and 60 second modes, so you can compare your burst and your steady speed.
+      </p>
+
+      <h3>Gross WPM vs net WPM</h3>
+
+      <p>
+        Gross WPM counts every word you type, with or without mistakes. Net WPM subtracts your errors. Employers care about net WPM, because a fast typist who makes many mistakes creates extra work.
+      </p>
+
+      <p>
+        A simple example shows the gap. Say you type at 70 gross WPM but make 5 uncorrected errors in one minute. Your net score drops to about 65 WPM. A typist at 65 gross WPM with no errors scores the same net speed with far less cleanup.
+      </p>
+
+      <h3>Why accuracy matters as much as speed</h3>
+
+      <p>
+        Many job postings list a speed target and an accuracy target together, such as 50 WPM at 95% accuracy or better. Data entry roles often care most about accuracy. You can check your own score on the <a href="/typing-accuracy-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing accuracy test</a> and see how errors change your result.
+      </p>
+
+      <p>
+        Want a plain speed number first? The <a href="/wpm-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">WPM test</a> gives you one without extra detail.
+      </p>
+
+      <h2>What employers and HR teams look for</h2>
+
+      <p>
+        Requirements vary a lot, so check each posting. These patterns show up most often.
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Office and admin roles:</strong> often 40 to 60 WPM with 95% accuracy or better.</li>
+        <li><strong>Data entry:</strong> often a higher number, with a strict accuracy rule. Some employers use keystrokes per hour for numeric work. Our <a href="/blog/data-entry-typing-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">data entry typing speed guide</a> covers the common targets, and our <a href="/blog/ten-key-typing-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">ten-key typing guide</a> covers numeric keypads.</li>
+        <li><strong>Customer support and chat roles:</strong> often 40 to 60 WPM, with a focus on clean writing.</li>
+        <li><strong>Transcription and court reporting:</strong> much higher, and usually tested in person or on special software.</li>
+      </ul>
+
+      <p>
+        Treat these as typical ranges, not rules. A posting always overrides a general guide.
+      </p>
+
+      <h3>Government and public sector jobs</h3>
+
+      <p>
+        Many government and public sector roles run their own typing test. They may ask for a stated speed, such as a set WPM score, and they often give the test themselves. In that case a certificate from any website cannot replace the official test. Read the job notice carefully to see what the agency accepts.
+      </p>
+
+      <h3>Proctored tests vs online certificates</h3>
+
+      <p>
+        A proctored test has someone watching, either in person or through a camera. An online certificate does not. That is the key difference.
+      </p>
+
+      <p>
+        An online certificate works well for:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>A job application that asks for your speed</li>
+        <li>A resume or LinkedIn profile line</li>
+        <li>Your own progress tracking over time</li>
+      </ul>
+
+      <p>
+        A proctored test works better when:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>The employer or agency requires it</li>
+        <li>A role carries a legal or compliance requirement</li>
+        <li>The employer wants to rule out outside help</li>
+      </ul>
+
+      <p>
+        Not sure which one applies? Ask the hiring contact which one they accept. Most will tell you in one line.
+      </p>
+
+      <h2>What a good typing certificate must show</h2>
+
+      <p>
+        Not all certificates carry the same weight. Look for these six details.
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Your name.</strong> The certificate should name the test taker.</li>
+        <li><strong>Net WPM.</strong> The score after errors, not just the raw speed.</li>
+        <li><strong>Accuracy.</strong> A percentage, so the reader can judge quality.</li>
+        <li><strong>Test length and date.</strong> A 15 second sprint and a 5 minute test are not equal.</li>
+        <li><strong>A unique certificate ID.</strong> The ID lets a reader look the certificate up.</li>
+        <li><strong>A way to verify it.</strong> A verification code or link proves the certificate is real.</li>
+      </ol>
+
+      <p>
+        A certificate with only a big number and a logo tells an employer very little. Anyone can edit that kind of image, and recruiters know it.
+      </p>
+
+      <h2>How TypeBlast certificates work</h2>
+
+      <p>
+        TypeBlast gives you a certificate after you finish a test. Here is what it includes:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>Your name</li>
+        <li>Your WPM and accuracy</li>
+        <li>A speed tier that shows where your score sits</li>
+        <li>A certificate ID</li>
+        <li>A verification hash that links the certificate to your result</li>
+      </ul>
+
+      <p>
+        You can download your certificate as a PDF and share it. That makes it easy to attach to a job application or send to a recruiter.
+      </p>
+
+      <p>
+        Visit the <a href="/certificates/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast certificates page</a> to see an example and start. The tool runs in your browser and takes about a minute.
+      </p>
+
+      <h3>How to earn a stronger certificate</h3>
+
+      <p>
+        A certificate reflects the best you can do on the day. These steps raise your score before you test.
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Warm up for five minutes.</strong> Type a short passage first so your hands feel loose.</li>
+        <li><strong>Sit well.</strong> Keep your wrists level and your shoulders relaxed. Our <a href="/blog/ergonomics-and-wrist-health-for-typists/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">ergonomics guide</a> explains the setup.</li>
+        <li><strong>Aim for accuracy first.</strong> Speed follows clean typing, not the other way around.</li>
+        <li><strong>Use the 60 second test.</strong> It gives a fairer result than a short sprint.</li>
+        <li><strong>Retake after practice.</strong> Wait a week of focused practice, then test again.</li>
+      </ol>
+
+      <p>
+        Two-finger typists gain the most from a technique change. Our <a href="/blog/two-finger-typing-speed-how-to-switch/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">guide to switching from two-finger typing</a> shows how to make that jump.
+      </p>
+
+      <h2>What counts as a good score?</h2>
+
+      <p>
+        Targets change by job, but these ranges give you a starting point.
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg max-w-2xl">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Net WPM</th>
+              <th class="p-3.5 sm:p-4">Level</th>
+              <th class="p-3.5 sm:p-4">Where it fits</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Under 30</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Beginner</td>
+              <td class="p-3.5 sm:p-4">Needs practice for most office roles</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">30 to 45</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Average</td>
+              <td class="p-3.5 sm:p-4">Meets basic requirements</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">45 to 60</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Good</td>
+              <td class="p-3.5 sm:p-4">Fits most admin and support jobs</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">60 to 80</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Strong</td>
+              <td class="p-3.5 sm:p-4">Stands out in applications</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">80+</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Advanced</td>
+              <td class="p-3.5 sm:p-4">Suits transcription and editing work</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        For more detail, read our <a href="/blog/good-typing-speed-wpm-benchmarks/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">good typing speed and WPM benchmarks</a> post.
+      </p>
+
+      <h2>Common mistakes with typing certificates</h2>
+
+      <p>
+        Four mistakes cost people the most.
+      </p>
+
+      <p>
+        <strong>Burst scores on a resume.</strong> A 15 second score looks better than your real working speed. Use the 60 second result on a resume.
+      </p>
+
+      <p>
+        <strong>Low accuracy.</strong> A high WPM with low accuracy can hurt more than it helps.
+      </p>
+
+      <p>
+        <strong>One certificate for every job.</strong> Some employers run their own test no matter what you show them.
+      </p>
+
+      <p>
+        <strong>An old certificate.</strong> Skills improve, so replace it once your score rises.
+      </p>
+
+      <h2>Which technique gives the fastest gains?</h2>
+
+      <p>
+        Your technique sets the limit on your speed. Touch typing usually gives the largest long-term gain, but it takes weeks of steady practice. Hybrid methods and one-hand methods suit some people better. Our <a href="/blog/typing-techniques-compared/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing techniques comparison</a> explains which style fits which goal, so you can choose before you invest your time. If Word skills are part of the job test, read our <a href="/blog/microsoft-word-editing-skills-test-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">Microsoft Word editing skills guide</a> too.
+      </p>
+
+      <h2>Frequently asked questions</h2>
+
+      <h3>Is a free online typing certificate accepted by employers?</h3>
+      <p>
+        Many employers accept it as a screening signal. Some ask for their own test or a proctored one. Always check the job posting or ask the hiring contact.
+      </p>
+
+      <h3>How do I get a typing certificate?</h3>
+      <p>
+        Take a timed typing test, then download the certificate that matches your result. On TypeBlast you finish a test and receive a certificate with your WPM, accuracy and ID.
+      </p>
+
+      <h3>What WPM do I need for a job?</h3>
+      <p>
+        Most office jobs ask for 40 to 60 WPM. Data entry and transcription roles often ask for more. The job posting gives the exact number.
+      </p>
+
+      <h3>Can an employer verify my certificate?</h3>
+      <p>
+        Yes, if the certificate carries a unique ID and a verification code. The reader uses the ID to confirm your result.
+      </p>
+
+      <h3>How long is a typing certificate valid?</h3>
+      <p>
+        Most certificates have no formal expiry, but employers prefer recent ones. A result from the last six to twelve months looks safest.
+      </p>
+
+      <h3>Does a typing certificate replace a typing course?</h3>
+      <p>
+        No. A certificate measures your current level. A course or practice plan helps you raise it.
+      </p>
+
+      <h2>Get your certificate</h2>
+
+      <p>
+        Take the free test, check your accuracy, and download your certificate in one sitting. Start on the <a href="/certificates/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast certificates page</a> and share your result with your next application.
+      </p>
+    `,
+  },
+  {
+    id: "post-microsoft-word-editing-skills-test-guide",
+    slug: "microsoft-word-editing-skills-test-guide",
+    title: "Microsoft Word Editing Skills: What Employers Test and How to Practice",
+    metaTitle: "Microsoft Word Editing Skills: Test Guide and Shortcuts",
+    metaDescription: "Prepare for a Word editing test. Learn track changes, find and replace, styles, tables and the shortcuts employers expect, with a simple practice plan.",
+    excerpt: "Speed gets you in the door, and Word skills get you through the test. Learn the features editing tests check, time-saving shortcuts, and a 7-day practice plan.",
+    category: "Career & Jobs",
+    author: AUTHORS.marcus,
+    publishedDate: "2026-11-26",
+    updatedDate: "2026-11-26",
+    featuredImage: "https://images.unsplash.com/photo-1663524789611-2c8330848379?auto=format&fit=crop&w=1600&q=80",
+    imageAlt: "Person typing on a laptop at a desk while editing a document",
+    imageCredit: "Photo by Kelly Sikkema on Unsplash (Unsplash License)",
+    readingTime: "7 min read",
+    tags: ["Career & Jobs", "Microsoft Word", "Editing Skills", "Keyboard Shortcuts", "Track Changes", "Job Tests"],
+    featured: false,
+    schemaType: "Article",
+    content: `
+      <p>
+        Speed gets you in the door. Word skills get you through the test. Many hiring teams now check both, and the Word part trips up people who type 70 WPM but never learned how Word actually works.
+      </p>
+
+      <p>
+        This guide covers the features that editing tests check, the shortcuts that save the most time, and a practice plan you can finish in a week.
+      </p>
+
+      <h2>What are Microsoft Word editing skills?</h2>
+
+      <p>
+        <strong>Microsoft Word editing skills mean fixing and formatting a document fast and cleanly. Employer tests usually check track changes, find and replace, styles, tables and shortcuts such as Ctrl+Z to undo, Ctrl+Y to redo and Ctrl+H to replace. Practice on a messy sample document with a timer.</strong>
+      </p>
+
+      <p>
+        In plain terms, a test hands you a rough document and asks you to clean it up. You may need to fix errors, change the layout and show your edits. The tester watches both your result and your speed.
+      </p>
+
+      <h2>What does a Word editing test look like?</h2>
+
+      <p>
+        Formats differ, but most follow one pattern. You open a document with planted problems. You fix them within a time limit, often 10 to 30 minutes. A score follows, based on how many fixes you got right.
+      </p>
+
+      <p>
+        Services such as EditingTests.com run tests like this, and many employers build their own. Typical tasks include:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>Fix spelling, grammar and punctuation errors</li>
+        <li>Apply heading styles and consistent fonts</li>
+        <li>Use track changes so a reviewer sees each edit</li>
+        <li>Replace a word or format across the whole document</li>
+        <li>Build or fix a table</li>
+        <li>Adjust spacing, margins and lists</li>
+      </ul>
+
+      <p>
+        Read the instructions twice. Tests often hide small rules, such as "do not change the title" or "keep tracked changes on."
+      </p>
+
+      <h2>Track changes: show every edit</h2>
+
+      <p>
+        Track Changes records each edit so a reviewer can accept or reject it. Editing tests check it more than almost anything else, because real jobs rely on it.
+      </p>
+
+      <p>
+        To turn it on, open the <strong>Review</strong> tab and select <strong>Track Changes</strong>. Word then marks every insertion and deletion. Reviewers can step through the edits, accept the good ones and reject the rest.
+      </p>
+
+      <p>
+        Three habits help:
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Turn it on before you edit.</strong> Edits you make first leave no trace.</li>
+        <li><strong>Keep it on until you finish.</strong> Many tests fail people who switch it off midway.</li>
+        <li><strong>Do not accept your own changes.</strong> The reviewer wants to see them.</li>
+      </ol>
+
+      <p>
+        Microsoft Support publishes step-by-step pages for Track Changes, including how to show or hide markup. Read the one for your version of Word, since menus shift a little between versions.
+      </p>
+
+      <h2>Find and replace: fix many errors at once</h2>
+
+      <p>
+        Find and replace saves the most time of any editing tool. Press <strong>Ctrl+H</strong> to open it. Type the word to find, type the new word, and choose Replace All.
+      </p>
+
+      <p>
+        Use it for:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>A product name spelled three different ways</li>
+        <li>Double spaces after a full stop</li>
+        <li>A date format that needs to change everywhere</li>
+      </ul>
+
+      <p>
+        One caution. Replace All can change words you meant to keep. Check a few matches first with Find Next, then replace the rest. If the result goes wrong, press <strong>Ctrl+Z</strong> to undo it.
+      </p>
+
+      <h2>Styles: format once, apply everywhere</h2>
+
+      <p>
+        Styles control how headings, body text and lists look. Instead of changing the font by hand on every line, you pick a style and Word applies it. Open the <strong>Home</strong> tab and look at the Styles gallery.
+      </p>
+
+      <p>
+        Why tests care: a document with proper heading styles shows you understand structure. A document with bold, enlarged text typed by hand tells the reviewer you took the slow route.
+      </p>
+
+      <p>
+        A quick rule: use Heading 1 for the title, Heading 2 for main sections and Normal for body text. Change a style once and every line that uses it updates together.
+      </p>
+
+      <h2>Tables: build and fix quickly</h2>
+
+      <p>
+        Tables show up in many tests. Open the <strong>Insert</strong> tab, choose <strong>Table</strong>, and pick the number of rows and columns. You can then add or delete rows, merge cells and set alignment from the Table tools that appear.
+      </p>
+
+      <p>
+        Watch for these small traps:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>Header rows that should repeat or stand out</li>
+        <li>Text that sits at the wrong alignment inside a cell</li>
+        <li>Column widths that cut words in half</li>
+      </ul>
+
+      <h2>Keyboard shortcuts that save the most time</h2>
+
+      <p>
+        Shortcuts show a tester that you work fast. These are the ones worth learning first.
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg max-w-xl">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Shortcut</th>
+              <th class="p-3.5 sm:p-4">What it does</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+Z</td>
+              <td class="p-3.5 sm:p-4">Undo the last action</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+Y</td>
+              <td class="p-3.5 sm:p-4">Redo what you undid</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+H</td>
+              <td class="p-3.5 sm:p-4">Open Find and Replace</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+F</td>
+              <td class="p-3.5 sm:p-4">Open Find</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+B / Ctrl+I / Ctrl+U</td>
+              <td class="p-3.5 sm:p-4">Bold, italic, underline</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+C / Ctrl+X / Ctrl+V</td>
+              <td class="p-3.5 sm:p-4">Copy, cut, paste</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+A</td>
+              <td class="p-3.5 sm:p-4">Select the whole document</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">Ctrl+S</td>
+              <td class="p-3.5 sm:p-4">Save</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Microsoft Support keeps a full list of Word shortcuts for Windows and Mac. Pick five from the table and use only those for a day. They become habit quickly.
+      </p>
+
+      <h2>How typing speed and editing skills work together</h2>
+
+      <p>
+        An editing test has a clock. Fast, clean typing leaves you more time for the fixes that earn points. A typist at 40 WPM spends most of a short test just entering text. A typist at 65 WPM finishes the typing and has time to check formatting.
+      </p>
+
+      <p>
+        Weak speed? Start there. Take the free <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a> to see your WPM and accuracy. Most office editing roles ask for 40 to 60 WPM, and our <a href="/blog/typing-tests-and-certificates-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing tests and certificates guide</a> explains what employers look for in more detail. Roles that mix typing and editing, such as data entry, often set tighter targets. Our <a href="/blog/data-entry-typing-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">data entry typing speed guide</a> lists them.
+      </p>
+
+      <p>
+        Technique matters here too. Touch typing keeps your eyes on the screen while you edit, so you spot errors as you type. Our <a href="/blog/typing-techniques-compared/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing techniques comparison</a> shows which method fits your goal.
+      </p>
+
+      <h2>A 7-day practice plan</h2>
+
+      <p>
+        You do not need a course. You need short, focused sessions.
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Day 1:</strong> Take a typing test. Note your WPM and accuracy.</li>
+        <li><strong>Day 2:</strong> Learn Track Changes. Edit a sample page with it on.</li>
+        <li><strong>Day 3:</strong> Practice Ctrl+H on a document full of repeated errors.</li>
+        <li><strong>Day 4:</strong> Rebuild a page using heading styles only.</li>
+        <li><strong>Day 5:</strong> Create and format three tables of different sizes.</li>
+        <li><strong>Day 6:</strong> Run a timed mock test. Use a messy sample document and a 20 minute timer.</li>
+        <li><strong>Day 7:</strong> Review mistakes, then repeat the typing test.</li>
+      </ul>
+
+      <p>
+        Save your best typing result. Once you hit your target, a <a href="/certificates/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast certificate</a> gives you a PDF you can attach next to your application.
+      </p>
+
+      <h2>Common mistakes in Word editing tests</h2>
+
+      <p>
+        <strong>Skipped instructions.</strong> Tests hide rules inside the instructions. Read all of them first.
+      </p>
+
+      <p>
+        <strong>Hand formatting.</strong> Typing bold text by hand looks fine but costs time and points.
+      </p>
+
+      <p>
+        <strong>No saves.</strong> Press Ctrl+S early and often.
+      </p>
+
+      <p>
+        <strong>Track Changes switched off.</strong> The reviewer cannot see your work without it.
+      </p>
+
+      <p>
+        <strong>One slow fix.</strong> Move on and return if time allows.
+      </p>
+
+      <h2>Frequently asked questions</h2>
+
+      <h3>What Word skills do employers test most?</h3>
+      <p>
+        Track changes, find and replace, styles, tables and basic formatting. Speed and accuracy count too.
+      </p>
+
+      <h3>How do I turn on Track Changes in Word?</h3>
+      <p>
+        Open the Review tab and select Track Changes. Word then marks every edit you make.
+      </p>
+
+      <h3>What is the shortcut for find and replace in Word?</h3>
+      <p>
+        Press Ctrl+H. Press Ctrl+F if you only want to find text.
+      </p>
+
+      <h3>How do I undo and redo in Word?</h3>
+      <p>
+        Press Ctrl+Z to undo and Ctrl+Y to redo.
+      </p>
+
+      <h3>How long does it take to prepare for a Word test?</h3>
+      <p>
+        Most people feel ready after a week of 30 minute sessions. A rough sample document and a timer make the best practice.
+      </p>
+
+      <h3>Do I need to type fast for a Word editing test?</h3>
+      <p>
+        It helps. Faster typing leaves more time for formatting and checks. A score of 40 to 60 WPM suits most editing roles.
+      </p>
+
+      <h2>Start with your speed</h2>
+
+      <p>
+        Test your typing, then work through the plan above. Begin with the <a href="/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a> and see where you stand today.
+      </p>
     `,
   },
 ];
