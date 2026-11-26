@@ -64,7 +64,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
 
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": post.schemaType || "BlogPosting",
     headline: post.title,
     description: post.metaDescription,
     image: [post.featuredImage],
@@ -124,6 +124,9 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
         } else if (href.startsWith("/") && !href.startsWith("//")) {
           e.preventDefault();
           onNavigatePath(href);
+        } else if (href.startsWith("https://www.typeblast.com/")) {
+          e.preventDefault();
+          onNavigatePath(href.replace("https://www.typeblast.com", ""));
         }
       }
     }
@@ -132,7 +135,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
   return (
     <article className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       <SeoHead
-        title={`${post.title} - TypeBlast Guide`}
+        title={post.metaTitle || `${post.title} - TypeBlast Guide`}
         description={post.metaDescription}
         canonicalUrl={currentUrl}
         structuredData={[breadcrumbSchema, articleSchema]}
@@ -260,18 +263,25 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
       </header>
 
       {/* Featured Banner Image */}
-      <div className="relative rounded-2xl overflow-hidden border border-slate-800 aspect-video max-h-[420px] shadow-xl bg-slate-900">
-        <img
-          src={post.featuredImage}
-          alt={post.imageAlt || post.title}
-          referrerPolicy="no-referrer"
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).src =
-              "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=1200&auto=format&fit=crop&q=80";
-          }}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      <figure className="space-y-2">
+        <div className="relative rounded-2xl overflow-hidden border border-slate-800 aspect-video max-h-[420px] shadow-xl bg-slate-900">
+          <img
+            src={post.featuredImage}
+            alt={post.imageAlt || post.title}
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src =
+                "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=1200&auto=format&fit=crop&q=80";
+            }}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        {post.imageCredit && (
+          <figcaption className="text-[11px] text-slate-400 text-right">
+            {post.imageCredit}
+          </figcaption>
+        )}
+      </figure>
 
       {/* Main Article Body */}
       <div 

@@ -125,7 +125,7 @@ app.get("/sitemap.xml", (_req, res) => {
   const baseUrl = "https://www.typeblast.com";
   const today = new Date().toISOString().split("T")[0];
 
-  const publicRoutes = [
+  const publicRoutes: { path: string; priority: string; changefreq: string; lastmod?: string }[] = [
     { path: "/", priority: "1.0", changefreq: "daily" },
     { path: "/typing-test/", priority: "0.9", changefreq: "daily" },
     { path: "/daily-typing-challenge/", priority: "0.9", changefreq: "daily" },
@@ -139,6 +139,10 @@ app.get("/sitemap.xml", (_req, res) => {
     { path: "/blog/gamified-typing-for-kids-and-students/", priority: "0.8", changefreq: "weekly" },
     { path: "/blog/mechanical-keyboard-switches-wpm-guide/", priority: "0.8", changefreq: "weekly" },
     { path: "/blog/data-entry-typing-speed/", priority: "0.8", changefreq: "weekly" },
+    { path: "/blog/two-finger-typing-speed-how-to-switch/", priority: "0.8", changefreq: "weekly", lastmod: "2026-11-26" },
+    { path: "/blog/ten-key-typing-guide/", priority: "0.8", changefreq: "weekly", lastmod: "2026-11-26" },
+    { path: "/blog/one-handed-typing-guide/", priority: "0.8", changefreq: "weekly", lastmod: "2026-11-26" },
+    { path: "/blog/typing-techniques-compared/", priority: "0.8", changefreq: "weekly", lastmod: "2026-11-26" },
     { path: "/typing-speed-test/", priority: "0.8", changefreq: "weekly" },
     { path: "/wpm-test/", priority: "0.8", changefreq: "weekly" },
     { path: "/typing-accuracy-test/", priority: "0.8", changefreq: "weekly" },
@@ -157,7 +161,7 @@ app.get("/sitemap.xml", (_req, res) => {
     .map(
       (r) => `  <url>
     <loc>${baseUrl}${r.path}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${r.lastmod || today}</lastmod>
     <changefreq>${r.changefreq}</changefreq>
     <priority>${r.priority}</priority>
   </url>`

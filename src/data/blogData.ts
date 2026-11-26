@@ -19,6 +19,7 @@ export interface BlogPost {
   id: string;
   slug: string;
   title: string;
+  metaTitle?: string;
   metaDescription: string;
   excerpt: string;
   category: BlogCategory;
@@ -27,9 +28,11 @@ export interface BlogPost {
   updatedDate: string;   // ISO format e.g. "2026-08-05"
   featuredImage: string;
   imageAlt?: string;
+  imageCredit?: string;
   readingTime: string;
   tags: string[];
   featured?: boolean;
+  schemaType?: "Article" | "BlogPosting";
   content: string; // Structured HTML or rich text content
 }
 
@@ -1676,6 +1679,910 @@ export const BLOG_POSTS: BlogPost[] = [
         <li><a href="https://news.vanderbilt.edu/2016/10/18/todays-self-taught-typists-almost-as-fast-as-touch-typistsas-long-as-they-can-see-the-keyboard/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Vanderbilt University: Self-taught typists almost as fast as touch typists</a> (2016)</li>
         <li><a href="https://www.bls.gov/opub/mlr/2023/article/occupational-projections-overview-2021-31.htm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">U.S. Bureau of Labor Statistics: Occupational projections overview, 2021 to 31</a></li>
         <li><a href="https://www.bls.gov/oes/2023/may/oes439021.htm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">U.S. Bureau of Labor Statistics: Data Entry Keyers, May 2023 OEWS</a></li>
+      </ul>
+    `,
+  },
+  {
+    id: "post-two-finger-typing-speed-how-to-switch",
+    slug: "two-finger-typing-speed-how-to-switch",
+    title: "Two Finger Typing: How Fast Can You Get, and When Should You Switch?",
+    metaTitle: "Two Finger Typing: Speed Limits and When to Switch",
+    metaDescription: "Is two finger typing slower? See what two large studies found, when to switch to touch typing, and a four-week plan to make the move.",
+    excerpt: "Research shows two finger typists can keep pace with some touch typists—and where the method runs out of road. See what two large studies found, when to switch, and a four-week plan to make the move.",
+    category: "Touch Typing",
+    author: AUTHORS.elena,
+    publishedDate: "2026-11-05",
+    updatedDate: "2026-11-26",
+    featuredImage: "https://images.unsplash.com/photo-1684181417136-3b03e7352ab3?auto=format&fit=crop&w=1600&q=80",
+    imageAlt: "Close-up of a hand typing on a laptop keyboard",
+    imageCredit: "Photo by William Mathews Walele on Unsplash",
+    readingTime: "6 min read",
+    tags: ["Touch Typing", "Two Finger Typing", "Typing Speed", "Hunt and Peck", "Four-Week Plan"],
+    featured: false,
+    schemaType: "Article",
+    content: `
+      <p>
+        You type with two fingers, and you get the job done. Maybe you hit 40 WPM. Maybe you hit 60. So why does every typing site tell you to switch to ten fingers?
+      </p>
+
+      <p>
+        Here is the honest answer. Research shows two finger typists can keep pace with some touch typists. It also shows where the method runs out of road. This guide covers both, then gives you a four-week plan if you decide to change.
+      </p>
+
+      <h2>Is Two Finger Typing Slower Than Touch Typing?</h2>
+
+      <p>
+        Two finger typing is slower on average, but the gap is smaller than most people expect. In a Vanderbilt University study of 48 typists, standard touch typists averaged 80 WPM and nonstandard typists averaged 72. The bigger difference showed up when researchers hid the keyboard: the nonstandard typists lost speed and accuracy.
+      </p>
+
+      <p>
+        A much larger study points the same way. Researchers at Aalto University and the University of Cambridge tracked 168,000 volunteers and 136 million keystrokes. Most people typed between 30 and 60 WPM. The average was 52, and the fastest typists passed 120.
+      </p>
+
+      <p>
+        The Aalto team also found that people who had taken a touch typing class often drifted away from strict ten-finger technique. Their speed and error rates looked a lot like those of people who never took a class. Modern keyboards need very little force, so a self-taught style can keep up with the textbook method.
+      </p>
+
+      <h2>Where Two Finger Typing Hits a Ceiling</h2>
+
+      <p>
+        Speed is only part of the picture. Two finger typing runs into three limits.
+      </p>
+
+      <p>
+        <strong>Back-to-back keys.</strong> Fast typists in the Aalto data pressed the next key before they lifted the last one, on 40 to 70% of their keystrokes. Researchers call this rollover. It needs different fingers on back-to-back letters. Two fingers can alternate on some pairs, but many pairs force the same finger to hop across the board. Take the word "were." All four letters sit on the left side. A touch typist spreads them across the ring, middle, and index fingers, so the fingers overlap. A two finger typist sends one finger hopping from key to key.
+      </p>
+
+      <p>
+        <strong>Eyes on the keys.</strong> Most two finger typists watch the keyboard. That habit slows you down and hides your typos until you glance up. The Aalto researchers named learning to type without looking at your fingers as an important goal. You catch errors sooner when your eyes stay on the screen.
+      </p>
+
+      <p>
+        <strong>Comfort over long sessions.</strong> Wrists or neck aching after a long day? Check your desk setup first. Our <a href="https://www.typeblast.com/blog/ergonomics-and-wrist-health-for-typists/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing ergonomics guide</a> covers wrist angles and posture.
+      </p>
+
+      <h2>Signs You Should Switch to Touch Typing</h2>
+
+      <p>
+        Switch if two or more of these sound like you:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>You look at the keyboard for most keys.</li>
+        <li>Your speed has sat in the same range for months.</li>
+        <li>Your job or exam sets a 60 WPM bar or higher. Our <a href="https://www.typeblast.com/blog/data-entry-typing-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">data entry typing speed guide</a> shows what employers expect.</li>
+        <li>You write long documents, reports, or code every day.</li>
+        <li>You spot most of your errors only after you look up.</li>
+      </ul>
+
+      <h2>Signs You Can Stay With Two Fingers</h2>
+
+      <p>
+        Keep your style if your speed already meets your goals and your accuracy holds at 95% or higher. The same goes if your eyes stay on the screen and your hands feel fine after a long day. A method that works does not need fixing.
+      </p>
+
+      <p>
+        Not sure where you stand? Compare your number with the ranges in our <a href="https://www.typeblast.com/blog/good-typing-speed-wpm-benchmarks/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">guide to good typing speeds by age and job</a>.
+      </p>
+
+      <h2>A Four-Week Plan to Move From Two Fingers to Touch Typing</h2>
+
+      <p>
+        Plan on 15 to 20 minutes a day. A 2026 guide from Data Entry Institute says that much daily practice brings noticeable gains within a few weeks. Expect your speed to drop at first. That dip is normal while your hands learn new paths, so track it and watch the recovery.
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Week 1: Learn the home row.</strong> Rest your fingers on A, S, D, F and J, K, L, semicolon. Type slow, real words. Our <a href="https://www.typeblast.com/blog/home-row-finger-placement-mastery/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">home row finger placement guide</a> shows the exact positions, and the <a href="https://www.typeblast.com/touch-typing/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast touch typing course</a> gives you guided lessons.</li>
+        <li><strong>Week 2: Add the top and bottom rows.</strong> Cover your hands with a sheet of paper or a cloth so you cannot peek. Go slow and let each finger return home after every reach.</li>
+        <li><strong>Week 3: Practice rollover.</strong> Type common words like "the," "and," and "you." Use a different finger for each letter, and start the next key before you lift the last.</li>
+        <li><strong>Week 4: Test and compare.</strong> Run a 1-minute and a 3-minute test on the <a href="https://www.typeblast.com/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a>. Compare both with your Week 0 score, and watch accuracy before speed.</li>
+      </ol>
+
+      <p>
+        When you hit 60 WPM with clean accuracy, the next step is our guide to <a href="https://www.typeblast.com/blog/how-to-type-100-wpm-touch-typing-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">reaching 100+ WPM with touch typing</a>.
+      </p>
+
+      <h2>Can't Switch Fully? Improve Your Style Instead</h2>
+
+      <p>
+        The Aalto researchers say you do not have to adopt strict touch typing to get faster. They suggest five habits that work for any style:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li>Slow down enough to avoid errors. Errors cost more time to fix than you gain from the extra speed.</li>
+        <li>Keep your eyes on the screen, not on your fingers.</li>
+        <li>Use different fingers on successive keys when you can.</li>
+        <li>Take a test now and then on fresh sentences, so you do not memorize the text.</li>
+        <li>Practice on purpose, so bad habits do not creep back.</li>
+      </ul>
+
+      <p>
+        Our <a href="https://www.typeblast.com/blog/improve-typing-speed-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">complete guide to improving your typing speed</a> builds these habits into a full practice routine. For a side-by-side look at every method, see <a href="https://www.typeblast.com/blog/typing-techniques-compared/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing techniques compared</a>.
+      </p>
+
+      <h2>Measure Your Baseline First</h2>
+
+      <p>
+        Do not change anything until you know your starting point. Take the <a href="https://www.typeblast.com/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing test</a> for speed, then the <a href="https://www.typeblast.com/typing-accuracy-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing accuracy test</a> to see how many errors slip through. Write both numbers down. Retest after a week of practice and compare.
+      </p>
+
+      <h2>Common Questions About Two Finger Typing</h2>
+
+      <h3>Is two finger typing bad?</h3>
+      <p>
+        No. It works for many people, and large studies show self-taught styles can reach speeds close to touch typing. The method hurts you only when it keeps your speed below what your job needs or forces you to watch the keys.
+      </p>
+
+      <h3>How fast can you type with two fingers?</h3>
+      <p>
+        It varies a lot. The Aalto study found most people type 30 to 60 WPM, and some reach 120 or more. Your ceiling with two fingers depends on how often back-to-back letters force the same finger to move.
+      </p>
+
+      <h3>How long does it take to learn touch typing?</h3>
+      <p>
+        Plan on several weeks of daily practice to feel comfortable. Speed usually dips at first and then climbs past your old level. Short daily sessions beat long weekend ones.
+      </p>
+
+      <h3>Is hunt and peck the same as two finger typing?</h3>
+      <p>
+        Close. Hunt and peck means searching the keyboard with your eyes and pressing keys with one or two fingers. Two finger typing can include typists who know the layout well and look at the keys less.
+      </p>
+
+      <h2>Sources</h2>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4 text-xs">
+        <li><a href="https://www.aalto.fi/en/news/the-traits-of-fast-typists-discovered-by-analysing-136-million-keystrokes" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Aalto University: The traits of fast typists discovered by analysing 136 million keystrokes</a> (2018)</li>
+        <li><a href="https://news.vanderbilt.edu/2016/10/18/todays-self-taught-typists-almost-as-fast-as-touch-typistsas-long-as-they-can-see-the-keyboard/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Vanderbilt University: Today's self-taught typists almost as fast as touch typists</a> (2016)</li>
+        <li><a href="https://dataentryinstitute.org/the-typing-skills-every-data-entry-professional-needs/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Data Entry Institute: The typing skills every data entry professional needs</a> (January 2026)</li>
+      </ul>
+    `,
+  },
+  {
+    id: "post-ten-key-typing-guide",
+    slug: "ten-key-typing-guide",
+    title: "Ten Key Typing: How to Use the Numeric Keypad Faster",
+    metaTitle: "Ten Key Typing Guide: Finger Position, KPH, Practice",
+    metaDescription: "Learn ten key typing on the numeric keypad: finger placement, KPH benchmarks, accuracy targets, and a four-week practice plan for data entry jobs.",
+    excerpt: "The numeric keypad fixes slow number entry. Learn where every finger goes, what KPH speeds count as good, and a four-week practice plan to build speed and accuracy.",
+    category: "Career & Jobs",
+    author: AUTHORS.marcus,
+    publishedDate: "2026-11-10",
+    updatedDate: "2026-11-26",
+    featuredImage: "https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48f?auto=format&fit=crop&w=1600&q=80",
+    imageAlt: "Calculator and pen on a desk next to a notebook",
+    imageCredit: "Photo by Recha Oktaviani on Unsplash",
+    readingTime: "7 min read",
+    tags: ["Ten Key Typing", "Numeric Keypad", "KPH", "Data Entry", "Career & Jobs", "Typing Practice"],
+    featured: false,
+    schemaType: "Article",
+    content: `
+      <p>
+        Open a spreadsheet full of invoice totals and you will feel it. The number row on top of your keyboard is slow. Your hand travels, your eyes bounce, and one wrong digit changes the whole figure.
+      </p>
+
+      <p>
+        The numeric keypad fixes that. Accountants, data entry clerks, and billing teams use it all day, and employers test it. This guide shows you where every finger goes, what speeds count as good, and how to build both speed and accuracy.
+      </p>
+
+      <h2>What Is Ten Key Typing?</h2>
+
+      <p>
+        Ten key typing means entering numbers on the numeric keypad with your right hand, without looking at the keys. Employers score it in keystrokes per hour (KPH), not words per minute. The pad sits at the right edge of a full-size keyboard and holds the digits 0 through 9 plus math keys and Enter.
+      </p>
+
+      <p>
+        The name comes from the ten digit keys. The classic pad has 17 keys in all, including the arithmetic keys. Press Num Lock off and the same keys turn into arrow and page keys, so keep it on for number entry.
+      </p>
+
+      <h2>Finger Position on the Numeric Keypad</h2>
+
+      <p>
+        The keypad has its own home row: the 4, 5, and 6 keys. Find the 5 key by touch. It has a small raised bump, just like the F and J keys on the main keyboard. Park your middle finger there and the rest of your hand falls into place.
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg max-w-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Finger</th>
+              <th class="p-3.5 sm:p-4">Keys it covers</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Index</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">4, 1, 7</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Middle</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">5, 2, 8</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Ring</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">6, 3, decimal point, 9</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Thumb</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">0</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Pinky</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">Plus and Enter</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Keep your hand light and let each finger return to its row after a reach. Do not hover your whole hand over the keys. The 5 key is your anchor, so check it by feel whenever you lose your place.
+      </p>
+
+      <h2>KPH vs WPM: How to Read the Numbers</h2>
+
+      <p>
+        Numbers do not form words, so tests count every keystroke. The conversion is simple: KPH equals WPM times 300. A 10,000 KPH score matches about 33 WPM. A 15,000 KPH score matches 50 WPM.
+      </p>
+
+      <p>
+        Sources draw the lines in slightly different places, but the pattern holds:
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg max-w-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">KPH</th>
+              <th class="p-3.5 sm:p-4">What it means</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">About 8,000</td>
+              <td class="p-3.5 sm:p-4">Average for most people</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">10,000 to 12,000</td>
+              <td class="p-3.5 sm:p-4">Job-ready for most entry-level roles</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">12,000 to 15,000</td>
+              <td class="p-3.5 sm:p-4">Advanced</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-mono font-bold text-cyan-400">15,000 and up</td>
+              <td class="p-3.5 sm:p-4">Strong enough for high-volume data entry</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        These ranges follow TypeQuicker's 2026 breakdown. Typing Lounge sets similar marks: 8,000 as a minimum, 10,000 as good, and 12,000 as very good. For the full hiring picture, read our guide to <a href="https://www.typeblast.com/blog/data-entry-typing-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">data entry typing speed and what employers expect</a>.
+      </p>
+
+      <h2>Accuracy Counts More Than Speed</h2>
+
+      <p>
+        A wrong digit does real damage. It can change a total, an account number, or a claim amount. TypeQuicker suggests a target of 95% to 98% accuracy, and Typing Lounge cites about 98% as typical for good typists. A clean 10,000 KPH beats a sloppy 13,000.
+      </p>
+
+      <p>
+        Most mistakes come from a short list: swapped digits, doubled keys, and a missed Enter. Find your repeat offenders and drill them. Do you often type 58 when you mean 85? Practice that pair slowly until your fingers stop guessing. Typing Lounge also suggests deleting an error right away during practice and restarting the line, so you do not train yourself to accept mistakes.
+      </p>
+
+      <p>
+        Check your baseline with the <a href="https://www.typeblast.com/typing-accuracy-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing accuracy test</a> before you push for speed.
+      </p>
+
+      <h2>How to Get Faster on the Keypad</h2>
+
+      <p>
+        Short, focused sessions beat long ones. Ten to fifteen minutes a day works well, according to TypeQuicker. Use this four-week plan:
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Week 1: Accuracy only.</strong> Keep Num Lock on, park on the 5 key, and type slow digit strings. Do not watch your hand.</li>
+        <li><strong>Week 2: Add the extras.</strong> Practice the decimal point, plus, and Enter. Type realistic numbers like dates, prices, and invoice IDs.</li>
+        <li><strong>Week 3: Add the clock.</strong> Run one-minute drills and stop when accuracy slips under 95%.</li>
+        <li><strong>Week 4: Test like an employer.</strong> Run a three to five minute test and project your hourly speed. Then compare it with the table above.</li>
+      </ol>
+
+      <p>
+        Keep your eyes on the source document, not the keypad. A TestMyTyping guide calls that habit the single biggest factor in moving from 8,000 to 12,000 KPH.
+      </p>
+
+      <h2>No Numpad? Use the Number Row or an External Keypad</h2>
+
+      <p>
+        Many laptops skip the keypad. You still have two options.
+      </p>
+
+      <p>
+        <strong>The number row.</strong> Your left hand covers 1 through 5, with the index finger taking 4 and 5. Your right hand covers 6 through 0, with the index finger taking 6 and 7. It works, but it is slower for long number runs.
+      </p>
+
+      <p>
+        <strong>An external keypad.</strong> USB and Bluetooth keypads plug into a laptop and give you the full layout. They suit anyone who enters numbers for more than a few minutes a day.
+      </p>
+
+      <h2>Ten Key Drills to Try Today</h2>
+
+      <p>
+        Short drills train your fingers faster than random number typing. Try these in order:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Column sweeps.</strong> Type 147, then 258, then 369. Each string runs down one finger's column. Repeat until you stop looking.</li>
+        <li><strong>Home row loops.</strong> Type 456, 654, 465, and 546. Your three fingers learn to move without your hand shifting.</li>
+        <li><strong>Swap catchers.</strong> Type pairs like 12 21, 13 31, and 58 85. These train you to catch swapped digits.</li>
+        <li><strong>Decimals and zero.</strong> Type amounts like 100.50, 205.05, and 30.01. The thumb on 0 and the ring finger on the decimal point need their own reps.</li>
+        <li><strong>Real data.</strong> Type dates, invoice IDs, and price lists from an actual spreadsheet. The pattern is messy, just like a real job.</li>
+      </ul>
+
+      <p>
+        Run each drill for two minutes. Stop a drill when accuracy slips under 95%, then restart slower.
+      </p>
+
+      <h2>How Employers Test Ten Key Skills</h2>
+
+      <p>
+        Expect a test of one to five minutes. Some use plain digit strings. Others mix in symbols to copy real data entry. Platforms score differently: some count every keystroke, including Enter, while others show net speed after errors. Read the instructions before you start, and practice on a keypad that feels like the one you will use on test day.
+      </p>
+
+      <p>
+        Your typing skills also carry over from letters to numbers. A solid base helps, and our <a href="https://www.typeblast.com/blog/improve-typing-speed-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">complete guide to improving typing speed</a> covers the habits that transfer. Compare ten key work with other methods in <a href="https://www.typeblast.com/blog/typing-techniques-compared/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing techniques compared</a>, or build your general speed with the <a href="https://www.typeblast.com/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a>.
+      </p>
+
+      <h2>Common Questions About Ten Key Typing</h2>
+
+      <h3>What is a good ten key speed?</h3>
+      <p>
+        A good ten key speed starts at 10,000 KPH with 95% accuracy or better. That puts you in the job-ready range for most entry-level data entry roles. Experts pass 12,000 KPH, and high-volume jobs may ask for 15,000 or more.
+      </p>
+
+      <h3>How do I convert WPM to KPH?</h3>
+      <p>
+        Multiply your WPM by 300. A score of 40 WPM equals 12,000 KPH, and 60 WPM equals 18,000 KPH. The result is an estimate, since numbers and symbols behave differently from words.
+      </p>
+
+      <h3>Which finger presses Enter on the keypad?</h3>
+      <p>
+        TestMyTyping's guide uses the right pinky for Enter, and Typing Lounge gives the pinky the plus key. Practice the reach on its own so it does not slow your rhythm.
+      </p>
+
+      <h3>Can I use the number row instead of the keypad?</h3>
+      <p>
+        You can, but the keypad is faster and keeps your hand still. The number row makes sense on laptops without a keypad or for short entries.
+      </p>
+
+      <h2>Sources</h2>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4 text-xs">
+        <li><a href="https://www.typequicker.com/learn/what-is-10-key-typing" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">TypeQuicker: What Exactly Is 10-Key Typing?</a> (January 2026)</li>
+        <li><a href="https://www.typinglounge.com/number-pad-typing" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Typing Lounge: Number Pad, How To Increase 10-Key Speed</a></li>
+        <li><a href="https://www.testmytyping.com/10-key-typing-test/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">TestMyTyping: Free 10 Key Typing Test</a></li>
+      </ul>
+    `,
+  },
+  {
+    id: "post-one-handed-typing-guide",
+    slug: "one-handed-typing-guide",
+    title: "One-Handed Typing: A Full Guide for Both Hands",
+    metaTitle: "One-Handed Typing Guide: Technique, Setup, Practice",
+    metaDescription: "Learn one-handed typing on a standard keyboard: home row anchors for each hand, a reach method, Shift tips, a 15-minute daily plan, and tools.",
+    excerpt: "A standard QWERTY keyboard works with one hand, and a clear method makes it far less clumsy. Learn how to set up, which keys each finger owns, and how to practice.",
+    category: "Keyboard Skills",
+    author: AUTHORS.research,
+    publishedDate: "2026-11-12",
+    updatedDate: "2026-11-26",
+    featuredImage: "https://images.unsplash.com/photo-1613988753173-8db625c972c5?auto=format&fit=crop&w=1600&q=80",
+    imageAlt: "A hand resting on a computer keyboard",
+    imageCredit: "Photo by Andrey Novik on Unsplash",
+    readingTime: "7 min read",
+    tags: ["One-Handed Typing", "Keyboard Skills", "Home Row", "Typing Practice", "Accessibility"],
+    featured: false,
+    schemaType: "Article",
+    content: `
+      <p>
+        People type with one hand for plenty of reasons. A wrist heals from an injury. A limb difference makes one-handed typing the daily norm. Or you hold a phone, a coffee, or a mouse in the other hand and still need to get words on the screen.
+      </p>
+
+      <p>
+        The good news: you do not need a special keyboard. A standard QWERTY keyboard works with one hand, and a clear method makes it far less clumsy. Here is how to set up, which keys each finger owns, and how to practice.
+      </p>
+
+      <h2>How Do You Type With One Hand?</h2>
+
+      <p>
+        Keep the standard QWERTY layout, rest your hand on its home row keys, and move your whole hand to reach keys far from home. Press the key, then return to the home position every time. Your left hand anchors on A, S, D, F. Your right hand anchors on J, K, L, and semicolon. Your thumb handles the space bar.
+      </p>
+
+      <p>
+        That return habit is the whole trick. Without it, your hand drifts across the keyboard and accuracy falls apart.
+      </p>
+
+      <h2>Set Up Your Keyboard and Desk</h2>
+
+      <p>
+        Your setup matters as much as your technique. Three small changes help most:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Slide the keyboard toward your typing hand.</strong> Many guides suggest centering your hand over F, G, H and J, and offsetting the keyboard toward the active side. The Children's Hemiplegia and Stroke Association (CHASA) uses this setup in its keyboarding guide.</li>
+        <li><strong>Tilt the keyboard a little.</strong> AT&amp;Me's one-handed typing guide suggests a slight tilt so your wrist and forearm stay in line.</li>
+        <li><strong>Rest your forearm.</strong> Support it on the desk so your shoulder can relax.</li>
+      </ul>
+
+      <p>
+        Long sessions load a single hand with every keystroke, so read our <a href="https://www.typeblast.com/blog/ergonomics-and-wrist-health-for-typists/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing ergonomics guide</a> for wrist angles and break habits.
+      </p>
+
+      <h2>Left-Hand and Right-Hand Home Positions</h2>
+
+      <p>
+        Each finger covers its home key plus the keys next to it.
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Finger</th>
+              <th class="p-3.5 sm:p-4">Left hand</th>
+              <th class="p-3.5 sm:p-4">Right hand</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Index</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">F (also G, R, T, V, B)</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">J (also H, U, Y, N, M)</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Middle</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">D</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">K</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Ring</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">S</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">L</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Pinky</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">A</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">Semicolon</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Thumb</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">Space</td>
+              <td class="p-3.5 sm:p-4 font-mono text-cyan-400">Space</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Your hand covers its own side of the keyboard with little effort. The far side takes a trip.
+      </p>
+
+      <h2>The Near, Stretch, Travel Method</h2>
+
+      <p>
+        TypeQuicker's one-handed guide sorts keys into three zones, and the idea works well. Here it is in plain terms:
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Near keys.</strong> You press these without moving your wrist. Type them at full speed.</li>
+        <li><strong>Stretch keys.</strong> You reach these with a small finger extension. Slow down a touch, but keep your wrist still.</li>
+        <li><strong>Travel keys.</strong> These sit on the far side. Move your whole hand, press the key, and bring the hand back to home.</li>
+      </ol>
+
+      <p>
+        Choose travel over stretch whenever a key sits far away. A stretch strains the fingers and causes typos. A whole-hand move is faster and cleaner. Where you can, roll across neighboring keys instead of jumping between distant ones.
+      </p>
+
+      <h2>Shift, Enter, Backspace, and Punctuation</h2>
+
+      <p>
+        These keys slow down most one-handed typists.
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Shift.</strong> Use your pinky for Shift on your own side. For the far-side Shift, treat it as a travel key. For all-caps stretches, tap Caps Lock instead of holding Shift.</li>
+        <li><strong>Sticky Keys.</strong> Windows and macOS both include Sticky Keys in their accessibility settings. It lets you press Shift, Control, or Alt one key at a time instead of holding them down while you press another key.</li>
+        <li><strong>Enter and Backspace.</strong> Move the whole hand, press, and return to home.</li>
+        <li><strong>Punctuation.</strong> Drill commas, periods, and apostrophes on their own. Accuracy breaks down here first.</li>
+      </ul>
+
+      <h2>A 15-Minute Daily Practice Plan</h2>
+
+      <p>
+        Short, steady sessions beat long ones. Try this split:
+      </p>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>3 minutes: home position drills.</strong> Type slow words made of keys on your own side. Return to home after every word.</li>
+        <li><strong>4 minutes: travel words.</strong> Type common words that force a trip across the keyboard, like "the," "and," "you," "with," and "for."</li>
+        <li><strong>4 minutes: Shift and punctuation.</strong> Type short sentences with capitals, commas, and periods.</li>
+        <li><strong>4 minutes: timed sentences.</strong> Aim for 95% accuracy or better. Raise the pace only when accuracy holds.</li>
+      </ol>
+
+      <p>
+        For structured lessons, Edclub (the TypingClub course library) lists a right-hand course with more than 400 lessons. Test your progress every week on the <a href="https://www.typeblast.com/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a>, and check errors with the <a href="https://www.typeblast.com/typing-accuracy-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing accuracy test</a>. Accept a lower WPM at the start. Clean technique first, and speed follows.
+      </p>
+
+      <p>
+        New to home row ideas? Our <a href="https://www.typeblast.com/blog/home-row-finger-placement-mastery/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">home row finger placement guide</a> explains the anchor positions for two hands, and the same logic carries over to one.
+      </p>
+
+      <h2>Starter Word Lists for One-Handed Practice</h2>
+
+      <p>
+        Start with words that stay on your side of the keyboard, so you can build rhythm without any travel.
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Left hand only:</strong> stage, fast, desert, wafer, great, tread, bread, crew, base, reverb.</li>
+        <li><strong>Right hand only:</strong> pump, lion, hill, union, ploy, mill, plum, kimono, onion, look.</li>
+      </ul>
+
+      <p>
+        Once those feel smooth, mix in words that need a trip across the keyboard, such as "write," "house," "people," and "number." Slow down for the trip, hit the key, and return home before the next letter.
+      </p>
+
+      <h2>Tools That Can Help</h2>
+
+      <p>
+        One-handed typing on a standard keyboard works for many people, but it is not the only path. The Shirley Ryan AbilityLab guide to computer access options suggests asking a few questions before you pick: how much time you spend at the computer, how fast you need to type, and whether you will stick with the method. Options include one-handed keyboards, voice typing, and word prediction. Both Windows and macOS include built-in dictation, which suits long drafts well.
+      </p>
+
+      <p>
+        Compare this method with others in <a href="https://www.typeblast.com/blog/typing-techniques-compared/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing techniques compared</a>. Our <a href="https://www.typeblast.com/blog/improve-typing-speed-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">guide to improving typing speed</a> covers habits that help any style.
+      </p>
+
+      <h2>Common Questions About One-Handed Typing</h2>
+
+      <h3>Can I type with one hand on a normal keyboard?</h3>
+      <p>
+        Yes. A standard QWERTY keyboard works. Rest your hand on its home keys, move the whole hand to reach far keys, and return to home after each reach. A keyboard offset toward your typing hand helps.
+      </p>
+
+      <h3>Is left-hand or right-hand typing easier?</h3>
+      <p>
+        Use the hand you can control best. The technique is the same for both. Left-hand typists anchor on A, S, D, F. Right-hand typists anchor on J, K, L, and semicolon.
+      </p>
+
+      <h3>How fast can I type with one hand?</h3>
+      <p>
+        Expect it to be slower than two-handed typing, especially at first. Speed depends on your practice and how often you travel across the keyboard. Track your own progress rather than chasing a target.
+      </p>
+
+      <h3>Should I use a one-handed keyboard instead?</h3>
+      <p>
+        It depends on your needs and budget. Many people start with a standard keyboard and the habits above, then add a specialty keyboard or voice tools if they want more speed or less strain.
+      </p>
+
+      <h2>Sources</h2>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4 text-xs">
+        <li><a href="https://www.typequicker.com/learn/one-handed-typing" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">TypeQuicker: One-Handed Typing, Left-Hand and Right-Hand Strategy</a> (January 2026)</li>
+        <li><a href="https://www.atandme.com/learn-one-handed-typing/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">AT&amp;Me: Learn One-Handed Typing</a></li>
+        <li><a href="https://chasa.org/school/keyboarding/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">CHASA: Handwriting and Keyboarding with One Hand</a></li>
+        <li><a href="https://www.sralab.org/lifecenter/resources/computer-access-options-one-handed-typing" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Shirley Ryan AbilityLab: Computer Access Options for One-Handed Typing</a></li>
+        <li><a href="https://www.edclub.com/library/right-hand-typing" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Edclub: Right Hand Typing</a></li>
+      </ul>
+    `,
+  },
+  {
+    id: "post-typing-techniques-compared",
+    slug: "typing-techniques-compared",
+    title: "Typing Techniques Compared: Which Method Fits You?",
+    metaTitle: "Typing Techniques Compared: Which Method Fits You?",
+    metaDescription: "Compare touch typing, two finger typing, hybrid styles, one-handed typing, and ten key. See what research says and which method fits your goal.",
+    excerpt: "Compare touch typing, two finger typing, hybrid styles, one-handed typing, and ten key. See what research says, avoid common myths, and pick the method that fits your goal.",
+    category: "Touch Typing",
+    author: AUTHORS.elena,
+    publishedDate: "2026-11-17",
+    updatedDate: "2026-11-26",
+    featuredImage: "https://images.unsplash.com/photo-1696444994097-c69bc74bf65f?auto=format&fit=crop&w=1600&q=80",
+    imageAlt: "Close-up of a black computer keyboard",
+    imageCredit: "Photo by Hongwei FAN on Unsplash",
+    readingTime: "10 min read",
+    tags: ["Pillar Guide", "Touch Typing", "Two Finger Typing", "Ten Key Typing", "One-Handed Typing", "Typing Techniques"],
+    featured: false,
+    schemaType: "Article",
+    content: `
+      <p>
+        Two people can type the same sentence in very different ways. One rests all ten fingers on the home row and never glances down. Another uses two fingers and still keeps up. A third types numbers on a keypad or does it all with one hand.
+      </p>
+
+      <p>
+        So which technique is best? That depends on your goal, your job, and your body. This guide compares every common method, shows what the research says, and points you to a deeper guide for each one.
+      </p>
+
+      <h2>What Are the Main Typing Techniques?</h2>
+
+      <p>
+        The main typing techniques are touch typing, hunt and peck (two finger typing), hybrid or self-taught styles, one-handed typing, and ten key typing. Touch typing assigns each finger a set of keys and keeps your eyes off the keyboard. The others trade some of that structure for flexibility or a special use.
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Technique</th>
+              <th class="p-3.5 sm:p-4">How it works</th>
+              <th class="p-3.5 sm:p-4">Best for</th>
+              <th class="p-3.5 sm:p-4">Limit</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Touch typing</td>
+              <td class="p-3.5 sm:p-4">Ten fingers, home row anchors, eyes on the screen</td>
+              <td class="p-3.5 sm:p-4">Jobs and exams that need 60+ WPM, long documents, code</td>
+              <td class="p-3.5 sm:p-4">Takes weeks of practice to learn</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Two finger typing</td>
+              <td class="p-3.5 sm:p-4">One or two fingers per hand, often with eyes on the keys</td>
+              <td class="p-3.5 sm:p-4">Casual use, short messages</td>
+              <td class="p-3.5 sm:p-4">Lower ceiling, more looking down</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Hybrid style</td>
+              <td class="p-3.5 sm:p-4">Self-taught mix of fingers, often 4 to 8</td>
+              <td class="p-3.5 sm:p-4">Most everyday typists</td>
+              <td class="p-3.5 sm:p-4">Habits vary, so results vary</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">One-handed typing</td>
+              <td class="p-3.5 sm:p-4">One hand covers the whole keyboard</td>
+              <td class="p-3.5 sm:p-4">Injury, limb difference, multitasking</td>
+              <td class="p-3.5 sm:p-4">Slower, needs a reach method</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4 font-semibold text-white">Ten key</td>
+              <td class="p-3.5 sm:p-4">Right hand on the numeric keypad</td>
+              <td class="p-3.5 sm:p-4">Accounting, billing, data entry</td>
+              <td class="p-3.5 sm:p-4">Numbers only, scored in KPH</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Touch Typing: The Standard Method</h2>
+
+      <p>
+        Touch typing uses all ten fingers. Each one owns a set of keys, and your hands rest on the home row: A, S, D, F and J, K, L, semicolon. Your eyes stay on the screen. Your fingers find the keys by feel and memory.
+      </p>
+
+      <p>
+        Speed is the main payoff. In a Vanderbilt University study of 48 typists, standard touch typists averaged 80 WPM. Eyes-on-screen typing also helps you catch typos as they happen.
+      </p>
+
+      <p>
+        Start with our <a href="https://www.typeblast.com/blog/home-row-finger-placement-mastery/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">home row finger placement guide</a>, then follow the <a href="https://www.typeblast.com/touch-typing/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast touch typing course</a> for guided lessons. Ready to go faster? Read how to <a href="https://www.typeblast.com/blog/how-to-type-100-wpm-touch-typing-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">reach 100+ WPM with touch typing</a>.
+      </p>
+
+      <h2>Two Finger Typing: Slower, but Not Always by Much</h2>
+
+      <p>
+        Two finger typing, often called hunt and peck, uses one or two fingers and leans on your eyes to find keys. Many people type this way for years and get by.
+      </p>
+
+      <p>
+        The data is kinder to it than the myth. In that same Vanderbilt study, nonstandard typists averaged 72 WPM. The gap widened when researchers hid the keyboard: those typists lost speed and accuracy. Two fingers also limit how often one key can follow another with a different finger.
+      </p>
+
+      <p>
+        Our full guide, <a href="https://www.typeblast.com/blog/two-finger-typing-speed-how-to-switch/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">two finger typing: how fast can you get and when to switch</a>, includes a decision checklist and a four-week plan.
+      </p>
+
+      <h2>Hybrid and Self-Taught Styles</h2>
+
+      <p>
+        Most adults sit somewhere between textbook touch typing and two fingers. Researchers at Aalto University and the University of Cambridge studied 168,000 volunteers and 136 million keystrokes. They found that people who had taken a touch typing class often typed much like people who never did. Many had drifted away from the pure ten-finger method and used fewer fingers.
+      </p>
+
+      <p>
+        The average typist in that study reached 52 WPM, most people landed between 30 and 60, and the fastest topped 120. The team noted that modern keyboards need little force, so self-taught styles can keep pace with touch typing.
+      </p>
+
+      <p>
+        The lesson is practical. How you type matters less than three habits: you watch the screen, you keep errors low, and you use different fingers on back-to-back keys when you can.
+      </p>
+
+      <h2>One-Handed Typing</h2>
+
+      <p>
+        One-handed typing uses a standard QWERTY keyboard and a single hand. You anchor on the home keys for that hand, move the whole hand to reach far keys, and return to the anchor each time. People use it during injury recovery, for accessibility, or when the other hand is busy.
+      </p>
+
+      <p>
+        It runs slower than two-handed typing, so clean technique and a good desk setup matter more. Our <a href="https://www.typeblast.com/blog/one-handed-typing-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">one-handed typing guide</a> covers left and right home positions, Shift handling, Sticky Keys, and a daily practice plan.
+      </p>
+
+      <h2>Ten Key Typing</h2>
+
+      <p>
+        Ten key typing means entering numbers on the numeric keypad with your right hand. Your fingers rest on the 4, 5, and 6 keys, and the raised bump on the 5 key lets you find your place by touch. Employers measure speed in keystrokes per hour (KPH), and KPH equals WPM times 300.
+      </p>
+
+      <p>
+        Accountants, billing teams, and data entry clerks use it daily. A job-ready score usually starts near 10,000 KPH with accuracy of 95% or better. See the <a href="https://www.typeblast.com/blog/ten-key-typing-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">ten key typing guide</a> for finger charts and a four-week plan. Our article on <a href="https://www.typeblast.com/blog/data-entry-typing-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">data entry typing speed</a> shows what hiring teams expect.
+      </p>
+
+      <h2>What Every Fast Method Has in Common</h2>
+
+      <p>
+        Different methods share the same core habits. The Aalto researchers pointed to five that work for any style:
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Cut your errors.</strong> Mistakes cost more time to fix than slow, careful typing costs.</li>
+        <li><strong>Keep your eyes off your fingers.</strong> Your hands learn fast patterns for common letter pairs, and you spot typos sooner.</li>
+        <li><strong>Use rollover.</strong> Fast typists in the study pressed the next key before lifting the last one on 40 to 70% of keystrokes. That needs different fingers on back-to-back keys.</li>
+        <li><strong>Test yourself on fresh text.</strong> Repeating the same sentence inflates your score.</li>
+        <li><strong>Practice on purpose.</strong> Short, focused sessions stop bad habits from creeping back.</li>
+      </ul>
+
+      <p>
+        Comfort matters too. A fast method that hurts your wrists will not last. Read our <a href="https://www.typeblast.com/blog/ergonomics-and-wrist-health-for-typists/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing ergonomics guide</a>, and if you are shopping for gear, see the <a href="https://www.typeblast.com/blog/mechanical-keyboard-switches-wpm-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">mechanical keyboard switch guide for WPM</a>.
+      </p>
+
+      <h2>Four Typing Myths the Research Does Not Support</h2>
+
+      <p>
+        Typing advice repeats a few claims that large studies do not back up.
+      </p>
+
+      <p>
+        <strong>Myth 1: Only touch typists type fast.</strong> The Aalto data shows fast typists with a mix of finger habits. Some of the fastest used fewer than ten fingers. Technique matters, but it is not the only path to speed.
+      </p>
+
+      <p>
+        <strong>Myth 2: A typing class locks in ten-finger habits.</strong> The Aalto team found that people who took a class often typed like people who never did. Habits fade without practice. A class helps most when you keep using what it taught you.
+      </p>
+
+      <p>
+        <strong>Myth 3: Looking at the keys never hurts.</strong> Looking at the keyboard works until you cannot. In the Vanderbilt study, typists without standard technique slowed down and made more errors when researchers hid the keyboard. Eyes-on-screen typing gives you speed and a faster way to spot typos.
+      </p>
+
+      <p>
+        <strong>Myth 4: Speed is the only score that counts.</strong> Employers ask for accuracy too, often 95% or better for data entry roles. A fast typist with a high error rate loses time to corrections. Our <a href="https://www.typeblast.com/blog/data-entry-typing-speed/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">data entry typing speed guide</a> shows what employers expect.
+      </p>
+
+      <h2>Common Mistakes When You Change Your Technique</h2>
+
+      <p>
+        Switching methods feels slow at first, and a few habits make it slower.
+      </p>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Chasing speed too early.</strong> Build accuracy first. Speed climbs once your fingers know where to go.</li>
+        <li><strong>Testing on the same text.</strong> Repeat a sentence and your score rises, but your skill does not. Use fresh passages.</li>
+        <li><strong>Skipping your baseline.</strong> Without a starting score, you cannot tell whether the change helps. Test before you begin.</li>
+        <li><strong>Long, rare sessions.</strong> A 15 to 20 minute daily session beats a two hour weekend marathon.</li>
+        <li><strong>Ignoring your desk.</strong> A slumped posture and bent wrists undo your progress. Check your setup against the <a href="https://www.typeblast.com/blog/ergonomics-and-wrist-health-for-typists/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">ergonomics guide</a>.</li>
+      </ul>
+
+      <h2>Which Technique Fits Your Goal?</h2>
+
+      <p>
+        Match the method to what you need to do:
+      </p>
+
+      <div class="my-6 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg max-w-2xl">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-100 font-bold border-b border-slate-800 uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="p-3.5 sm:p-4">Your goal</th>
+              <th class="p-3.5 sm:p-4">Start with</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60">
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4">Reach 60 WPM or more for a job or exam</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-cyan-400">Touch typing</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4">Get faster without relearning everything</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-cyan-400">A hybrid style with the five habits above</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4">Pass a data entry or accounting test</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-cyan-400">Ten key, plus touch typing for text</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4">Keep working during an injury</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-cyan-400">One-handed typing</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4">Teach a child to type</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-cyan-400">Touch typing through short games</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="p-3.5 sm:p-4">Type casually and keep your speed</td>
+              <td class="p-3.5 sm:p-4 font-semibold text-cyan-400">Stay with what works and watch accuracy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        For kids, play helps. Our post on <a href="https://www.typeblast.com/blog/gamified-typing-for-kids-and-students/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">gamified typing for kids and students</a> explains how games build finger placement without the boredom of drills.
+      </p>
+
+      <h2>How to Choose a Method in Three Steps</h2>
+
+      <ol class="list-decimal pl-5 space-y-2 text-slate-300 my-4">
+        <li><strong>Measure your baseline.</strong> Take the <a href="https://www.typeblast.com/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast typing test</a> for speed and the <a href="https://www.typeblast.com/typing-accuracy-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing accuracy test</a> for errors.</li>
+        <li><strong>Compare with your target.</strong> Check the ranges in our <a href="https://www.typeblast.com/blog/good-typing-speed-wpm-benchmarks/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">guide to good typing speeds by age and job</a>. Career goals often set the bar, and our look at <a href="https://www.typeblast.com/blog/how-typing-speed-impacts-tech-careers/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing speed in tech, law, and remote careers</a> shows how much it matters.</li>
+        <li><strong>Pick one change and test it for four weeks.</strong> Add rollover practice, move to touch typing, or start keypad drills. Retest weekly and keep what works.</li>
+      </ol>
+
+      <p>
+        For a full practice routine, see our <a href="https://www.typeblast.com/blog/improve-typing-speed-guide/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">complete guide to improving your typing speed</a>.
+      </p>
+
+      <h2>A 12-Week Roadmap to Better Technique</h2>
+
+      <p>
+        This plan works for most adults who want to move toward touch typing or tighten a hybrid style. Adjust the pace to your schedule.
+      </p>
+
+      <p>
+        <strong>Weeks 1 to 4: Build the base.</strong> Learn the home row, then add the top and bottom rows. Cover your hands so you stop peeking. Take the <a href="https://www.typeblast.com/typing-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing test</a> at the start and at the end of each week. Expect your speed to dip.
+      </p>
+
+      <p>
+        <strong>Weeks 5 to 8: Build flow.</strong> Type common words and short phrases. Practice rollover by using different fingers for back-to-back letters. Add the <a href="https://www.typeblast.com/typing-accuracy-test/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">typing accuracy test</a> to your weekly check and aim for 95% or better.
+      </p>
+
+      <p>
+        <strong>Weeks 9 to 12: Build speed.</strong> Run timed one, three, and five minute tests. Raise your pace only when accuracy holds. Review your weakest keys and drill them for a few minutes a day. The <a href="https://www.typeblast.com/lessons/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast lessons</a> and <a href="https://www.typeblast.com/typing-practice/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">practice drills</a> help you target them.
+      </p>
+
+      <p>
+        Need a certificate for a job or school application? See the <a href="https://www.typeblast.com/certificates/" class="text-cyan-400 font-semibold underline hover:text-cyan-300">TypeBlast certificates page</a> after you hit your target.
+      </p>
+
+      <h2>Common Questions About Typing Techniques</h2>
+
+      <h3>What is the best typing technique?</h3>
+      <p>
+        Touch typing is the standard because it supports high speed with your eyes on the screen. Research shows hybrid and two finger styles can come close for some people. The best method is the one that meets your speed and accuracy goals without strain.
+      </p>
+
+      <h3>Is touch typing faster than two finger typing?</h3>
+      <p>
+        Usually, yes. In the Vanderbilt study, touch typists averaged 80 WPM against 72 for nonstandard typists. The bigger gap appeared when the keyboard was hidden, because two finger typists rely more on sight.
+      </p>
+
+      <h3>Do I need to type with all ten fingers?</h3>
+      <p>
+        No. The Aalto researchers found that many fast typists use fewer than ten fingers. What matters more is that you keep your eyes on the screen, keep errors low, and use different fingers for back-to-back keys.
+      </p>
+
+      <h3>How long does it take to learn touch typing?</h3>
+      <p>
+        Plan on several weeks of daily practice of 15 to 20 minutes. Your speed may dip at first and then climb past your old level. Short daily sessions work better than long weekend ones.
+      </p>
+
+      <h3>What is ten key typing?</h3>
+      <p>
+        Ten key typing is entering numbers on the numeric keypad with your right hand. Employers score it in KPH, and 10,000 KPH with 95% accuracy is a common job-ready mark.
+      </p>
+
+      <h2>Sources</h2>
+
+      <ul class="list-disc pl-5 space-y-2 text-slate-300 my-4 text-xs">
+        <li><a href="https://www.aalto.fi/en/news/the-traits-of-fast-typists-discovered-by-analysing-136-million-keystrokes" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Aalto University: The traits of fast typists discovered by analysing 136 million keystrokes</a> (2018)</li>
+        <li><a href="https://news.vanderbilt.edu/2016/10/18/todays-self-taught-typists-almost-as-fast-as-touch-typistsas-long-as-they-can-see-the-keyboard/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Vanderbilt University: Today's self-taught typists almost as fast as touch typists</a> (2016)</li>
+        <li><a href="https://www.typequicker.com/learn/what-is-10-key-typing" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">TypeQuicker: What Exactly Is 10-Key Typing?</a> (January 2026)</li>
+        <li><a href="https://dataentryinstitute.org/the-typing-skills-every-data-entry-professional-needs/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 underline hover:text-cyan-300">Data Entry Institute: The typing skills every data entry professional needs</a> (January 2026)</li>
       </ul>
     `,
   },
