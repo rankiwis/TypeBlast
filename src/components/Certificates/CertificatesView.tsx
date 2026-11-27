@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Award, Printer, Download, ShieldCheck, Sparkles, FileText, TrendingUp, Target, Flame, Activity, CheckCircle2, Share2, Copy, Check, ExternalLink } from "lucide-react";
-import { jsPDF } from "jspdf";
 import { TypingStats } from "../../types";
 
 interface CertificatesViewProps {
@@ -12,6 +11,13 @@ export const CertificatesView: React.FC<CertificatesViewProps> = ({ lastStats })
   const [certTier] = useState<"Gold Certified" | "Platinum Certified" | "Master Certified">("Master Certified");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [copiedShareText, setCopiedShareText] = useState(false);
+  const [dateStr, setDateStr] = useState("");
+  const [verificationCode, setVerificationCode] = useState("TB-000000");
+
+  useEffect(() => {
+    setDateStr(new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }));
+    setVerificationCode(`TB-${Math.floor(100000 + Math.random() * 900000)}`);
+  }, []);
 
   const wpm = lastStats?.wpm || 88;
   const rawWpm = lastStats?.rawWpm || 94;
@@ -19,8 +25,6 @@ export const CertificatesView: React.FC<CertificatesViewProps> = ({ lastStats })
   const duration = lastStats?.duration || 30;
   const correctChars = lastStats?.correctChars || 220;
   const errorChars = lastStats?.errorChars || 4;
-  const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-  const verificationCode = `TB-${Math.floor(100000 + Math.random() * 900000)}`;
 
   // Historical progress estimates
   const totalTests = 42;
@@ -53,10 +57,11 @@ export const CertificatesView: React.FC<CertificatesViewProps> = ({ lastStats })
     window.print();
   };
 
-  const handleDownloadProgressPdf = () => {
+  const handleDownloadProgressPdf = async () => {
     setIsGeneratingPdf(true);
 
     try {
+      const { jsPDF } = await import("jspdf");
       const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",

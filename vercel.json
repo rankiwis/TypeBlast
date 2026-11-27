@@ -1,6 +1,37 @@
 {
   "trailingSlash": true,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/app-shell.html" }
+    { "source": "/login", "destination": "/app-shell.html" },
+    { "source": "/login/", "destination": "/app-shell.html" },
+    { "source": "/signup", "destination": "/app-shell.html" },
+    { "source": "/signup/", "destination": "/app-shell.html" },
+    { "source": "/forgot-password", "destination": "/app-shell.html" },
+    { "source": "/forgot-password/", "destination": "/app-shell.html" },
+    { "source": "/reset-password", "destination": "/app-shell.html" },
+    { "source": "/reset-password/", "destination": "/app-shell.html" },
+    { "source": "/dashboard", "destination": "/app-shell.html" },
+    { "source": "/dashboard/", "destination": "/app-shell.html" },
+    { "source": "/profile", "destination": "/app-shell.html" },
+    { "source": "/profile/", "destination": "/app-shell.html" },
+    { "source": "/terms-of-service", "destination": "/app-shell.html" },
+    { "source": "/terms-of-service/", "destination": "/app-shell.html" },
+    { "source": "/privacy-policy", "destination": "/app-shell.html" },
+    { "source": "/privacy-policy/", "destination": "/app-shell.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      ]
+    }
   ]
 }

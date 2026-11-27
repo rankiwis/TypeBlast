@@ -135,7 +135,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <SeoHead
-        title="TypeBlast Blog - Typing Speed Guides, Practice & Touch Typing Tips"
+        title="Typing Speed & Touch Typing Blog | TypeBlast"
         description="Comprehensive guides on touch typing, increasing WPM, keyboard switch ergonomics, typing games, and career benchmarks from the TypeBlast Team."
         canonicalUrl="https://www.typeblast.com/blog/"
         structuredData={[

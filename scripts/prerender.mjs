@@ -143,7 +143,26 @@ async function main() {
     fs.writeFileSync(outFile, pageHtml, "utf-8");
   }
 
-  console.log(`Prerendered ${routes.length} routes successfully.`);
+  // Render 404 page to dist/404.html with noindex and no canonical
+  const { html: notFoundHtml, head: notFoundHead } = render("/404-not-found/");
+  const notFoundTitle = notFoundHead?.title || "Page Not Found | TypeBlast";
+  const notFoundDescription =
+    notFoundHead?.description ||
+    "The page you're looking for doesn't exist or may have moved.";
+  const notFoundTags = [
+    `<title>${escapeHtml(notFoundTitle)}</title>`,
+    `<meta name="description" content="${escapeHtml(notFoundDescription)}" />`,
+    '<meta name="robots" content="noindex" />',
+  ].join("\n    ");
+  let notFoundPageHtml = injectAfterViewport(cleanTemplate, notFoundTags);
+  const rootPlaceholder = '<div id="root"></div>';
+  if (!notFoundPageHtml.includes(rootPlaceholder)) {
+    throw new Error("Could not find <div id=\"root\"></div> in template while rendering 404.html");
+  }
+  notFoundPageHtml = notFoundPageHtml.replace(rootPlaceholder, () => `<div id="root">${notFoundHtml}</div>`);
+  fs.writeFileSync(path.join(distDir, "404.html"), notFoundPageHtml, "utf-8");
+
+  console.log(`Prerendered ${routes.length} routes successfully (+ 404.html).`);
 }
 
 main().catch((err) => {

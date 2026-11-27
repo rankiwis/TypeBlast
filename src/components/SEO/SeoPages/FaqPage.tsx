@@ -46,18 +46,6 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigatePath }) => {
 
   const structuredData = [
     generateBreadcrumbSchema(breadcrumbs),
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: mainFaqs.map((f) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: f.a,
-        },
-      })),
-    },
   ];
 
   return (

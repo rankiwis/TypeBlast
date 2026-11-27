@@ -25,7 +25,7 @@ export const TermsOfServicePage: React.FC<TermsOfServicePageProps> = ({ onNaviga
   const canonicalUrl = "https://www.typeblast.com/terms/";
   const pageTitle = "Terms of Service - TypeBlast Usage & Fair Play Rules";
   const metaDescription =
-    "Read the TypeBlast Terms of Service. Understand our policies regarding website usage, accounts, typing tests, games, leaderboard fair play, and intellectual property.";
+    "Read the TypeBlast Terms of Service covering website usage, accounts, typing tests, arcade games, leaderboard fair play, and intellectual property.";
 
   const breadcrumbs = [{ label: "Terms of Service", path: "/terms/" }];
 

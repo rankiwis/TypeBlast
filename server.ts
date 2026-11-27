@@ -886,6 +886,16 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
+    const clientOnlyPaths = new Set([
+      "login",
+      "signup",
+      "forgot-password",
+      "reset-password",
+      "dashboard",
+      "profile",
+      "terms-of-service",
+      "privacy-policy",
+    ]);
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       const cleanReqPath = req.path.replace(/^\/+|\/+$/g, "");
@@ -897,8 +907,17 @@ async function startServer() {
         res.sendFile(resolvedCandidate);
         return;
       }
-      const appShell = path.join(distPath, "app-shell.html");
-      res.sendFile(fs.existsSync(appShell) ? appShell : path.join(distPath, "index.html"));
+      if (clientOnlyPaths.has(cleanReqPath.toLowerCase())) {
+        const appShell = path.join(distPath, "app-shell.html");
+        res.sendFile(fs.existsSync(appShell) ? appShell : path.join(distPath, "index.html"));
+        return;
+      }
+      const notFoundPage = path.join(distPath, "404.html");
+      if (fs.existsSync(notFoundPage)) {
+        res.status(404).sendFile(notFoundPage);
+      } else {
+        res.status(404).send("Not Found");
+      }
     });
   }
 

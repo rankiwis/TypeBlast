@@ -25,7 +25,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigatePath }) => {
   const canonicalUrl = "https://www.typeblast.com/about/";
   const pageTitle = "About TypeBlast - Modern Touch Typing & Speed Platform";
   const metaDescription =
-    "Discover TypeBlast: what we do, our precision typing technology, and who we serve — from students and educators to programmers, writers, and competitive typists.";
+    "Discover TypeBlast, our precision typing technology, and who we serve, from students and educators to programmers, writers, and competitive typists.";
 
   const breadcrumbs = [{ label: "About Us", path: "/about/" }];
 

@@ -77,11 +77,18 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
   const [finalStats, setFinalStats] = useState<TypingStats | null>(null);
   const [isScoreValidated, setIsScoreValidated] = useState<boolean>(true);
 
-  // Personal Best from localStorage
-  const [personalBest, setPersonalBest] = useState<number>(() => {
+  // Personal Best loaded after hydration to match SSR markup
+  const [personalBest, setPersonalBest] = useState<number>(0);
+
+  useEffect(() => {
     const saved = localStorage.getItem("typeblast_pb");
-    return saved ? parseInt(saved, 10) || 0 : 0;
-  });
+    if (saved) {
+      const parsed = parseInt(saved, 10);
+      if (!Number.isNaN(parsed)) {
+        setPersonalBest(parsed);
+      }
+    }
+  }, []);
 
   // Modal States
   const [customTextModalOpen, setCustomTextModalOpen] = useState(false);

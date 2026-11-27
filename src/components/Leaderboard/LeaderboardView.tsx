@@ -177,7 +177,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({ onNavigatePath
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
       <SeoHead
-        title="TypeBlast Global Leaderboard - Today, This Week & All Time Speed Records"
+        title="Typing Speed Leaderboard: Top WPM Scores | TypeBlast"
         description="View official verified typing speed rankings across 15s, 30s & 60s typing sprints. Compete for top rank and master typing accuracy."
         canonicalUrl="https://www.typeblast.com/leaderboard/"
       />

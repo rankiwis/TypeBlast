@@ -24,7 +24,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
   const canonicalUrl = "https://www.typeblast.com/privacy/";
   const pageTitle = "Privacy Policy - TypeBlast Data Protection & Privacy";
   const metaDescription =
-    "Read the official TypeBlast Privacy Policy. Understand how we handle account details, typing test data, analytics, cookies, leaderboards, and your privacy rights.";
+    "Read the TypeBlast Privacy Policy to learn how we handle account details, typing test data, analytics, cookies, leaderboards, and your privacy rights.";
 
   const breadcrumbs = [{ label: "Privacy Policy", path: "/privacy/" }];
 

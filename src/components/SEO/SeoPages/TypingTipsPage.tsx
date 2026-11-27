@@ -60,18 +60,6 @@ export const TypingTipsPage: React.FC<TypingTipsPageProps> = ({ onNavigatePath }
         "@id": canonicalUrl,
       },
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqs.map((f) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: f.a,
-        },
-      })),
-    },
   ];
 
   return (

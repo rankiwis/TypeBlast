@@ -76,12 +76,7 @@ const TOKEN_KEY = "typeblast_auth_token";
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserAccount | null>(null);
-  const [token, setToken] = useState<string | null>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem(TOKEN_KEY);
-    }
-    return null;
-  });
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   async function parseJsonResponse(res: Response, defaultErrorMsg: string) {
@@ -106,16 +101,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Fetch logged in user profile on initial load
   useEffect(() => {
-    const fetchUser = async () => {
-      if (!token) {
-        setIsLoading(false);
-        return;
-      }
+    const storedToken = localStorage.getItem(TOKEN_KEY);
+    if (!storedToken) {
+      setIsLoading(false);
+      return;
+    }
 
+    setToken(storedToken);
+
+    const fetchUser = async () => {
       try {
         const res = await fetch("/api/auth/me", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${storedToken}`,
           },
         });
 
@@ -136,7 +134,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     fetchUser();
-  }, [token]);
+  }, []);
 
   const signup = async (username: string, email: string, password: string) => {
     const res = await fetch("/api/auth/signup", {
