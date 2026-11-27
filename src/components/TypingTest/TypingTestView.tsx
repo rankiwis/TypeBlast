@@ -51,12 +51,14 @@ interface TypingTestViewProps {
   onTestComplete: (stats: TypingStats) => void;
   setActiveTab: (tab: TabType) => void;
   isKidsMode?: boolean;
+  embedded?: boolean;
 }
 
 export const TypingTestView: React.FC<TypingTestViewProps> = ({
   onTestComplete,
   setActiveTab,
   isKidsMode = false,
+  embedded = false,
 }) => {
   const [duration, setDuration] = useState<TestDuration>(30);
   const [category, setCategory] = useState<TestCategory>("words");
@@ -362,9 +364,15 @@ export const TypingTestView: React.FC<TypingTestViewProps> = ({
         </div>
 
         <div className="space-y-4 max-w-3xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-100 tracking-tight leading-[1.1]">
-            Test Your Typing Speed. <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">Get Faster.</span>
-          </h1>
+          {embedded ? (
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-100 tracking-tight leading-[1.1]">
+              Test Your Typing Speed. <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">Get Faster.</span>
+            </h2>
+          ) : (
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-100 tracking-tight leading-[1.1]">
+              Test Your Typing Speed. <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">Get Faster.</span>
+            </h1>
+          )}
 
           <p className="text-base sm:text-lg text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed">
             Take a free typing speed test, practice your keyboard skills, and challenge yourself with fun typing games.

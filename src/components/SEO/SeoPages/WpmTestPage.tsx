@@ -147,7 +147,7 @@ export const WpmTestPage: React.FC<WpmTestPageProps> = ({
           </span>
           <span>5 Chars = 1 Word Standard</span>
         </div>
-        <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} />
+        <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} embedded />
       </div>
 
       {/* Educational Sections */}

@@ -117,7 +117,7 @@ export const TypingSpeedTestPage: React.FC<TypingSpeedTestPageProps> = ({
           </span>
           <span>Instant WPM Tracking</span>
         </div>
-        <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} />
+        <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} embedded />
       </div>
 
       {/* Educational Content Sections */}

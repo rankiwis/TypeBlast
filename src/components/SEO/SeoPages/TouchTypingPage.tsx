@@ -174,7 +174,7 @@ export const TouchTypingPage: React.FC<TouchTypingPageProps> = ({
           </span>
           <span>Keep your eyes on the screen!</span>
         </div>
-        <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} />
+        <TypingTestView onTestComplete={onTestComplete} setActiveTab={setActiveTab} embedded />
       </div>
 
       {/* Educational Content Sections */}

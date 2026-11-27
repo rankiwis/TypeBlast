@@ -207,11 +207,16 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
                   </span>
                 </div>
 
-                <h2
-                  onClick={() => onNavigatePath(`/blog/${featuredPost.slug}/`)}
-                  className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight cursor-pointer hover:text-cyan-400 transition-colors group-hover:translate-x-0.5"
-                >
-                  {featuredPost.title}
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight hover:text-cyan-400 transition-colors group-hover:translate-x-0.5">
+                  <a
+                    href={`/blog/${featuredPost.slug}/`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigatePath(`/blog/${featuredPost.slug}/`);
+                    }}
+                  >
+                    {featuredPost.title}
+                  </a>
                 </h2>
 
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed line-clamp-3">
@@ -236,13 +241,17 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
                   </div>
                 </div>
 
-                <button
-                  onClick={() => onNavigatePath(`/blog/${featuredPost.slug}/`)}
+                <a
+                  href={`/blog/${featuredPost.slug}/`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigatePath(`/blog/${featuredPost.slug}/`);
+                  }}
                   className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-cyan-500/20 cursor-pointer"
                 >
                   <span>Read Article</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                </a>
               </div>
             </div>
 
@@ -323,9 +332,13 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPosts.map((post) => (
-            <div
+            <a
               key={post.id}
-              onClick={() => onNavigatePath(`/blog/${post.slug}/`)}
+              href={`/blog/${post.slug}/`}
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigatePath(`/blog/${post.slug}/`);
+              }}
               className="group flex flex-col justify-between bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/40 rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/40"
             >
               <div>
@@ -392,7 +405,7 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
                   Read <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       )}
@@ -412,12 +425,16 @@ export const BlogHubPage: React.FC<BlogHubPageProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={() => onNavigatePath("/typing-test/")}
+        <a
+          href="/typing-test/"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigatePath("/typing-test/");
+          }}
           className="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-cyan-500/20 whitespace-nowrap cursor-pointer hover:scale-105"
         >
           Start Typing Test Now
-        </button>
+        </a>
       </div>
     </div>
   );

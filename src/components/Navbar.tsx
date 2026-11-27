@@ -131,8 +131,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-3">
           {/* Logo */}
-          <div
-            onClick={() => handleNavClick("/typing-test/", "test")}
+          <a
+            href="/typing-test/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("/typing-test/", "test");
+            }}
             className="flex items-center gap-2.5 cursor-pointer group shrink-0"
             id="brand-logo"
           >
@@ -146,17 +150,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
               </div>
             </div>
-          </div>
+          </a>
 
           {/* Desktop Primary Navigation Bar */}
           <nav className="hidden lg:flex items-center gap-1">
             {primaryNavItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
-                <button
+                <a
                   key={item.id}
                   id={`nav-item-${item.id}`}
-                  onClick={() => handleNavClick(item.path, item.id)}
+                  href={item.path}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.path, item.id);
+                  }}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 whitespace-nowrap ${
                     isActive
                       ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-inner"
@@ -176,7 +184,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       {item.tag}
                     </span>
                   )}
-                </button>
+                </a>
               );
             })}
 
@@ -199,9 +207,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </div>
                   <div className="py-1">
                     {secondaryNavItems.map((item) => (
-                      <button
+                      <a
                         key={item.label}
-                        onClick={() => handleNavClick(item.path, item.id)}
+                        href={item.path}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNavClick(item.path, item.id);
+                        }}
                         className="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center justify-between transition-colors"
                       >
                         <div className="flex items-center gap-2">
@@ -213,7 +225,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             {item.tag}
                           </span>
                         )}
-                      </button>
+                      </a>
                     ))}
                   </div>
                 </div>
@@ -224,14 +236,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Right Controls: Prominent "Start Test" CTA, Stats & Sound */}
           <div className="flex items-center gap-2.5 shrink-0">
             {/* Prominent Start Test CTA Button */}
-            <button
-              onClick={handleStartTest}
+            <a
+              href="/typing-test/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleStartTest();
+              }}
               id="start-test-cta-btn"
               className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/25 flex items-center gap-1.5 active:scale-95 transition-all duration-150 border border-cyan-300/30"
             >
               <Play className="w-3.5 h-3.5 fill-slate-950" />
               <span>Start Test</span>
-            </button>
+            </a>
 
             {/* Sound Selector Dropdown */}
             <div className="relative" ref={soundMenuRef}>
@@ -299,8 +315,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </div>
 
                     <div className="py-1">
-                      <button
-                        onClick={() => {
+                      <a
+                        href="/dashboard/"
+                        onClick={(e) => {
+                          e.preventDefault();
                           onNavigatePath("/dashboard/");
                           setShowUserMenu(false);
                         }}
@@ -308,10 +326,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                       >
                         <LayoutDashboard className="w-3.5 h-3.5 text-cyan-400" />
                         <span>Dashboard</span>
-                      </button>
+                      </a>
 
-                      <button
-                        onClick={() => {
+                      <a
+                        href="/profile/"
+                        onClick={(e) => {
+                          e.preventDefault();
                           onNavigatePath("/profile/");
                           setShowUserMenu(false);
                         }}
@@ -319,7 +339,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       >
                         <User className="w-3.5 h-3.5 text-purple-400" />
                         <span>Profile & Settings</span>
-                      </button>
+                      </a>
                     </div>
 
                     <div className="pt-1">
@@ -340,12 +360,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             ) : (
               <div className="hidden sm:flex items-center gap-1.5">
-                <button
-                  onClick={() => onNavigatePath("/login/")}
+                <a
+                  href="/login/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigatePath("/login/");
+                  }}
                   className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition-colors"
                 >
                   Log In
-                </button>
+                </a>
               </div>
             )}
 
@@ -366,13 +390,17 @@ export const Navbar: React.FC<NavbarProps> = ({
       {showMobileMenu && (
         <div className="lg:hidden border-t border-slate-800 bg-slate-950/98 backdrop-blur-xl px-4 py-5 space-y-6 max-h-[85vh] overflow-y-auto">
           {/* Mobile Start Test Hero CTA */}
-          <button
-            onClick={handleStartTest}
+          <a
+            href="/typing-test/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleStartTest();
+            }}
             className="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-2"
           >
             <Play className="w-4 h-4 fill-slate-950" />
             <span>Start Typing Test Now</span>
-          </button>
+          </a>
 
           {/* Primary Nav Section */}
           <div className="space-y-2">
@@ -383,9 +411,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               {primaryNavItems.map((item) => {
                 const isActive = activeTab === item.id;
                 return (
-                  <button
+                  <a
                     key={item.id}
-                    onClick={() => handleNavClick(item.path, item.id)}
+                    href={item.path}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(item.path, item.id);
+                    }}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
                       isActive
                         ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
@@ -394,7 +426,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   >
                     {item.icon}
                     <span>{item.label}</span>
-                  </button>
+                  </a>
                 );
               })}
             </div>
@@ -407,14 +439,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div className="grid grid-cols-2 gap-2">
               {secondaryNavItems.map((item) => (
-                <button
+                <a
                   key={item.label}
-                  onClick={() => handleNavClick(item.path, item.id)}
+                  href={item.path}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.path, item.id);
+                  }}
                   className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-medium text-slate-300 text-left"
                 >
                   {item.icon}
                   <span className="truncate">{item.label}</span>
-                </button>
+                </a>
               ))}
             </div>
           </div>
@@ -425,30 +461,46 @@ export const Navbar: React.FC<NavbarProps> = ({
               Resources & Info
             </div>
             <div className="grid grid-cols-2 gap-2 text-xs text-slate-400">
-              <button
-                onClick={() => handleNavClick("/typing-tips/")}
+              <a
+                href="/typing-tips/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("/typing-tips/");
+                }}
                 className="flex items-center gap-2 px-2 py-1.5 hover:text-cyan-400 text-left"
               >
                 <Lightbulb className="w-3.5 h-3.5 text-cyan-400" /> Typing Tips
-              </button>
-              <button
-                onClick={() => handleNavClick("/faq/")}
+              </a>
+              <a
+                href="/faq/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("/faq/");
+                }}
                 className="flex items-center gap-2 px-2 py-1.5 hover:text-cyan-400 text-left"
               >
                 <HelpCircle className="w-3.5 h-3.5 text-cyan-400" /> FAQ
-              </button>
-              <button
-                onClick={() => handleNavClick("/about/")}
+              </a>
+              <a
+                href="/about/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("/about/");
+                }}
                 className="flex items-center gap-2 px-2 py-1.5 hover:text-cyan-400 text-left"
               >
                 <Info className="w-3.5 h-3.5 text-cyan-400" /> About
-              </button>
-              <button
-                onClick={() => handleNavClick("/contact/")}
+              </a>
+              <a
+                href="/contact/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("/contact/");
+                }}
                 className="flex items-center gap-2 px-2 py-1.5 hover:text-cyan-400 text-left"
               >
                 <Mail className="w-3.5 h-3.5 text-cyan-400" /> Contact
-              </button>
+              </a>
             </div>
           </div>
         </div>

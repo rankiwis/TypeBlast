@@ -258,12 +258,16 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <li>
               <strong>Exercising Rights:</strong> To submit a data request, please email{" "}
               <span className="font-mono text-cyan-400 font-semibold">privacy@typeblast.com</span> or use our{" "}
-              <button
-                onClick={() => onNavigatePath("/contact/")}
+              <a
+                href="/contact/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigatePath("/contact/");
+                }}
                 className="text-cyan-400 underline hover:text-cyan-300 font-semibold"
               >
                 Contact Form
-              </button>
+              </a>
               .
             </li>
           </ul>

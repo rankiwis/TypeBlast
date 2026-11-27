@@ -1,5 +1,5 @@
 import React from "react";
-import { Activity, Sparkles, Trophy, Award, GraduationCap, Users } from "lucide-react";
+import { Activity, Sparkles, Trophy, Award, GraduationCap, Users, CreditCard } from "lucide-react";
 import { TabType } from "../types";
 
 interface FooterProps {
@@ -22,8 +22,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {/* Brand Col */}
           <div className="col-span-2 lg:col-span-1 space-y-3">
-            <div
-              onClick={() => handleLink("/typing-test/", "test")}
+            <a
+              href="/typing-test/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLink("/typing-test/", "test");
+              }}
               className="flex items-center gap-2 cursor-pointer group w-fit"
             >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
@@ -32,7 +36,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
               <span className="text-lg font-black tracking-tight text-white group-hover:text-cyan-400 transition-colors">
                 TypeBlast
               </span>
-            </div>
+            </a>
             <p className="text-[11px] text-slate-400 leading-relaxed max-w-xs">
               The premier online typing speed, precision, and arcade gaming platform. Master touch typing with real-time telemetry and AI coaching.
             </p>
@@ -45,52 +49,76 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
             </h3>
             <ul className="space-y-2 text-[11px]">
               <li>
-                <button
-                  onClick={() => handleLink("/typing-test/", "test")}
+                <a
+                  href="/typing-test/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/typing-test/", "test");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Typing Test
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/typing-speed-test/", "test")}
+                <a
+                  href="/typing-speed-test/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/typing-speed-test/", "test");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Typing Speed Test
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/typing-practice/", "practice")}
+                <a
+                  href="/typing-practice/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/typing-practice/", "practice");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Typing Practice
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/typing-games/", "games")}
+                <a
+                  href="/typing-games/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/typing-games/", "games");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Typing Games
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/daily-typing-challenge/", "daily")}
+                <a
+                  href="/daily-typing-challenge/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/daily-typing-challenge/", "daily");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Daily Challenge
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/leaderboard/", "leaderboard")}
+                <a
+                  href="/leaderboard/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/leaderboard/", "leaderboard");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Leaderboard
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -102,44 +130,64 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
             </h3>
             <ul className="space-y-2 text-[11px]">
               <li>
-                <button
-                  onClick={() => handleLink("/typing-tips/")}
+                <a
+                  href="/typing-tips/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/typing-tips/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Typing Tips
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/blog/", "blog")}
+                <a
+                  href="/blog/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/blog/", "blog");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Blog
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/faq/")}
+                <a
+                  href="/faq/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/faq/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   FAQ
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/touch-typing/")}
+                <a
+                  href="/touch-typing/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/touch-typing/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Touch Typing Guide
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/wpm-test/")}
+                <a
+                  href="/wpm-test/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/wpm-test/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   WPM Calculator
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -151,36 +199,52 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
             </h3>
             <ul className="space-y-2 text-[11px]">
               <li>
-                <button
-                  onClick={() => handleLink("/dashboard/")}
+                <a
+                  href="/dashboard/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/dashboard/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Dashboard
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/profile/")}
+                <a
+                  href="/profile/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/profile/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Profile Settings
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/login/")}
+                <a
+                  href="/login/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/login/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Log In
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/signup/")}
+                <a
+                  href="/signup/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/signup/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Create Account
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -192,36 +256,52 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
             </h3>
             <ul className="space-y-2 text-[11px]">
               <li>
-                <button
-                  onClick={() => handleLink("/about/")}
+                <a
+                  href="/about/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/about/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   About Us
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/contact/")}
+                <a
+                  href="/contact/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/contact/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Contact Support
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/privacy/")}
+                <a
+                  href="/privacy/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/privacy/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Privacy Policy
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => handleLink("/terms/")}
+                <a
+                  href="/terms/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLink("/terms/");
+                  }}
                   className="hover:text-cyan-300 transition-colors text-left"
                 >
                   Terms of Service
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -231,30 +311,66 @@ export const Footer: React.FC<FooterProps> = ({ onNavigatePath, setActiveTab }) 
         <div className="pt-6 border-t border-slate-900/80 flex flex-wrap items-center justify-between gap-4 text-[11px]">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-400">
             <span className="font-semibold text-slate-300">More Tools:</span>
-            <button
-              onClick={() => handleLink("/aicoach/", "aicoach")}
+            <a
+              href="/aicoach/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLink("/aicoach/", "aicoach");
+              }}
               className="hover:text-purple-300 font-medium flex items-center gap-1"
             >
               <Sparkles className="w-3 h-3 text-purple-400" /> AI Coach
-            </button>
-            <button
-              onClick={() => handleLink("/lessons/", "lessons")}
+            </a>
+            <a
+              href="/lessons/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLink("/lessons/", "lessons");
+              }}
               className="hover:text-cyan-300 flex items-center gap-1"
             >
               <GraduationCap className="w-3 h-3 text-cyan-400" /> Typing Lessons
-            </button>
-            <button
-              onClick={() => handleLink("/certificates/", "certificates")}
+            </a>
+            <a
+              href="/certificates/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLink("/certificates/", "certificates");
+              }}
               className="hover:text-cyan-300 flex items-center gap-1"
             >
               <Award className="w-3 h-3 text-amber-400" /> Certificates
-            </button>
-            <button
-              onClick={() => handleLink("/kids/", "kids")}
+            </a>
+            <a
+              href="/kids/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLink("/kids/", "kids");
+              }}
               className="hover:text-cyan-300 flex items-center gap-1"
             >
               <Users className="w-3 h-3 text-emerald-400" /> TypeBlast Kids
-            </button>
+            </a>
+            <a
+              href="/teachers/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLink("/teachers/", "teachers");
+              }}
+              className="hover:text-cyan-300 flex items-center gap-1"
+            >
+              <Trophy className="w-3 h-3 text-cyan-400" /> For Teachers
+            </a>
+            <a
+              href="/pricing/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLink("/pricing/", "pricing");
+              }}
+              className="hover:text-cyan-300 flex items-center gap-1"
+            >
+              <CreditCard className="w-3 h-3 text-amber-400" /> Pricing
+            </a>
           </div>
 
           <div className="text-slate-500 font-mono text-[10px]">

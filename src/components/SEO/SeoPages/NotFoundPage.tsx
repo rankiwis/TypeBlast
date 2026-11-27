@@ -73,26 +73,38 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigatePath }) =>
 
         {/* Primary Call-to-Actions */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <button
-            onClick={() => handleNavigate("/")}
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigate("/");
+            }}
             className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-cyan-500/20 hover:scale-[1.02] cursor-pointer"
           >
             <Home className="w-4 h-4" /> Go to Homepage
-          </button>
+          </a>
 
-          <button
-            onClick={() => handleNavigate("/typing-test/")}
+          <a
+            href="/typing-test/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigate("/typing-test/");
+            }}
             className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-cyan-500/40 cursor-pointer"
           >
             <Zap className="w-4 h-4 text-cyan-400" /> Take a Typing Test
-          </button>
+          </a>
 
-          <button
-            onClick={() => handleNavigate("/typing-games/")}
+          <a
+            href="/typing-games/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigate("/typing-games/");
+            }}
             className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:border-purple-500/40 cursor-pointer"
           >
             <Gamepad2 className="w-4 h-4 text-purple-400" /> Explore Typing Games
-          </button>
+          </a>
         </div>
 
         {/* Useful Navigation: "Try one of these instead:" */}
@@ -105,8 +117,12 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigatePath }) =>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button
-              onClick={() => handleNavigate("/typing-speed-test/")}
+            <a
+              href="/typing-speed-test/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigate("/typing-speed-test/");
+              }}
               className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-900 transition-all flex items-center justify-between text-left group cursor-pointer"
             >
               <div className="flex items-center gap-3">
@@ -121,10 +137,14 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigatePath }) =>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all" />
-            </button>
+            </a>
 
-            <button
-              onClick={() => handleNavigate("/typing-practice/")}
+            <a
+              href="/typing-practice/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigate("/typing-practice/");
+              }}
               className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-emerald-500/40 hover:bg-slate-900 transition-all flex items-center justify-between text-left group cursor-pointer"
             >
               <div className="flex items-center gap-3">
@@ -139,10 +159,14 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigatePath }) =>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all" />
-            </button>
+            </a>
 
-            <button
-              onClick={() => handleNavigate("/typing-games/")}
+            <a
+              href="/typing-games/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigate("/typing-games/");
+              }}
               className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-purple-500/40 hover:bg-slate-900 transition-all flex items-center justify-between text-left group cursor-pointer"
             >
               <div className="flex items-center gap-3">
@@ -157,10 +181,14 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigatePath }) =>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all" />
-            </button>
+            </a>
 
-            <button
-              onClick={() => handleNavigate("/daily-typing-challenge/")}
+            <a
+              href="/daily-typing-challenge/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigate("/daily-typing-challenge/");
+              }}
               className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-500/40 hover:bg-slate-900 transition-all flex items-center justify-between text-left group cursor-pointer"
             >
               <div className="flex items-center gap-3">
@@ -175,7 +203,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigatePath }) =>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
-            </button>
+            </a>
           </div>
         </div>
       </div>

@@ -30,10 +30,10 @@ export const TeachersView: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900 border border-slate-800">
         <div>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-xl font-bold text-white flex items-center gap-2">
             <Users className="w-5 h-5 text-cyan-400" />
             <span>Teachers & Schools Management Portal</span>
-          </h3>
+          </h1>
           <p className="text-xs text-slate-400">Track student typing benchmarks, manage assignments, and export gradebooks</p>
         </div>
 

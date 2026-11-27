@@ -92,9 +92,13 @@ export const InternalLinksNav: React.FC<InternalLinksNavProps> = ({ currentPath,
         {SEO_PAGES_META.map((item) => {
           const isCurrent = currentPath === item.path || currentPath === item.path.replace(/\/$/, "");
           return (
-            <div
+            <a
               key={item.path}
-              onClick={() => onNavigate(item.path)}
+              href={item.path}
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate(item.path);
+              }}
               className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
                 isCurrent
                   ? "bg-slate-900 border-cyan-500/50 shadow-lg shadow-cyan-500/10 pointer-events-none"
@@ -122,7 +126,7 @@ export const InternalLinksNav: React.FC<InternalLinksNavProps> = ({ currentPath,
                 <span>{item.keyword}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </div>
-            </div>
+            </a>
           );
         })}
       </div>

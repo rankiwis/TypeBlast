@@ -8,6 +8,8 @@ interface SeoHeadProps {
   structuredData?: object[];
 }
 
+export type { SeoHeadProps };
+
 export const SeoHead: React.FC<SeoHeadProps> = ({
   title,
   description,
@@ -15,6 +17,17 @@ export const SeoHead: React.FC<SeoHeadProps> = ({
   noIndex = false,
   structuredData = [],
 }) => {
+  if (typeof window === "undefined") {
+    // Expose SEO metadata for static prerender script during SSR
+    (globalThis as { __SEO_HEAD__?: SeoHeadProps }).__SEO_HEAD__ = {
+      title,
+      description,
+      canonicalUrl,
+      noIndex,
+      structuredData,
+    };
+  }
+
   useEffect(() => {
     // 1. Document Title
     document.title = title;
@@ -42,11 +55,13 @@ export const SeoHead: React.FC<SeoHeadProps> = ({
     setMetaTag('meta[property="og:url"]', "property", "og:url", canonicalUrl);
     setMetaTag('meta[property="og:type"]', "property", "og:type", "website");
     setMetaTag('meta[property="og:site_name"]', "property", "og:site_name", "TypeBlast");
+    setMetaTag('meta[property="og:image"]', "property", "og:image", "https://www.typeblast.com/og-image.png");
 
     // 5. Twitter Card Metadata
     setMetaTag('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image");
     setMetaTag('meta[name="twitter:title"]', "name", "twitter:title", title);
     setMetaTag('meta[name="twitter:description"]', "name", "twitter:description", description);
+    setMetaTag('meta[name="twitter:image"]', "name", "twitter:image", "https://www.typeblast.com/og-image.png");
 
     // 6. Canonical Link
     let canonical = document.querySelector('link[rel="canonical"]');

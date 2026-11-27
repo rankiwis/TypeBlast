@@ -257,12 +257,16 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigatePath }) => {
           <h3 className="text-lg font-bold text-white">Ready to test your typing speed?</h3>
           <p className="text-xs text-slate-300">Take a free 60-second test and discover your WPM baseline in seconds.</p>
         </div>
-        <button
-          onClick={() => onNavigatePath("/typing-test/")}
+        <a
+          href="/typing-test/"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigatePath("/typing-test/");
+          }}
           className="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-colors shrink-0 shadow-lg shadow-cyan-500/20"
         >
           Start Typing Test
-        </button>
+        </a>
       </div>
 
       <InternalLinksNav currentPath="/about/" onNavigate={onNavigatePath} />

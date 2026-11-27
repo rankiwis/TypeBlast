@@ -1,4 +1,5 @@
 import express from "express";
+import fs from "fs";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
@@ -887,7 +888,17 @@ async function startServer() {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+      const cleanReqPath = req.path.replace(/^\/+|\/+$/g, "");
+      const candidate = cleanReqPath
+        ? path.join(distPath, cleanReqPath, "index.html")
+        : path.join(distPath, "index.html");
+      const resolvedCandidate = path.resolve(candidate);
+      if (resolvedCandidate.startsWith(distPath + path.sep) && fs.existsSync(resolvedCandidate)) {
+        res.sendFile(resolvedCandidate);
+        return;
+      }
+      const appShell = path.join(distPath, "app-shell.html");
+      res.sendFile(fs.existsSync(appShell) ? appShell : path.join(distPath, "index.html"));
     });
   }
 

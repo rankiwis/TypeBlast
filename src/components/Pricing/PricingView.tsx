@@ -8,7 +8,7 @@ export const PricingView: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
       {/* Title */}
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-black text-white">Simple, Transparent Pricing</h2>
+        <h1 className="text-3xl font-black text-white">Simple, Transparent Pricing</h1>
         <p className="text-xs text-slate-400">Unlock AI Coaching, Unlimited Arcade Games, and Official School Certifications</p>
 
         {/* Toggle */}

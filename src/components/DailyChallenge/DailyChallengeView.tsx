@@ -297,9 +297,9 @@ export const DailyChallengeView: React.FC<DailyChallengeViewProps> = () => {
             <span>Official Daily Sprint</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
             Today's TypeBlast Challenge
-          </h1>
+          </h2>
 
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
             Every 24 hours, typists around the world compete on the exact same official challenge passage. Complete today’s challenge to set your daily rank and build your activity streak!

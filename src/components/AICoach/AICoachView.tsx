@@ -64,7 +64,7 @@ export const AICoachView: React.FC<AICoachViewProps> = ({ lastStats, setActiveTa
             <Sparkles className="w-3.5 h-3.5 text-purple-400" />
             <span>Server-Side Gemini AI Diagnostics</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white">AI Personal Typing Coach</h2>
+          <h1 className="text-2xl sm:text-3xl font-black text-white">AI Personal Typing Coach</h1>
           <p className="text-xs text-slate-300">
             Powered by Gemini AI • Evaluates keystroke latency, error matrix, and ergonomics
           </p>

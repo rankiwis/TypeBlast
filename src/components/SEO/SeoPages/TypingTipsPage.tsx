@@ -173,18 +173,26 @@ export const TypingTipsPage: React.FC<TypingTipsPageProps> = ({ onNavigatePath }
           Launch our interactive typing test or practice drills to benchmark your speed right now.
         </p>
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => onNavigatePath("/typing-test/")}
+          <a
+            href="/typing-test/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigatePath("/typing-test/");
+            }}
             className="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs hover:bg-cyan-400 transition-colors"
           >
             Take 60s Typing Test
-          </button>
-          <button
-            onClick={() => onNavigatePath("/typing-practice/")}
+          </a>
+          <a
+            href="/typing-practice/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigatePath("/typing-practice/");
+            }}
             className="px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs hover:bg-slate-700 transition-colors"
           >
             Start Practice Drills
-          </button>
+          </a>
         </div>
       </div>
 

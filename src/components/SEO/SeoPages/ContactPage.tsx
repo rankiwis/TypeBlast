@@ -290,12 +290,16 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigatePath }) => {
             </div>
 
             <div className="pt-2 border-t border-slate-800">
-              <button
-                onClick={() => onNavigatePath("/faq/")}
-                className="text-xs text-cyan-400 hover:text-cyan-300 font-bold transition-colors"
+              <a
+                href="/faq/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigatePath("/faq/");
+                }}
+                className="inline-block text-xs text-cyan-400 hover:text-cyan-300 font-bold transition-colors"
               >
                 View Full FAQ Page &rarr;
-              </button>
+              </a>
             </div>
           </div>
 

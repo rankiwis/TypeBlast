@@ -30,7 +30,7 @@ export const KidsView: React.FC = () => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Smile className="w-8 h-8 text-amber-400 animate-bounce" />
-            <h2 className="text-3xl font-black text-amber-300">TypeBlast Junior! 🌟</h2>
+            <h1 className="text-3xl font-black text-amber-300">TypeBlast Junior! 🌟</h1>
           </div>
           <p className="text-xs text-slate-300 font-bold">Fun typing adventures for young learners!</p>
         </div>

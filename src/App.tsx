@@ -41,6 +41,45 @@ import { ContactPage } from "./components/SEO/SeoPages/ContactPage";
 import { PrivacyPolicyPage } from "./components/SEO/SeoPages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./components/SEO/SeoPages/TermsOfServicePage";
 import { NotFoundPage } from "./components/SEO/SeoPages/NotFoundPage";
+import { SeoHead } from "./components/SEO/SeoHead";
+
+const ROUTE_SEO: Record<string, { title: string; description: string }> = {
+  "/": {
+    title: "Free Typing Speed Test Online - TypeBlast",
+    description:
+      "Test your typing speed and accuracy online with standard 15s, 30s, and 60s WPM tests. Track progress and get custom AI practice drills.",
+  },
+  "/lessons/": {
+    title: "Interactive Typing Lessons & Home Row Drills | TypeBlast",
+    description:
+      "Learn touch typing step by step with free interactive lessons covering the home row, top row, numbers, and symbols for faster, error-free typing.",
+  },
+  "/certificates/": {
+    title: "Verified Typing Speed Certificates & PDF Reports | TypeBlast",
+    description:
+      "Generate official typing speed certificates and downloadable PDF progress summaries with verified WPM, accuracy scores, and unique verification IDs.",
+  },
+  "/aicoach/": {
+    title: "AI Typing Coach & Keystroke Error Diagnostics | TypeBlast",
+    description:
+      "Get personalized typing drills and ergonomic speed tips from our AI Typing Coach based on your WPM, accuracy rate, and mistyped keystroke patterns.",
+  },
+  "/kids/": {
+    title: "TypeBlast Junior - Fun Kids Typing Practice & Games",
+    description:
+      "Fun, kid-friendly typing practice designed for young learners. Build keyboard familiarity, collect stars, and develop early touch typing confidence.",
+  },
+  "/teachers/": {
+    title: "Typing Portal for Teachers & Schools | TypeBlast",
+    description:
+      "Manage classroom typing benchmarks, track student WPM and accuracy progress, monitor completed lessons, and export gradebook CSV reports on TypeBlast.",
+  },
+  "/pricing/": {
+    title: "TypeBlast Plans & Pricing - Free, Pro & Schools",
+    description:
+      "Compare TypeBlast Starter, Pro, and Schools & Teachers plans. Start taking free typing tests or unlock full AI coaching and classroom analytics tools.",
+  },
+};
 
 function normalizePath(path: string): string {
   const [pathname] = path.split(/[?#]/);
@@ -57,13 +96,16 @@ function normalizePath(path: string): string {
   return cleaned;
 }
 
-function MainAppContent() {
+function MainAppContent({ initialPath }: { initialPath?: string }) {
   const { recordTestResult } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>("test");
   const [soundProfile, setSoundProfile] = useState<"mechanical" | "soft" | "typewriter" | "retro" | "muted">("mechanical");
   const [lastStats, setLastStats] = useState<TypingStats | null>(null);
 
   const [currentPath, setCurrentPath] = useState<string>(() => {
+    if (initialPath) {
+      return normalizePath(initialPath);
+    }
     if (typeof window !== "undefined") {
       return normalizePath(window.location.pathname);
     }
@@ -161,6 +203,9 @@ function MainAppContent() {
   const isBlogPost = currentPath.startsWith("/blog/") && currentPath !== "/blog/" && Boolean(getBlogPostBySlug(currentPath.replace(/^\/blog\/?|\/$/g, "")));
   const isKnownPath = isHome || knownPaths.includes(currentPath) || isBlogHub || isBlogPost;
 
+  const seoKey = isHome ? "/" : currentPath;
+  const routeSeo = ROUTE_SEO[seoKey];
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Navbar with primary links, CTA, & mobile drawer */}
@@ -172,6 +217,14 @@ function MainAppContent() {
         soundProfile={soundProfile}
         setSoundProfile={setSoundProfile}
       />
+
+      {routeSeo && (
+        <SeoHead
+          title={routeSeo.title}
+          description={routeSeo.description}
+          canonicalUrl={"https://www.typeblast.com" + seoKey}
+        />
+      )}
 
       {/* Main View Container */}
       <main className="flex-1">
@@ -290,10 +343,10 @@ function MainAppContent() {
   );
 }
 
-export default function App() {
+export default function App({ initialPath }: { initialPath?: string } = {}) {
   return (
     <AuthProvider>
-      <MainAppContent />
+      <MainAppContent initialPath={initialPath} />
     </AuthProvider>
   );
 }

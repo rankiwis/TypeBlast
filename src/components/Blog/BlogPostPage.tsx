@@ -42,12 +42,16 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
         <p className="text-xs text-slate-400">
           The requested guide or blog post could not be located.
         </p>
-        <button
-          onClick={() => onNavigatePath("/blog/")}
-          className="px-4 py-2 bg-cyan-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-cyan-400 transition-colors cursor-pointer"
+        <a
+          href="/blog/"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigatePath("/blog/");
+          }}
+          className="inline-block px-4 py-2 bg-cyan-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-cyan-400 transition-colors cursor-pointer"
         >
           Return to Blog Hub
-        </button>
+        </a>
       </div>
     );
   }
@@ -135,7 +139,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
   return (
     <article className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       <SeoHead
-        title={post.metaTitle || `${post.title} - TypeBlast Guide`}
+        title={post.metaTitle || (post.title.length <= 48 ? `${post.title} | TypeBlast` : post.title)}
         description={post.metaDescription}
         canonicalUrl={currentUrl}
         structuredData={[breadcrumbSchema, articleSchema]}
@@ -143,13 +147,17 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
 
       {/* Navigation & Breadcrumbs */}
       <div className="space-y-4">
-        <button
-          onClick={() => onNavigatePath("/blog/")}
+        <a
+          href="/blog/"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigatePath("/blog/");
+          }}
           className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-cyan-400 font-medium transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to All Blog Guides</span>
-        </button>
+        </a>
 
         <Breadcrumbs items={breadcrumbs} onNavigate={onNavigatePath} />
       </div>
@@ -309,12 +317,16 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={() => onNavigatePath("/typing-test/")}
+        <a
+          href="/typing-test/"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigatePath("/typing-test/");
+          }}
           className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20 whitespace-nowrap cursor-pointer hover:scale-105"
         >
           Take Speed Test
-        </button>
+        </a>
       </div>
 
       {/* Tags List */}
@@ -360,10 +372,14 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {relatedPosts.map((rel) => (
-              <div
+              <a
                 key={rel.id}
-                onClick={() => onNavigatePath(`/blog/${rel.slug}/`)}
-                className="group p-4 rounded-xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/40 transition-all duration-300 cursor-pointer space-y-3"
+                href={`/blog/${rel.slug}/`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigatePath(`/blog/${rel.slug}/`);
+                }}
+                className="block group p-4 rounded-xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/40 transition-all duration-300 cursor-pointer space-y-3"
               >
                 <div className="aspect-video rounded-lg overflow-hidden">
                   <img
@@ -380,7 +396,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({
                     {rel.title}
                   </h4>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
